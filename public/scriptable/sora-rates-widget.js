@@ -47,7 +47,7 @@ function parseCsv(csv) {
 
 async function loadRows() {
   const fm = FileManager.local();
-  const cachePath = fm.joinPath(fm.cachesDirectory(), "sora-rates-widget.csv");
+  const cachePath = fm.joinPath(fm.cacheDirectory(), "sora-rates-widget.csv");
   try {
     const req = new Request(CSV_URL);
     req.timeoutInterval = 20;

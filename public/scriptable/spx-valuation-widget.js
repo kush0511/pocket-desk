@@ -29,7 +29,7 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 async function loadRows() {
   const fm = FileManager.local();
-  const cachePath = fm.joinPath(fm.cachesDirectory(), "spx-valuation-widget.json");
+  const cachePath = fm.joinPath(fm.cacheDirectory(), "spx-valuation-widget.json");
   try {
     const req = new Request(DATA_URL);
     req.timeoutInterval = 30;

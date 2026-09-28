@@ -47,7 +47,7 @@ function makeRuntime(family, parameter, { offline = false } = {}) {
   }
   const FileManager = {
     local: () => ({
-      cachesDirectory: () => cacheDir,
+      cacheDirectory: () => cacheDir,
       joinPath: (a, b) => join(a, b),
       fileExists: existsSync,
       readString: (p) => readFileSync(p, "utf8"),
