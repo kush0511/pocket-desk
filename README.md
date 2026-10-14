@@ -38,6 +38,8 @@ Medium/large cards link separately. Small widgets have one tap target. The site 
 - Automatic nearest-MRT matching happens **on the phone**, against public station-exit coordinates. Precise coordinates are not embedded in this repository or sent to a station-search service.
 - Scriptable requests iOS location permission in the app. Widget updates are best-effort, not continuous tracking. A failed location update may use a clearly labelled saved fix for up to six hours; older fixes are rejected.
 - Nearest means straight-line distance to an official exit, not walking distance or confirmed exit availability. Manual station selection remains available. No nearby MRT is shown when mapped exits are more than 5 km away.
+- A fresh location within 800 m of your nearest home MRT shows **Home turf :)**. This is proximity to the station, not proof you are at your home address. Saved fixes remain explicitly labelled and aged.
+- More than 75 km from the approximate Singapore centre (1.3521, 103.8198), the train panel becomes **Wander mode** with an approximate straight-line distance calculated on your phone. This is a distance-based travel cue, not country/border detection. It can work even when timetable data is unavailable.
 - If you enable air quality, coordinates rounded to two decimal places are sent to Open-Meteo. Air caches are keyed by location. You can use a manual air-quality location or turn the feature off.
 - iOS controls refresh timing. The requested refresh interval is not a guarantee. Each card carries its own observation date/time; failures and stale data are visible.
 - Last-train results exclude your walk to the station and are not live departures or guaranteed connections. Singapore's service day runs through 03:59 the next morning.

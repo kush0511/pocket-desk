@@ -12,6 +12,18 @@ const SIGNALS = [
 
 type Size = "large" | "medium" | "small";
 type Signal = typeof SIGNALS[number]["key"];
+type TrainState = "journey" | "home" | "travel";
+
+const AIR_SAMPLES = [
+  { value: 42, label: "Good" },
+  { value: 245, label: "Very unhealthy" },
+  { value: 500, label: "Hazardous" },
+  { value: 1000, label: "Hazardous" },
+] as const;
+
+function airColor(value: number) {
+  return value <= 50 ? "#82e8cb" : value <= 100 ? "#e4d579" : value <= 150 ? "#ffb45b" : value <= 200 ? "#ff8898" : value <= 300 ? "#c6a4ee" : "#e685c8";
+}
 
 // Deliberately illustrative, never presented as a current financial feed.
 const SAMPLE_SORA = [1.48,1.45,1.54,1.42,1.44,1.49,1.38,1.45,1.40,1.37,1.42,1.39,1.31,1.36,1.37,1.29,1.33,1.28,1.30,1.34,1.29,1.26,1.31,1.28,1.22,1.29,1.25,1.24,1.31,1.22,1.21,1.24,1.28,1.19,1.23,1.18,1.25,1.19,1.20,1.16,1.22,1.18,1.16,1.21,1.19,1.15,1.17,1.13,1.19,1.16,1.18,1.12,1.16,1.11,1.18,1.15,1.10,1.15,1.2026,1.0846];
@@ -51,10 +63,11 @@ function ValuationDial() {
   </svg>;
 }
 
-function AirDial() {
+function AirDial({ value }: { value: number }) {
+  const digits = String(value).length;
   return <svg className="air-dial" viewBox="0 0 60 60" aria-hidden="true">
-    {Array.from({ length: 30 }, (_, i) => { const theta = (140 + i * 260 / 29) * Math.PI / 180; return <path key={i} d={`M${30 + Math.cos(theta) * 23},${30 + Math.sin(theta) * 23} L${30 + Math.cos(theta) * 27},${30 + Math.sin(theta) * 27}`} fill="none" stroke={i < 4 ? "#C5F277" : "#5E708F"} strokeWidth="2" opacity={i < 4 ? 1 : .28} />; })}
-    <text x="30" y="38" textAnchor="middle">42</text>
+    {Array.from({ length: 30 }, (_, i) => { const theta = (140 + i * 260 / 29) * Math.PI / 180, lit = (i + 1) * 10 <= Math.min(300, value); return <path key={i} d={`M${30 + Math.cos(theta) * 23},${30 + Math.sin(theta) * 23} L${30 + Math.cos(theta) * 27},${30 + Math.sin(theta) * 27}`} fill="none" stroke={lit ? airColor((i + 1) * 10) : "#5E708F"} strokeWidth="2" opacity={lit ? 1 : .28} />; })}
+    <text x="30" y="31" textAnchor="middle" dominantBaseline="middle" style={{ fontSize: digits > 3 ? 17 : digits > 2 ? 21 : 27, fill: airColor(value) }}>{value}</text>
   </svg>;
 }
 
@@ -83,25 +96,46 @@ function SpxInstrument() {
 function RouteTrack() {
   return <span className="route-track"><i className="route-stop" /><i className="route-ne" /><i className="route-interchange" /><i className="route-ew" /><i className="route-stop route-end" /></span>;
 }
-function TrainTicket() {
+function PostcardStamp({ state }: { state: Exclude<TrainState, "journey"> }) {
+  return <svg className="ticket-postcard-stamp" viewBox="0 0 37 37" aria-hidden="true">
+    <circle cx="18.5" cy="18.5" r="14.43" fill="none" stroke="#5e3c22" strokeWidth="1" opacity=".35" />
+    {state === "home" ? <g fill="none" stroke="#281d16" opacity=".7"><path d="M10.56 18.5 18.5 11.86 26.44 18.5" strokeWidth="1.5" /><path d="M13.02 17.35V24.56H23.98V17.35" strokeWidth="1.3" /><path d="M17.06 24.56V19.94H19.94V24.56" strokeWidth="1.1" /></g> : <g fill="none" stroke="#281d16" opacity=".7"><circle cx="18.5" cy="18.5" r="8.66" strokeWidth="1.1" /><path d="M9.84 18.5H27.16M18.5 9.84 15.18 14.89V22.11L18.5 27.16 21.82 22.11V14.89Z" strokeWidth=".8" /></g>}
+  </svg>;
+}
+function TrainTicket({ state }: { state: TrainState }) {
+  if (state !== "journey") {
+    const home = state === "home";
+    return <>
+      <span className="ticket-top"><span>{home ? "HOME TURF" : "WANDER MODE  ✈"}</span><span>{home ? "HOME" : "SG ↗"}</span></span>
+      <span className={`ticket-postcard ticket-postcard-${state}`}>
+        <span className="ticket-postcard-words"><strong>{home ? "Home turf :)" : "~1,234 km"}</strong><span className="ticket-postcard-detail">{home ? "Lakeside is nearby" : "from Singapore"}</span></span>
+        <PostcardStamp state={state} />
+      </span>
+      <span className="ticket-postcard-foot"><span>Location now</span><span className={home ? "ticket-home-direction" : undefined}>{home ? "Nearest MRT · tap for directions" : "Straight-line · SG centre"}</span></span>
+    </>;
+  }
   return <>
     <span className="ticket-perforation" aria-hidden="true" />
-    <span className="ticket-top"><span>LAST TRAIN / HOME</span><span>SGT</span></span>
-    <span className="ticket-main">
-      <span className="ticket-route"><span className="ticket-origin">Farrer Park</span><strong>→ Lakeside</strong><RouteTrack /></span>
-      <span className="ticket-departure"><strong>23:41</strong><span>BOARD BY</span></span>
+    <span className="ticket-journey">
+      <span className="ticket-route-column">
+        <span className="ticket-top"><span>LAST TRAIN / HOME</span></span>
+        <span className="ticket-route"><span className="ticket-origin">Farrer Park</span><strong>→ Lakeside</strong><RouteTrack /></span>
+        <span className="ticket-bottom"><span>Historical · 29 Jul · verify</span><span>Location now</span></span>
+      </span>
+      <span className="ticket-departure"><span className="ticket-zone">SGT</span><span className="ticket-time-block"><strong>23:41</strong><span>BOARD BY</span></span></span>
     </span>
-    <span className="ticket-bottom"><span>Historical estimate · 29 Jul · verify</span><span>GPS 18:00 · example</span></span>
-    <span className="ticket-vertical"><strong>23:41</strong><span className="ticket-history-label">Historical estimate</span><span className="ticket-vertical-route">Farrer Park → Lakeside</span><RouteTrack /><span className="ticket-vertical-spacer" /><span className="ticket-location">GPS 18:00 · example</span><span className="ticket-verify">29 Jul · verify</span></span>
+    <span className="ticket-vertical"><span className="ticket-top"><span>LAST TRAIN / HOME</span></span><strong>23:41</strong><span className="ticket-history-label">Historical estimate</span><span className="ticket-vertical-route">Farrer Park → Lakeside</span><RouteTrack /><span className="ticket-vertical-spacer" /><span className="ticket-location">Location now</span><span className="ticket-verify">29 Jul · verify</span></span>
   </>;
 }
 
-function AirInstrument() {
+function AirInstrument({ value, trainState }: { value: number; trainState: TrainState }) {
+  const quality = AIR_SAMPLES.find(sample => sample.value === value)!.label;
+  const warnings = Number(trainState === "journey") + Number(value > 100);
   return <>
     <span className="air-standalone-title">AIR / US AQI</span>
-    <AirDial />
-    <span className="air-copy"><span className="instrument-label">US AQI · model</span><strong>Good</strong><span className="air-standalone-model">US AQI · model</span><span className="air-attribution">CAMS / Open-Meteo</span><span className="air-time">14 Oct 17:45</span></span>
-    <span className="air-source"><span>SOURCES</span><span className="source-lights" aria-hidden="true"><i /><i /><i /><i /></span><span className="source-warning">1 to check</span></span>
+    <AirDial value={value} />
+    <span className="air-copy"><span className="instrument-label">US AQI · model</span><strong className={value > 100 ? "air-quality-warning" : undefined}>{quality}</strong><span className="air-standalone-model">US AQI · model</span><span className="air-attribution">CAMS / Open-Meteo</span><span className="air-time">14 Oct 17:45</span><span className="sr-only">Sample AQI {value}</span></span>
+    <span className="air-source"><span>SOURCES</span><span className="source-lights" aria-hidden="true"><i /><i /><i className={trainState === "journey" ? "source-caution" : undefined} /><i style={{ background: value > 100 ? "#ffd28d" : "#82e8cb" }} /></span><span className={warnings ? "source-warning" : "source-ready"}>{warnings ? `${warnings} to check` : "ALL SET"}</span></span>
   </>;
 }
 
@@ -110,11 +144,20 @@ export function DeskPreview() {
   const [active, setActive] = useState<Signal>("sora");
   const [smallCard, setSmallCard] = useState<Signal>("sora");
   const [mediumSet, setMediumSet] = useState<"markets" | "local">("markets");
+  const [trainState, setTrainState] = useState<TrainState>("home");
+  const [airValue, setAirValue] = useState(245);
   const selected = SIGNALS.find((signal) => signal.key === active)!;
   const Icon = selected.icon;
+  const hasTrain = size === "large" || (size === "medium" && mediumSet === "local") || (size === "small" && smallCard === "train");
+  const hasAir = size === "large" || (size === "medium" && mediumSet === "local") || (size === "small" && smallCard === "air");
+  const detail = active === "train" && trainState !== "journey"
+    ? trainState === "home"
+      ? "A little welcome back when your home MRT is nearby. This sample uses Lakeside. On your phone, a fresh location within 800 m of your nearest home station shows this card; saved locations are labelled. It does not confirm that you are at home."
+      : "A tiny travel postcard when you are more than 75 km from the Singapore reference point. The installed widget calculates an approximate straight-line distance on your phone. This 1,234 km example is illustrative."
+    : selected.detail;
 
   function instrument(key: Signal) {
-    return <button key={key} className={`instrument instrument-${key}${active === key ? " instrument-active" : ""}`} onClick={() => setActive(key)} aria-label={`Explore ${SIGNALS.find(s => s.key === key)!.name}`} aria-pressed={active === key}>{key === "sora" ? <SoraInstrument /> : key === "spx" ? <SpxInstrument /> : key === "train" ? <TrainTicket /> : <AirInstrument />}</button>;
+    return <button key={key} className={`instrument instrument-${key}${key === "train" ? ` instrument-train-${trainState}` : ""}${active === key ? " instrument-active" : ""}`} onClick={() => setActive(key)} aria-label={`Explore ${SIGNALS.find(s => s.key === key)!.name}${key === "air" ? `, sample AQI ${airValue}` : ""}`} aria-pressed={active === key}>{key === "sora" ? <SoraInstrument /> : key === "spx" ? <SpxInstrument /> : key === "train" ? <TrainTicket state={trainState} /> : <AirInstrument value={airValue} trainState={trainState} />}</button>;
   }
   function changeSize(option: Size) {
     setSize(option);
@@ -140,8 +183,12 @@ export function DeskPreview() {
         <span className="preview-hint">{size === "large" ? "The full control room" : size === "medium" ? "Two signals. New rhythm." : "A solo instrument"}</span>
       </div>
       {size !== "large" && <div className="parameter-select"><label htmlFor="widget-parameter">Widget parameter</label>{size === "medium" ? <select id="widget-parameter" value={mediumSet} onChange={(event) => { const next = event.target.value as "markets" | "local"; setMediumSet(next); setActive(next === "markets" ? "sora" : "train"); }}><option value="markets">markets · SORA + S&P 500</option><option value="local">local · Last train + air</option></select> : <select id="widget-parameter" value={smallCard} onChange={(event) => { const next = event.target.value as Signal; setSmallCard(next); setActive(next); }}>{SIGNALS.map((signal) => <option key={signal.key} value={signal.key}>{signal.key} · {signal.name}</option>)}</select>}</div>}
+      {(hasTrain || hasAir) && <div className="sample-controls">
+        {hasTrain && <div className="sample-select"><label htmlFor="train-sample">Train sample</label><select id="train-sample" value={trainState} onChange={event => { setTrainState(event.target.value as TrainState); setActive("train"); }}><option value="journey">Journey home</option><option value="home">Near home</option><option value="travel">Travelling</option></select></div>}
+        {hasAir && <div className="sample-select"><label htmlFor="air-sample">Air sample</label><select id="air-sample" value={airValue} onChange={event => { setAirValue(Number(event.target.value)); setActive("air"); }}>{AIR_SAMPLES.map(sample => <option key={sample.value} value={sample.value}>{sample.value} · {sample.label}</option>)}</select></div>}
+      </div>}
       <p className="preview-note">Illustrative web preview. Sample values & curves. Not an iPhone screenshot.</p>
-      <div className="preview-detail" aria-live="polite" aria-atomic="true"><span className={`detail-icon detail-${selected.key}`}><Icon aria-hidden="true" /></span><div><p>{selected.detail}</p><a href={selected.link} target="_blank" rel="noreferrer">{selected.action}<ChevronRight /></a></div></div>
+      <div className="preview-detail" aria-live="polite" aria-atomic="true"><span className={`detail-icon detail-${selected.key}`}><Icon aria-hidden="true" /></span><div><p>{detail}</p><a href={selected.link} target="_blank" rel="noreferrer">{selected.action}<ChevronRight /></a></div></div>
     </div>
   );
 }

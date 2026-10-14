@@ -18,6 +18,11 @@ const PD = {
   trainData: 'https://raw.githubusercontent.com/kush0511/sg-last-train-home/main/',
   stationsData: 'https://kush0511.github.io/pocket-desk/data/sg-station-coordinates.json',
   airSite: 'https://open-meteo.com/en/docs/air-quality-api',
+  // Fixed approximate Singapore centre, not a home address or national boundary.
+  // Great-circle distances are computed entirely on-device; no country lookup.
+  singaporeReference: { latitude: 1.3521, longitude: 103.8198 },
+  travelThresholdKm: 75,
+  homeMrtRadiusKm: 0.8,
   hour: 3600000,
   day: 86400000,
 };
@@ -281,7 +286,25 @@ async function airCard(settings, locationResult) {
       attribution: 'CAMS / Open-Meteo', value: d.aqi, quality: aqiLabel(d.aqi), warning: result.offline || age(d.time) > 3 * PD.hour || (result.locationCached && !result.manual) || d.aqi > 100, url: PD.airSite };
   } catch { return emptyCard('air', 'AIR QUALITY', 'Air data unavailable', 'Open app to check location', setupUrl('air')); }
 }
+function trainLocationLabel(locationResult) {
+  return `Location ${elapsed(locationResult.value.checkedAt)}${locationResult.cached ? ' · saved' : ''}`;
+}
+function travelCard(settings, locationResult) {
+  // Manual origin always wins. A recent fix can indicate distance, not a country.
+  if (!settings.autoLocation || settings.origin || !validLocation(locationResult.value) || age(locationResult.value.checkedAt) > 6 * PD.hour) return null;
+  const distance = distanceKm(locationResult.value, PD.singaporeReference);
+  if (distance <= PD.travelThresholdKm) return null;
+  const rounded = String(Math.round(distance)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const locationLabel = trainLocationLabel(locationResult);
+  return { key: 'train', state: 'travel', title: 'WANDER MODE', metric: `~${rounded} km`,
+    label: 'from Singapore', headline: 'Wander mode ✈',
+    detail: locationResult.cached ? 'Miles from your last saved spot.' : 'Collecting miles, making memories.',
+    foot: locationLabel, locationLabel, extra: 'Straight-line · SG centre',
+    distanceKm: distance, warning: locationResult.cached, url: PD.site };
+}
 async function trainCard(settings, locationResult, preloaded, preloadedCoordinates) {
+  const travel = travelCard(settings, locationResult);
+  if (travel) return travel;
   if (!settings.autoLocation && !settings.origin) return emptyCard('train', 'LAST TRAIN', 'Nearest MRT → home', 'Enable location in Scriptable', setupUrl('train'));
   try {
     if (preloaded === null) throw new Error('Timetable unavailable');
@@ -291,16 +314,26 @@ async function trainCard(settings, locationResult, preloaded, preloadedCoordinat
     let origin, nearest, locationLabel;
     if (settings.origin) { origin = resolveStation(settings.origin, data.stations); locationLabel = 'Saved origin'; }
     else {
-      if (!locationResult.value) return emptyCard('train', 'LAST TRAIN', 'Location unavailable', 'Open app to update location', setupUrl('train'));
+      if (!validLocation(locationResult.value) || age(locationResult.value.checkedAt) > 6 * PD.hour) return emptyCard('train', 'LAST TRAIN', 'Location unavailable', 'Open app to update location', setupUrl('train'));
       if (preloadedCoordinates === null) throw new Error('Station coordinates unavailable');
       const coordinates = preloadedCoordinates || await loadStations();
       nearest = nearestStation(locationResult.value, coordinates.value.stations, data.stations);
       if (!nearest || nearest.distance > 5) return emptyCard('train', 'LAST TRAIN', 'No nearby MRT', 'Over 5 km from a mapped exit', mapsUrl(destination.name));
       origin = resolveStation(nearest.station.id, data.stations);
-      locationLabel = `Location ${elapsed(locationResult.value.checkedAt)}${locationResult.cached ? ' · saved' : ''}`;
+      locationLabel = trainLocationLabel(locationResult);
     }
     if (!origin) return emptyCard('train', 'LAST TRAIN', 'Origin unavailable', 'Choose an origin in the app', setupUrl('train'));
-    if (origin.id === destination.id) return { key: 'train', title: 'LAST TRAIN', metric: destination.name, label: settings.origin ? 'Same origin & home station' : 'Home MRT is nearest', detail: 'Walk / get transit directions', foot: locationLabel, url: mapsUrl(destination.name) };
+    if (origin.id === destination.id) {
+      if (settings.origin) return { key: 'train', state: 'station', title: 'SAVED ROUTE', metric: destination.name,
+        label: 'Same origin & home station', detail: 'Tap for transit directions', foot: locationLabel, url: mapsUrl(destination.name) };
+      const nearby = nearest.distance <= PD.homeMrtRadiusKm;
+      return { key: 'train', state: nearby ? 'home' : 'near-home', title: nearby ? 'HOME TURF' : 'HOME STATION',
+        metric: nearby ? locationResult.cached ? 'Home turf, last seen' : 'Home turf :)' : 'Home MRT is nearest',
+        label: nearby ? `${destination.name} is nearby` : `${destination.name} · ${nearest.distance.toFixed(1)} km away`,
+        detail: locationResult.cached ? 'From your saved location' : 'Take the last stretch easy.',
+        foot: locationLabel, locationLabel, extra: nearby ? 'Nearest MRT · tap for directions' : 'Straight-line · tap for directions',
+        destination: destination.name, warning: locationResult.cached, url: mapsUrl(destination.name) };
+    }
     const serviceDate = singaporeServiceDate();
     const years = Object.keys(data.holidays).map((d) => d.slice(0, 4));
     if (!years.includes(serviceDate.slice(0, 4)) || isoAge(data.date) > 180) return emptyCard('train', 'LAST TRAIN', 'Timetable too old', 'Check the train dashboard', PD.trainSite);
@@ -311,7 +344,7 @@ async function trainCard(settings, locationResult, preloaded, preloadedCoordinat
     const minute = ((journey.boardBy % 1440) + 1440) % 1440;
     const time = `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`;
     const stale = isoAge(data.date) > 45;
-    return { key: 'train', title: 'LAST TRAIN', metric: departed && !stale ? 'Ended' : time,
+    return { key: 'train', state: 'journey', title: 'LAST TRAIN', metric: departed && !stale ? 'Ended' : time,
       label: stale ? 'Historical estimate' : departed ? `Last board-by ${time} SGT` : `${journey.confidence !== 'exact' ? 'Est. ' : ''}board-by · SGT`,
       detail: `${locationResult.cached && !settings.origin ? 'Saved fix: ' : ''}${origin.name} → ${destination.name}`,
       foot: stale ? `${shortDate(data.date)} · verify` : `${shortDate(data.date)} · table`,
@@ -361,7 +394,9 @@ function textLine(parent, text, width, height, size, hex = COLORS.text, weight =
   const row = fixedRow(parent, width, height);
   if (centered) row.addSpacer();
   addText(row, text, size, hex, weight);
-  if (centered) row.addSpacer();
+  // WidgetText alignment does not affect text inside stacks. A trailing flexible
+  // spacer explicitly anchors leading rows; both sides are used only for centring.
+  row.addSpacer();
   return row;
 }
 function canvas(width, height) {
@@ -438,7 +473,7 @@ function peDial(value, width, height) {
 function airColor(value) {
   return value <= 50 ? COLORS.air : value <= 100 ? 'E4D579' : value <= 150 ? 'FFB45B' : value <= 200 ? 'FF8898' : value <= 300 ? 'C6A4EE' : 'E685C8';
 }
-function airDial(value, size) {
+function airDial(value, size, metric = finite(value) ? String(Math.round(value)) : '—') {
   const ctx = canvas(size, size), center = size / 2, radius = size / 2 - 3;
   // 30 calibrated ticks represent 0–300 US AQI. The number remains unclamped.
   for (let i = 0; i < 30; i++) {
@@ -446,6 +481,17 @@ function airDial(value, size) {
     const lit = finite(value) && (i + 1) * 10 <= Math.min(300, Math.max(0, value));
     stroke(ctx, [a, b], lit ? airColor((i + 1) * 10) : '5E708F', 2, lit ? 1 : 0.28);
   }
+  // Draw the whole value in the same Retina canvas as the dial. Native stack
+  // spacers can compress a 3-digit label to “2…” even in a fixed-width gauge.
+  // Reserve the inner circle, budget a generous 0.72 em per digit, and never
+  // clamp the printed value when the 0–300 tick ring saturates.
+  const textWidth = Math.max(12, size - 18), digits = String(metric).length;
+  const fontSize = Math.min(30, size * 0.44, textWidth / (Math.max(1, digits) * 0.72));
+  const textHeight = fontSize * 1.35;
+  ctx.setFont(Font.boldRoundedSystemFont(fontSize));
+  ctx.setTextColor(color(finite(value) ? airColor(value) : COLORS.muted));
+  ctx.setTextAlignedCenter();
+  ctx.drawTextInRect(String(metric), new Rect((size - textWidth) / 2, (size - textHeight) / 2, textWidth, textHeight));
   return ctx.getImage();
 }
 const LINE_COLORS = { NS: 'E94D51', EW: '15864D', CG: '15864D', NE: '874DBB', CC: 'C58C15', DT: '2671C9', TE: '9A593D' };
@@ -506,33 +552,75 @@ function drawSpx(parent, card, width, height) {
   sourceLine(stack, card, width);
   return stack;
 }
+function postcardStamp(state, size) {
+  const ctx = canvas(size, size), c = size / 2, r = size * 0.39;
+  stroke(ctx, arcPoints(c, c, r, 0, 360, 60), COLORS.ticketMuted, 1, 0.35);
+  if (state === 'travel') {
+    // A tiny hand-drawn globe: no external graphics or location sharing.
+    stroke(ctx, arcPoints(c, c, r * 0.60, 0, 360, 40), COLORS.ticketInk, 1.1, 0.7);
+    stroke(ctx, [{x:c-r*.60,y:c},{x:c+r*.60,y:c}], COLORS.ticketInk, 0.8, 0.6);
+    for (const direction of [-1, 1]) stroke(ctx, [
+      {x:c,y:c-r*.60},{x:c+direction*r*.23,y:c-r*.25},{x:c+direction*r*.23,y:c+r*.25},{x:c,y:c+r*.60},
+    ], COLORS.ticketInk, 0.8, 0.6);
+  } else {
+    stroke(ctx, [{x:c-r*.55,y:c},{x:c,y:c-r*.46},{x:c+r*.55,y:c}], COLORS.ticketInk, 1.5, 0.7);
+    stroke(ctx, [{x:c-r*.38,y:c-r*.08},{x:c-r*.38,y:c+r*.42},{x:c+r*.38,y:c+r*.42},{x:c+r*.38,y:c-r*.08}], COLORS.ticketInk, 1.3, 0.7);
+    stroke(ctx, [{x:c-r*.10,y:c+r*.42},{x:c-r*.10,y:c+r*.10},{x:c+r*.10,y:c+r*.10},{x:c+r*.10,y:c+r*.42}], COLORS.ticketInk, 1.1, 0.7);
+  }
+  return ctx.getImage();
+}
 function drawTicket(parent, card, width, height) {
   const stack = column(parent, width, height), pad = 9, inner = width - pad * 2;
   stack.url = card.url; stack.cornerRadius = 15; stack.setPadding(pad, pad, pad, pad);
-  const horizontal = width >= 235, split = horizontal ? Math.round(width * 0.63) : 0;
+  const horizontal = width >= 235, journey = Boolean(card.route && card.origin && card.destination);
+  const split = horizontal && journey ? Math.round(width * 0.63) : 0;
   stack.backgroundImage = ticketBackdrop(width, height, split);
-  const header = fixedRow(stack, inner, 11); addText(header, 'LAST TRAIN / HOME', 8, COLORS.ticketInk, 'semibold'); header.addSpacer();
-  if (horizontal) addText(header, 'SGT', 8, COLORS.ticketMuted, 'semibold');
-  if (horizontal) {
-    const content = fixedRow(stack, inner, 45), leftWidth = split - pad - 9, rightWidth = inner - leftWidth - 16;
-    const route = column(content, leftWidth, 45);
-    if (card.origin && card.destination) {
-      textLine(route, `${card.detail?.startsWith('Saved fix:') ? 'Saved fix: ' : ''}${card.origin}`, leftWidth, 12, 10, COLORS.ticketMuted);
-      textLine(route, `→ ${card.destination}`, leftWidth, 22, 18, COLORS.ticketInk, 'bold');
-      addGraphic(route, routeRail(card, leftWidth, 9), leftWidth, 9);
-    } else {
-      textLine(route, card.label, leftWidth, 18, 12, COLORS.ticketInk, 'semibold');
-      textLine(route, card.detail, leftWidth, 14, 9, COLORS.ticketMuted); route.addSpacer();
-    }
-    content.addSpacer(16);
-    const time = column(content, rightWidth, 45);
-    textLine(time, card.metric, rightWidth, 34, card.metric.length > 6 ? 22 : 28, COLORS.ticketInk, 'bold', true);
-    textLine(time, card.origin ? 'BOARD BY' : card.unavailable ? 'TAP TO OPEN' : 'HOME MRT', rightWidth, 11, 8, COLORS.ticketMuted, 'semibold', true);
+  if (!journey) {
+    // Home, travel and unavailable states are postcards, not fake boarding passes.
+    // A wide leading column leaves breathing room instead of a giant destination.
+    const travel = card.state === 'travel', home = card.state === 'home';
+    const header = fixedRow(stack, inner, 11);
+    addText(header, travel ? 'WANDER MODE  ✈' : home ? 'HOME TURF' : card.state === 'station' ? 'SAVED ROUTE' : 'LAST TRAIN / HOME', 8, COLORS.ticketInk, 'semibold'); header.addSpacer();
+    if (horizontal && (home || travel)) addText(header, home ? 'HOME' : 'SG ↗', 8, COLORS.ticketMuted, 'semibold');
+    stack.addSpacer(horizontal ? 4 : 5);
+    const bodyHeight = horizontal ? 40 : 51, body = fixedRow(stack, inner, bodyHeight);
+    const stampSize = horizontal && (home || travel) ? 37 : 0, textWidth = inner - (stampSize ? stampSize + 8 : 0);
+    const words = column(body, textWidth, bodyHeight);
+    const headline = card.unavailable ? card.label : card.metric;
+    const metricSize = horizontal ? travel ? 23 : headline.length > 18 ? 17 : 22 : travel ? 20 : headline.length > 15 ? 12 : 16;
+    textLine(words, headline, textWidth, horizontal ? 27 : 26, metricSize, COLORS.ticketInk, 'bold');
+    textLine(words, travel ? card.label : card.unavailable ? card.detail : card.label, textWidth, 13, 9, COLORS.ticketMuted);
+    if (stampSize) { body.addSpacer(8); addGraphic(body, postcardStamp(card.state, stampSize), stampSize, stampSize); }
     stack.addSpacer();
-    textLine(stack, `${card.origin ? card.label + ' · ' : ''}${card.foot}`, inner, 11, 8, COLORS.ticketInk, 'semibold');
-    textLine(stack, card.locationLabel || (card.origin ? 'Station-to-station estimate' : 'Tap to open details'), inner, 10, 8, COLORS.ticketMuted);
+    if (horizontal) {
+      textLine(stack, card.locationLabel || card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
+      textLine(stack, travel ? 'Straight-line · SG centre' : card.extra || card.detail, inner, 10, 8, COLORS.ticketMuted);
+    } else {
+      textLine(stack, card.locationLabel || card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
+      if (travel) textLine(stack, 'Straight-line · SG centre', inner, 10, 8, COLORS.ticketMuted);
+    }
+    return stack;
+  }
+  if (horizontal) {
+    const leftWidth = split - pad - 9, rightWidth = inner - leftWidth - 18;
+    const content = fixedRow(stack, inner, height - pad * 2), route = column(content, leftWidth, height - pad * 2);
+    textLine(route, 'LAST TRAIN / HOME', leftWidth, 11, 8, COLORS.ticketInk, 'semibold');
+    route.addSpacer(2);
+    textLine(route, `${card.detail?.startsWith('Saved fix:') ? 'Saved fix: ' : ''}${card.origin}`, leftWidth, 12, 9, COLORS.ticketMuted);
+    textLine(route, `→ ${card.destination}`, leftWidth, 22, 17, COLORS.ticketInk, 'bold');
+    addGraphic(route, routeRail(card, leftWidth, 8), leftWidth, 8);
+    route.addSpacer();
+    textLine(route, `${card.label === 'Historical estimate' ? 'Historical' : card.label} · ${card.foot}`, leftWidth, 11, 8, COLORS.ticketInk, 'semibold');
+    textLine(route, card.locationLabel || 'Station-to-station estimate', leftWidth, 10, 8, COLORS.ticketMuted);
+    content.addSpacer(18);
+    const time = column(content, rightWidth, height - pad * 2);
+    textLine(time, 'SGT', rightWidth, 11, 8, COLORS.ticketMuted, 'semibold', true);
+    time.addSpacer();
+    textLine(time, card.metric, rightWidth, 34, card.metric.length > 6 ? 22 : 28, COLORS.ticketInk, 'bold', true);
+    textLine(time, 'BOARD BY', rightWidth, 11, 8, COLORS.ticketMuted, 'semibold', true);
+    time.addSpacer();
   } else {
-    // Small is a vertical ticket; medium/local uses the same legible narrow ticket.
+    textLine(stack, 'LAST TRAIN / HOME', inner, 11, 8, COLORS.ticketInk, 'semibold');
     textLine(stack, card.metric, inner, 35, card.metric.length > 6 ? 22 : 29, COLORS.ticketInk, 'bold');
     textLine(stack, card.label, inner, 12, 9, COLORS.ticketInk, 'semibold');
     textLine(stack, card.detail, inner, 12, 9, COLORS.ticketMuted);
@@ -547,8 +635,7 @@ function drawAir(parent, card, width, height, rail = false) {
   const stack = column(parent, width, height); stack.url = card.url;
   if (rail) {
     const row = fixedRow(stack, width, height), gaugeSize = Math.min(46, height - 4);
-    const gauge = column(row, gaugeSize, gaugeSize); gauge.backgroundImage = airDial(card.value, gaugeSize);
-    gauge.addSpacer(); textLine(gauge, card.metric, gaugeSize, 25, 21, finite(card.value) ? airColor(card.value) : COLORS.muted, 'bold', true); gauge.addSpacer();
+    addGraphic(row, airDial(card.value, gaugeSize, card.metric), gaugeSize, gaugeSize);
     row.addSpacer(8); const textWidth = width - gaugeSize - 8, details = column(row, textWidth, height);
     details.addSpacer();
     textLine(details, 'US AQI · model', textWidth, 12, 9, COLORS.air, 'semibold');
@@ -559,8 +646,7 @@ function drawAir(parent, card, width, height, rail = false) {
     textLine(stack, 'AIR / US AQI', width, 12, 9, COLORS.air, 'semibold', true);
     const gaugeSize = Math.min(width, Math.max(36, height - 60));
     const holder = fixedRow(stack, width, gaugeSize); holder.addSpacer();
-    const gauge = column(holder, gaugeSize, gaugeSize); gauge.backgroundImage = airDial(card.value, gaugeSize);
-    gauge.addSpacer(); textLine(gauge, card.metric, gaugeSize, Math.min(36, gaugeSize), Math.min(30, gaugeSize * 0.48), finite(card.value) ? airColor(card.value) : COLORS.muted, 'bold', true); gauge.addSpacer(); holder.addSpacer();
+    addGraphic(holder, airDial(card.value, gaugeSize, card.metric), gaugeSize, gaugeSize); holder.addSpacer();
     textLine(stack, card.unavailable ? card.label : card.detail, width, 12, 9, card.warning ? COLORS.warning : COLORS.text, 'medium', true);
     textLine(stack, 'US AQI · model', width, 11, 8, COLORS.muted, 'medium', true);
     if (card.attribution) textLine(stack, card.attribution, width, 10, 8, COLORS.faint, 'medium', true);
@@ -684,7 +770,7 @@ async function menu(settings) {
   if (choice < 3) return ['large', 'medium', 'small'][choice];
   if (choice === 3) await setupTrain(settings);
   if (choice === 4) await setupAir(settings);
-  if (choice === 5) await alertMessage('Snapshot, not a live feed', 'iOS decides refresh timing. Each card shows its own data time. Automatic location may fall back to a saved fix for up to 6 hours, clearly marked. MRT is selected by straight-line distance to a mapped exit; walking access can differ. Station exits: LTA / data.gov.sg, Singapore Open Data Licence: https://data.gov.sg/open-data-licence. Last-train tables older than 45 days are flagged; after 180 days no time is shown. Check operator notices. AQI is CAMS model data via Open-Meteo, with an approximate location sent only after you allow it. Small widgets have one tap target.');
+  if (choice === 5) await alertMessage('Snapshot, not a live feed', 'iOS decides refresh timing. Each card shows its own data time. Automatic location may fall back to a saved fix for up to 6 hours, clearly marked. MRT is selected by straight-line distance to a mapped exit; walking access can differ. Home turf means within 800 m of your nearest home MRT, not your exact home. Wander mode starts over 75 km from approximate Singapore centre (1.3521, 103.8198); the on-device great-circle distance is not a border or country check. Station exits: LTA / data.gov.sg, Singapore Open Data Licence: https://data.gov.sg/open-data-licence. Last-train tables older than 45 days are flagged; after 180 days no time is shown. Check operator notices. AQI is CAMS model data via Open-Meteo, with an approximate location sent only after you allow it. Small widgets have one tap target.');
   if (choice === 6) { settings.autoLocation = false; settings.location = null; saveSettings(settings); }
   return 'large';
 }
@@ -704,8 +790,10 @@ async function run() {
   const loaders = {
     sora: soraCard, spx: spxCard,
     train: async () => {
-      const [location, data, coordinates] = await Promise.all([
-        locationPromise, settings.autoLocation || settings.origin ? loadTrainData().catch(() => null) : Promise.resolve(null),
+      const location = await locationPromise, travel = travelCard(settings, location);
+      if (travel) return travel; // Travelling needs no MRT/timetable request at all.
+      const [data, coordinates] = await Promise.all([
+        settings.autoLocation || settings.origin ? loadTrainData().catch(() => null) : Promise.resolve(null),
         settings.autoLocation && !settings.origin ? loadStations().catch(() => null) : Promise.resolve(undefined),
       ]);
       return trainCard(settings, location, data, coordinates);

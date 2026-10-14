@@ -36,7 +36,7 @@ const fixtures = {
 };
 
 function runtime({ family = 'large', parameter = '', width = 390, height = 844, files = new Map(), offline = false, failure = '', location = farrer, locationError = false, app = false, choices = [], fixtureOverrides = {}, mockTime = NOW, timezoneOffset = 0 } = {}) {
-  const requests = [], texts = [], alerts = []; let result, locationCalls = 0, completed = false;
+  const requests = [], texts = [], drawnTexts = [], alerts = []; let result, locationCalls = 0, completed = false;
   const settingsPath = '/docs/pocket-desk/settings.json';
   class Stack {
     constructor(kind = 'stack') { this.kind = kind; this.children = []; this.axis = 'horizontal'; this.padding = [0, 0, 0, 0]; }
@@ -90,6 +90,14 @@ function runtime({ family = 'large', parameter = '', width = 390, height = 844, 
     constructor() { this.commands = []; this.lineWidth = 1; }
     setFillColor(color) { this.fillColor = color; }
     setStrokeColor(color) { this.strokeColor = color; }
+    setFont(font) { this.font = font; }
+    setTextColor(color) { this.textColor = color; }
+    setTextAlignedCenter() { this.textAlignment = 'center'; }
+    drawTextInRect(text, rect) {
+      assert.ok(this.font && this.textColor && this.textAlignment, 'Canvas text has explicit styling');
+      const command = { type: 'drawTextInRect', text, rect, font: this.font, color: this.textColor, alignment: this.textAlignment };
+      this.commands.push(command); drawnTexts.push(command);
+    }
     setLineWidth(width) { assert.ok(Number.isFinite(width) && width > 0); this.lineWidth = width; }
     fillRect(rect) { this.commands.push({ type: 'fillRect', rect, color: this.fillColor }); }
     fillEllipse(rect) { this.commands.push({ type: 'fillEllipse', rect, color: this.fillColor }); }
@@ -122,17 +130,17 @@ function runtime({ family = 'large', parameter = '', width = 390, height = 844, 
     },
   };
   return {
-    env, files, requests, texts, alerts, settingsPath,
+    env, files, requests, texts, drawnTexts, alerts, settingsPath,
     get result() { return result; }, get locationCalls() { return locationCalls; }, get completed() { return completed; },
     async run() { await new AsyncFunction(...Object.keys(env), source)(...Object.values(env)); return result; },
     async api() {
-      const exports = 'return { validIso,parseSora,validSpxRows,nearestStation,singaporeServiceDate,makeTrainEngine,chosenCards,widgetDimensions,readSettings,trainCard,airCard,soraCard,spxCard,currentLocation,cached,buildWidget,loadAir,setupAir,chartGeometry,largeLayout,peDial,airDial,routeRail };';
+      const exports = 'return { validIso,parseSora,validSpxRows,distanceKm,travelCard,nearestStation,singaporeServiceDate,makeTrainEngine,chosenCards,widgetDimensions,readSettings,trainCard,airCard,soraCard,spxCard,currentLocation,cached,buildWidget,loadAir,setupAir,chartGeometry,largeLayout,peDial,airDial,routeRail };';
       return new AsyncFunction(...Object.keys(env), source.replace(/await run\(\);\s*$/, exports))(...Object.values(env));
     },
   };
 }
 function settingsFiles(settings) { return new Map([['/docs/pocket-desk/settings.json', JSON.stringify(settings)]]); }
-function widgetText(rt) { return rt.texts.map((t) => t.text).join(' | '); }
+function widgetText(rt) { return [...rt.texts,...rt.drawnTexts].map((t) => t.text).join(' | '); }
 function assertLayout(node, trail = 'widget') {
   if (node.kind === 'text') {
     assert.equal(node.lineLimit, 1, `${trail}: text must be single-line`);
@@ -209,7 +217,7 @@ for (const [width,height] of [[320,568],[375,667],[390,844],[430,932],[440,956]]
       const rt = runtime({family,width,height,files:settingsFiles({autoLocation:true,airConsent:true,destination:'lakeside'}),parameter:family==='medium'?'local':''});
       const api = await rt.api(); await rt.run(); assertWidget(rt,api.widgetDimensions(family));
       if(family==='large') {
-        assert.match(widgetText(rt),/Historical estimate/); assert.match(widgetText(rt),/29 Jul · verify/);
+        assert.match(widgetText(rt),/Historical/); assert.match(widgetText(rt),/29 Jul · verify/);
         assert.match(widgetText(rt),/1.0846/); assert.match(widgetText(rt),/US AQI · model/);
         assert.equal(rt.result.children.filter((c)=>c.kind==='stack').length,4);
         assert.equal(rt.locationCalls,1);
@@ -239,11 +247,71 @@ await test('Cached location clearly shows its age and is rejected after six hour
   assert.match(widgetText(rt),/Location unavailable/); assert.doesNotMatch(widgetText(rt),/Historical estimate/);
 });
 await test('Home station nearest, outside Singapore, missing and malformed source states are honest', async () => {
-  for(const [loc,pattern] of [[lakeside,/Home MRT is nearest/],[{latitude:51.5,longitude:-0.1},/No nearby MRT/]]) {
+  for(const [loc,pattern] of [[lakeside,/Home turf :\)/],[{latitude:51.5,longitude:-0.1},/WANDER MODE/]]) {
     const rt=runtime({family:'small',parameter:'train',location:loc,files:settingsFiles({autoLocation:true})}); await rt.run();assert.match(widgetText(rt),pattern);
   }
   const rt=runtime({offline:true}); const api=await rt.api();await rt.run();assertWidget(rt,api.widgetDimensions('large'));
   assert.match(widgetText(rt),/Rates unavailable/);assert.match(widgetText(rt),/Valuation unavailable/);
+});
+await test('Home turf requires a nearby automatic home station; manual same-station is explicit', async () => {
+  const rt = runtime(), api = await rt.api();
+  const fresh = (point, cached = false) => ({ value:{...point,checkedAt:NOW-(cached?2*HOUR:0)},cached });
+  const settings = {autoLocation:true,destination:'lakeside'};
+  const home = await api.trainCard(settings,fresh(lakeside));
+  assert.equal(home.state,'home'); assert.equal(home.metric,'Home turf :)'); assert.equal(home.label,'Lakeside is nearby');
+  assert.doesNotMatch(JSON.stringify(home),/back home already|at home|arrived home/i);
+  const farFromExit = {latitude:1.337,longitude:103.716};
+  assert.equal(api.nearestStation(farFromExit,coordinates.stations,trainData.stations).station.id,'lakeside');
+  const near = await api.trainCard(settings,fresh(farFromExit));
+  assert.equal(near.state,'near-home'); assert.doesNotMatch(near.metric,/Home turf/);
+  const manual = await api.trainCard({...settings,origin:'lakeside'},fresh(lakeside));
+  assert.equal(manual.state,'station'); assert.equal(manual.label,'Same origin & home station');
+  const saved = await api.trainCard(settings,fresh(lakeside,true));
+  assert.equal(saved.state,'home'); assert.equal(saved.metric,'Home turf, last seen'); assert.equal(saved.warning,true);
+  assert.match(saved.foot,/Location 2h ago · saved/);
+});
+await test('Travel distance is local, approximate and independent of train or coordinate data', async () => {
+  const location = {latitude:51.5,longitude:-0.1};
+  const rt = runtime({family:'small',parameter:'train',location,offline:true,files:settingsFiles({autoLocation:true})});
+  const api=await rt.api(); await rt.run(); assertWidget(rt,api.widgetDimensions('small'));
+  assert.match(widgetText(rt),/WANDER MODE/); assert.match(widgetText(rt),/from Singapore/);
+  assert.match(widgetText(rt),/Straight-line · SG centre/);
+  assert.equal(rt.requests.length,0,'Travel card must not request timetable, station, or geocoding data');
+  const fix={value:{...location,checkedAt:NOW},cached:false};
+  const card=await api.trainCard({autoLocation:true},fix,null,null);
+  assert.equal(card.state,'travel'); assert.equal(card.metric,'~10,846 km');
+  assert.equal(card.warning,false); assert.ok(card.distanceKm>10840&&card.distanceKm<10860);
+  const manual=api.travelCard({autoLocation:true,origin:'farrer-park'},fix); assert.equal(manual,null);
+  assert.equal(api.travelCard({autoLocation:false},fix),null);
+  for(const point of [
+    {latitude:1.470,longitude:103.815}, // northern SG
+    {latitude:1.250,longitude:103.635}, // offshore/southwestern SG
+    {latitude:1.470,longitude:104.050}, // northeastern SG
+    {latitude:1.470,longitude:103.750}, // nearby Johor: no country assertion
+    {latitude:1.100,longitude:103.980}, // nearby Batam: deliberately conservative
+  ]) assert.equal(api.travelCard({autoLocation:true},{value:{...point,checkedAt:NOW},cached:false}),null);
+  // The cutoff is a distance guard, never a country boundary.
+  const reference={latitude:1.3521,longitude:103.8198};
+  for(const km of [74.9,75.1]) {
+    const point={latitude:reference.latitude+(km/6371)*180/Math.PI,longitude:reference.longitude,checkedAt:NOW};
+    assert.equal(Boolean(api.travelCard({autoLocation:true},{value:point,cached:false})),km>75);
+  }
+  for(const bad of [null,{latitude:NaN,longitude:0,checkedAt:NOW},{latitude:91,longitude:0,checkedAt:NOW},{...location,checkedAt:NOW+DAY}]) {
+    assert.equal(api.travelCard({autoLocation:true},{value:bad,cached:false}),null);
+  }
+  const remoteSg=await api.trainCard({autoLocation:true,destination:'lakeside'},{value:{latitude:1.250,longitude:103.635,checkedAt:NOW},cached:false},{value:trainData,offline:false},{value:coordinates,offline:false});
+  assert.equal(remoteSg.label,'No nearby MRT'); assert.notEqual(remoteSg.state,'travel');
+});
+await test('Cached travel fixes state their age, expire, and do not pretend to be current', async () => {
+  const settings={autoLocation:true,location:{latitude:51.5,longitude:-0.1,checkedAt:NOW-2*HOUR}};
+  const rt=runtime({family:'large',locationError:true,offline:true,files:settingsFiles(settings)});
+  const api=await rt.api(); await rt.run(); assertWidget(rt,api.widgetDimensions('large'));
+  assert.match(widgetText(rt),/Location 2h ago · saved/); assert.match(widgetText(rt),/WANDER MODE/);
+  const card=api.travelCard(settings,{value:settings.location,cached:true}); assert.equal(card.warning,true);
+  settings.location.checkedAt=NOW-7*HOUR;
+  assert.equal(api.travelCard(settings,{value:settings.location,cached:true}),null);
+  const expired=runtime({family:'small',parameter:'train',locationError:true,files:settingsFiles(settings)}); await expired.run();
+  assert.match(widgetText(expired),/Location unavailable/); assert.doesNotMatch(widgetText(expired),/WANDER MODE/);
 });
 await test('A failed card does not break unrelated cards', async () => {
   const rt=runtime({failure:'valuation-data.json'});await rt.run();
@@ -363,6 +431,54 @@ await test('P/E instrument clamps its marker, AQI ticks encode the actual value,
   const lit = (value) => api.airDial(value, 46).commands.filter((c) => c.type === 'strokePath' && c.color.alpha === 1).length;
   assert.equal(lit(0), 0); assert.equal(lit(42), 4); assert.equal(lit(100), 10); assert.equal(lit(500), 30); assert.equal(lit(undefined), 0);
 });
+await test('AQI 0–1000 prints completely inside one Retina drawing without compressible text stacks', async () => {
+  for(const aqi of [0,42,100,245,300,500,1000]) for(const [width,height] of [[320,568],[390,844],[440,956]]) for(const family of width===320?['small','medium','large']:['large']) {
+    const rt=runtime({family,parameter:family==='small'?'air':'local',width,height,files:settingsFiles({autoLocation:true,airConsent:true}),fixtureOverrides:{'air-quality?':{current:{us_aqi:aqi,time:NOW/1000}}}});
+    const api=await rt.api(); await rt.run(); assertWidget(rt,api.widgetDimensions(family));
+    const value=rt.drawnTexts.find((t)=>t.text===String(aqi)); assert.ok(value,`AQI ${aqi} is rendered directly in its gauge`);
+    assert.equal(value.alignment,'center'); assert.ok(value.font.size>=9);
+    assert.ok(value.font.size*String(aqi).length*.72<=value.rect.width+.01,'All digits fit a conservative glyph budget');
+    assert.ok(value.rect.height>=value.font.size*1.3,'Number has complete vertical glyph space');
+    assert.equal(rt.texts.some((t)=>t.text===String(aqi)),false,'No native gauge label can ellipsize');
+    if(width===320||aqi===245||aqi===500) captures.push({name:`${family}-aqi-${aqi}-${width}`,dimension:api.widgetDimensions(family),tree:rt.result});
+  }
+});
+await test('Home, saved-home, travel, manual-home, missing and no-route tickets have no fake boarding divider', async () => {
+  const states=[
+    {name:'home',location:lakeside,settings:{autoLocation:true}},
+    {name:'saved-home',locationError:true,settings:{autoLocation:true,location:{...lakeside,checkedAt:NOW-2*HOUR}}},
+    {name:'travel',location:{latitude:35.68,longitude:139.76},settings:{autoLocation:true}},
+    {name:'saved-travel',locationError:true,settings:{autoLocation:true,location:{latitude:35.68,longitude:139.76,checkedAt:NOW-2*HOUR}}},
+    {name:'manual-home',settings:{origin:'lakeside'}},
+    {name:'missing',settings:{}},
+    {name:'no-nearby-route',location:{latitude:1.250,longitude:103.635},settings:{autoLocation:true}},
+    {name:'home-station-farther',location:{latitude:1.337,longitude:103.716},settings:{autoLocation:true}},
+  ];
+  for(const state of states) for(const [width,height] of [[320,568],[390,844]]) for(const family of ['small','medium','large']) {
+    const rt=runtime({family,parameter:family==='medium'?'local':'train',width,height,location:state.location,locationError:state.locationError,
+      files:settingsFiles({...state.settings,airConsent:true}),fixtureOverrides:{'air-quality?':{current:{us_aqi:245,time:NOW/1000}}}});
+    const api=await rt.api(); await rt.run(); assertWidget(rt,api.widgetDimensions(family));
+    const drawings=[]; const visit=(node)=>{if(node.backgroundImage)drawings.push(node.backgroundImage);for(const child of node.children||[])visit(child);}; visit(rt.result);
+    const ticket=drawings.find((drawing)=>drawing.commands.some((c)=>c.type==='fillRect'&&c.color.hex==='FFB45B'));
+    assert.ok(ticket); assert.equal(ticket.commands.filter((c)=>c.type==='fillEllipse').length,0,'No punched divider on a non-journey state');
+    assert.doesNotMatch(widgetText(rt),/BOARD BY/);
+    if(family==='large'||family==='small') captures.push({name:`${family}-${state.name}-${width}`,dimension:api.widgetDimensions(family),tree:rt.result});
+  }
+});
+await test('Leading text rows use explicit trailing spacers and source metadata stays clear of ticket divider', async () => {
+  const rt=runtime({files:settingsFiles({autoLocation:true,airConsent:true})}); await rt.run();
+  const visit=(node)=>{
+    if(node.axis==='horizontal'&&node.children.filter((c)=>c.kind==='text').length===1&&node.children.every((c)=>['text','spacer'].includes(c.kind))) {
+      assert.equal(node.children.at(-1).kind,'spacer','One-label rows need trailing spacer, including leading alignment');
+    }
+    for(const child of node.children||[])visit(child);
+  }; visit(rt.result);
+  const ticket=rt.result.children.filter((c)=>c.kind==='stack')[2],content=ticket.children[0];
+  assert.equal(content.axis,'horizontal'); assert.equal(content.children.filter((c)=>c.kind==='stack').length,2);
+  const route=content.children[0];
+  const source=route.children.find((node)=>node.children?.some((text)=>text.text?.includes('29 Jul · verify')));
+  assert.ok(source); assert.ok(source.size.width<ticket.size.width*.63-9,'Source footer stays entirely left of perforation');
+});
 await test('Transit rail derives colors and stops from the calculated journey only', async () => {
   const rt = runtime(), api = await rt.api();
   const card = await api.trainCard({origin:'farrer-park',destination:'lakeside',buffer:3},{value:null,cached:false});
@@ -392,7 +508,7 @@ await test('Large layout stays asymmetric with separate source links and honest 
   assert.equal(panels[1].url,'https://kush0511.github.io/spy-valuation-bands/');
   assert.equal(ticket.url,'https://kush0511.github.io/sg-last-train-home/');
   assert.equal(footer.children.find((c) => c.kind === 'stack').url,'https://open-meteo.com/en/docs/air-quality-api');
-  assert.match(widgetText(rt),/Historical estimate · 29 Jul · verify/); assert.match(widgetText(rt),/Location now/);
+  assert.match(widgetText(rt),/Historical · 29 Jul · verify/); assert.match(widgetText(rt),/Location now/);
   assert.match(widgetText(rt),/US AQI · model/); assert.match(widgetText(rt),/CAMS \/ Open-Meteo/);
   assert.equal(api.largeLayout({width:292,height:311}).finance,103);
 });
