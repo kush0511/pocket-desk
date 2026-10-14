@@ -42,6 +42,7 @@ function runtime({ family = 'large', parameter = '', width = 390, height = 844, 
     constructor(kind = 'stack') { this.kind = kind; this.children = []; this.axis = 'horizontal'; this.padding = [0, 0, 0, 0]; }
     addText(text) { const item = { kind: 'text', text: String(text), centerAlignText() {} }; this.children.push(item); texts.push(item); return item; }
     addStack() { const child = new Stack(); this.children.push(child); return child; }
+    addImage(image) { const child = { kind: 'image', image }; this.children.push(child); return child; }
     addSpacer(length) { this.children.push({ kind: 'spacer', length }); }
     setPadding(...padding) { assert.equal(padding.length, 4); this.padding = padding; }
     layoutVertically() { this.axis = 'vertical'; }
@@ -77,11 +78,31 @@ function runtime({ family = 'large', parameter = '', width = 390, height = 844, 
     async presentSheet() { return choices.length ? choices.shift() : -1; }
     async presentAlert() { return choices.length ? choices.shift() : -1; }
   }
+  class Point { constructor(x, y) { assert.ok(Number.isFinite(x) && Number.isFinite(y)); this.x = x; this.y = y; } }
+  class Rect extends Point { constructor(x, y, width, height) { super(x, y); assert.ok(Number.isFinite(width) && Number.isFinite(height) && width >= 0 && height >= 0); this.width = width; this.height = height; } }
+  class Path {
+    constructor() { this.commands = []; }
+    move(point) { this.commands.push({ type: 'move', ...point }); }
+    addLine(point) { this.commands.push({ type: 'line', ...point }); }
+    closeSubpath() { this.commands.push({ type: 'close' }); }
+  }
+  class DrawContext {
+    constructor() { this.commands = []; this.lineWidth = 1; }
+    setFillColor(color) { this.fillColor = color; }
+    setStrokeColor(color) { this.strokeColor = color; }
+    setLineWidth(width) { assert.ok(Number.isFinite(width) && width > 0); this.lineWidth = width; }
+    fillRect(rect) { this.commands.push({ type: 'fillRect', rect, color: this.fillColor }); }
+    fillEllipse(rect) { this.commands.push({ type: 'fillEllipse', rect, color: this.fillColor }); }
+    addPath(path) { this.path = path; }
+    strokePath() { this.commands.push({ type: 'strokePath', path: structuredClone(this.path.commands), color: this.strokeColor, lineWidth: this.lineWidth }); }
+    fillPath() { this.commands.push({ type: 'fillPath', path: structuredClone(this.path.commands), color: this.fillColor }); }
+    getImage() { assert.ok(this.respectScreenScale, 'Graphics must use Retina screen scale'); return { kind: 'drawing', size: this.size, commands: this.commands }; }
+  }
   const env = {
-    ListWidget, Request, Alert,
+    ListWidget, Request, Alert, Point, Rect, Path, DrawContext,
     FileManager: { local: () => ({ documentsDirectory: () => '/docs', joinPath: (a, b) => `${a}/${b}`, fileExists: (p) => files.has(p), createDirectory: (p) => files.set(p, ''), readString: (p) => files.get(p), writeString: (p, s) => files.set(p, s) }) },
     Font: new Proxy({}, { get: (_, name) => (size) => ({ name, size }) }),
-    Color: function Color(hex) { this.hex = hex; },
+    Color: function Color(hex, alpha = 1) { assert.ok(/^[a-fA-F0-9]{6}$/.test(hex)); assert.ok(alpha >= 0 && alpha <= 1); this.hex = hex; this.alpha = alpha; },
     Size: function Size(width, height) { assert.ok(Number.isFinite(width) && Number.isFinite(height)); this.width = width; this.height = height; },
     Device: { screenSize: () => ({ width, height }) },
     Location: { setAccuracyToHundredMeters() {}, async current() { locationCalls++; if (locationError) throw new Error('Location unavailable'); return { ...location, horizontalAccuracy: 100 }; } },
@@ -105,7 +126,7 @@ function runtime({ family = 'large', parameter = '', width = 390, height = 844, 
     get result() { return result; }, get locationCalls() { return locationCalls; }, get completed() { return completed; },
     async run() { await new AsyncFunction(...Object.keys(env), source)(...Object.values(env)); return result; },
     async api() {
-      const exports = 'return { validIso,parseSora,validSpxRows,nearestStation,singaporeServiceDate,makeTrainEngine,chosenCards,widgetDimensions,readSettings,trainCard,airCard,currentLocation,cached,buildWidget,loadAir,setupAir };';
+      const exports = 'return { validIso,parseSora,validSpxRows,nearestStation,singaporeServiceDate,makeTrainEngine,chosenCards,widgetDimensions,readSettings,trainCard,airCard,soraCard,spxCard,currentLocation,cached,buildWidget,loadAir,setupAir,chartGeometry,largeLayout,peDial,airDial,routeRail };';
       return new AsyncFunction(...Object.keys(env), source.replace(/await run\(\);\s*$/, exports))(...Object.values(env));
     },
   };
@@ -119,6 +140,7 @@ function assertLayout(node, trail = 'widget') {
     assert.ok(node.font.size >= 8, `${trail}: minimum font`);
     return { width: node.text.length * node.font.size * 0.56, height: node.font.size * 1.2, flexible: true };
   }
+  if (node.kind === 'image') return { width: node.imageSize.width, height: node.imageSize.height, flexible: false };
   if (node.kind === 'spacer') return { width: node.length || 0, height: node.length || 0, flexible: !node.length };
   const children = node.children.map((child, i) => assertLayout(child, `${trail}/${i}`));
   const [top, right, bottom, left] = node.padding;
@@ -189,7 +211,7 @@ for (const [width,height] of [[320,568],[375,667],[390,844],[430,932],[440,956]]
       if(family==='large') {
         assert.match(widgetText(rt),/Historical estimate/); assert.match(widgetText(rt),/29 Jul · verify/);
         assert.match(widgetText(rt),/1.0846/); assert.match(widgetText(rt),/US AQI · model/);
-        assert.equal(rt.result.children.filter((c)=>c.kind==='stack').length,3);
+        assert.equal(rt.result.children.filter((c)=>c.kind==='stack').length,4);
         assert.equal(rt.locationCalls,1);
         captures.push({name:`${family}-${width}x${height}`,dimension:api.widgetDimensions(family),tree:rt.result});
       }
@@ -279,6 +301,100 @@ await test('Circular accessories retain model and historical-data labels', async
   assert.match(widgetText(rt),/Historical train/);assert.match(widgetText(rt),/29 Jul · verify/);
   const air=runtime({family:'accessoryCircular',parameter:'air',files:settingsFiles({airConsent:true,airMode:'manual',airLocation:{latitude:1.3,longitude:103.8,checkedAt:NOW}})});await air.run();
   assert.match(widgetText(air),/US AQI model/);assert.match(widgetText(air),/14 Oct/);
+});
+
+await test('Native instruments preserve the exact validated source series', async () => {
+  const rows = [
+    { date: '2026-10-09', spx: 7600, eps: 400, pe: 19 },
+    { date: '2026-10-12', spx: 7800, eps: 400, pe: 19.5 },
+    { date: '2026-10-13', spx: 7840, eps: 400, pe: 19.6 },
+  ];
+  const rt = runtime({ fixtureOverrides: { 'valuation-data.json': { rows } } }), api = await rt.api();
+  const sora = await api.soraCard(), spx = await api.spxCard();
+  assert.deepEqual(sora.series, [
+    {date:'2026-10-12',value:1.2026,m1:1.29,m3:1.24},
+    {date:'2026-10-13',value:1.0846,m1:1.2894,m3:1.2366},
+  ]);
+  assert.deepEqual(spx.series, rows.map((r) => ({ date:r.date,value:r.pe })));
+  assert.equal(spx.value, 19.6);
+  assert.ok(Math.abs(sora.delta + 11.8) < 1e-8);
+  await rt.run(); assertWidget(rt, api.widgetDimensions('large'));
+  captures.push({ name:'market-history-338',dimension:api.widgetDimensions('large'),tree:rt.result });
+});
+await test('Sixty-observation synthetic fixture renders the full three-series chart for visual QA', async () => {
+  // Deliberately synthetic test-only fixture. Runtime never generates observations.
+  const dailyRates = [1.19,1.14,1.12,1.21,1.22,1.18,1.16,1.25,1.12,1.15,1.24,1.22,1.20,1.19,1.26,1.18,1.17,1.19,1.21,1.18,1.16,1.15,1.14,1.20,1.18,1.16,1.13,1.12,1.15,1.13,1.12,1.14,1.16,1.14,1.13,1.10,1.12,1.16,1.12,1.09,1.11,1.14,1.13,1.12,1.15,1.11,1.10,1.14,1.11,1.08,1.12,1.11,1.09,1.11,1.10,1.09,1.12,1.10,1.09,1.0846];
+  const csv = 'Date,SORA,1M,3M\n' + dailyRates.map((value,i) => {
+    const date = new Date(NOW - (60-i) * DAY), m1 = 1.34 - i * .00086, m3 = 1.33 - i * .00158;
+    return `${date.getUTCDate()}/${date.getUTCMonth()+1}/${date.getUTCFullYear()},${value},${m1.toFixed(4)},${m3.toFixed(4)}`;
+  }).join('\n');
+  const rows = dailyRates.map((_,i) => ({date:new Date(NOW-(60-i)*DAY).toISOString().slice(0,10),spx:(18.7+i*.014)*400,eps:400,pe:18.7+i*.014}));
+  for(const [width,height] of [[320,568],[390,844],[430,932]]) {
+    const rt=runtime({width,height,files:settingsFiles({autoLocation:true,airConsent:true}),fixtureOverrides:{'pub?output=csv':csv,'valuation-data.json':{rows}}});
+    const api=await rt.api();await rt.run();assertWidget(rt,api.widgetDimensions('large'));
+    assert.match(widgetText(rt),/60 obs/);
+    captures.push({name:`synthetic-60-observations-${width}`,dimension:api.widgetDimensions('large'),tree:rt.result});
+  }
+});
+await test('Chart geometry uses actual dates, shared scales and handles flat or missing history', async () => {
+  const api = await runtime().api();
+  const series = [
+    {date:'2026-10-01',value:1,m1:2,m3:3},
+    {date:'2026-10-02',value:2,m1:2,m3:3},
+    {date:'2026-10-11',value:3,m1:2,m3:3},
+  ];
+  const geometry = api.chartGeometry(series, 106, 46, ['value','m1','m3']);
+  assert.equal(geometry.low, 1); assert.equal(geometry.high, 3);
+  assert.equal(geometry.paths[0][0].x, 3); assert.equal(geometry.paths[0][1].x, 13); assert.equal(geometry.paths[0][2].x, 103);
+  assert.equal(geometry.paths[0][1].y, geometry.paths[1][1].y, 'Equal rates share the same y coordinate');
+  assert.equal(geometry.paths[0][2].y, geometry.paths[2][2].y);
+  const flat = api.chartGeometry(series.map((r) => ({date:r.date,value:2})), 70, 20);
+  assert.ok(flat.paths[0].every((p) => p.y === 10));
+  assert.equal(api.chartGeometry([], 70, 20), null);
+  assert.equal(api.chartGeometry([{date:'2026-10-01',value:2}], 70, 20), null);
+  for (const path of geometry.paths) for (const p of path) assert.ok(p.x >= 0 && p.x <= 106 && p.y >= 0 && p.y <= 46);
+});
+await test('P/E instrument clamps its marker, AQI ticks encode the actual value, and no-data has no marker', async () => {
+  const api = await runtime().api();
+  const markers = (value) => api.peDial(value, 110, 55).commands.filter((c) => c.type === 'fillEllipse');
+  assert.deepEqual(markers(12), markers(16)); assert.deepEqual(markers(40), markers(26));
+  assert.equal(markers(undefined).length, 0);
+  assert.notDeepEqual(markers(19), markers(23));
+  const lit = (value) => api.airDial(value, 46).commands.filter((c) => c.type === 'strokePath' && c.color.alpha === 1).length;
+  assert.equal(lit(0), 0); assert.equal(lit(42), 4); assert.equal(lit(100), 10); assert.equal(lit(500), 30); assert.equal(lit(undefined), 0);
+});
+await test('Transit rail derives colors and stops from the calculated journey only', async () => {
+  const rt = runtime(), api = await rt.api();
+  const card = await api.trainCard({origin:'farrer-park',destination:'lakeside',buffer:3},{value:null,cached:false});
+  assert.equal(card.origin, 'Farrer Park'); assert.equal(card.destination, 'Lakeside');
+  assert.deepEqual(card.routeLines.map((r) => r.id), ['NE','EW']);
+  assert.ok(card.routeLines.every((r) => Number.isInteger(r.stops) && r.stops > 0));
+  const rail = api.routeRail(card, 120, 9);
+  assert.deepEqual(rail.commands.filter((c) => c.type === 'strokePath').map((c) => c.color.hex), ['874DBB','15864D']);
+  assert.equal(api.routeRail({unavailable:true},120,9).commands.length,0);
+});
+await test('Every small instrument and every medium pair fits the smallest supported iPhone', async () => {
+  const keys = ['sora','spx','train','air'];
+  for (const family of ['small','medium']) for (const first of keys) for (const second of family === 'small' ? [''] : keys.filter((key) => key !== first)) {
+    const parameter = family === 'small' ? first : `${first},${second}`;
+    const rt = runtime({family,parameter,width:320,height:568,files:settingsFiles({autoLocation:true,airConsent:true})});
+    const api = await rt.api(); await rt.run(); assertWidget(rt, api.widgetDimensions(family));
+    if(family === 'small' || parameter === 'sora,spx' || parameter === 'train,air') captures.push({name:`${family}-${parameter}-292`,dimension:api.widgetDimensions(family),tree:rt.result});
+  }
+});
+await test('Large layout stays asymmetric with separate source links and honest warning text', async () => {
+  const rt = runtime({width:320,height:568,files:settingsFiles({autoLocation:true,airConsent:true})}), api=await rt.api(); await rt.run();
+  const [header,finance,ticket,footer] = rt.result.children.filter((c) => c.kind === 'stack');
+  assert.equal(header.size.height,16); assert.equal(ticket.size.width,268);
+  const panels = finance.children.filter((c) => c.kind === 'stack');
+  assert.ok(panels[0].size.width > panels[1].size.width * 1.4);
+  assert.equal(panels[0].url,'https://kush0511.github.io/sora-rates/');
+  assert.equal(panels[1].url,'https://kush0511.github.io/spy-valuation-bands/');
+  assert.equal(ticket.url,'https://kush0511.github.io/sg-last-train-home/');
+  assert.equal(footer.children.find((c) => c.kind === 'stack').url,'https://open-meteo.com/en/docs/air-quality-api');
+  assert.match(widgetText(rt),/Historical estimate · 29 Jul · verify/); assert.match(widgetText(rt),/Location now/);
+  assert.match(widgetText(rt),/US AQI · model/); assert.match(widgetText(rt),/CAMS \/ Open-Meteo/);
+  assert.equal(api.largeLayout({width:292,height:311}).finance,103);
 });
 const capture=process.argv.find((arg)=>arg.startsWith('--capture='));
 if(capture) { writeFileSync(capture.slice('--capture='.length),JSON.stringify(captures,null,2));console.log(`Captured ${captures.length} render trees.`); }

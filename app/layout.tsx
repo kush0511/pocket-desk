@@ -6,11 +6,11 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Pocket Desk — Your day, at a glance",
-  description: "One considered iPhone widget for SORA, S&P 500 forward P/E, the way home, and local air quality. Preview and install Pocket Desk with Scriptable.",
+  title: "Pocket Desk / Night Shift",
+  description: "A personal instrument panel for your iPhone. SORA curves, S&P 500 valuation, a ticket home to Lakeside, and local air quality. Install Pocket Desk with Scriptable.",
 };
 
-export const viewport: Viewport = { themeColor: "#f7f8f2" };
+export const viewport: Viewport = { themeColor: "#080e18" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}><body>{children}</body></html>;

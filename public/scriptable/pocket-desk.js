@@ -1,7 +1,7 @@
-// Pocket Desk — a calm, source-labelled iPhone widget for Scriptable.
+// Pocket Desk / NIGHT SHIFT — a personal instrument panel for Scriptable.
 // https://kush0511.github.io/pocket-desk/
 // Run once inside Scriptable for previews and private, on-device setup.
-// Large: four cards. Medium: markets | local | sora,air (any two cards).
+// Large: finance instruments, transit ticket, air signal. Medium: markets | local | sora,air.
 // Small: sora | spx | train | air. Default: sora.
 // iOS controls refresh timing; this script cannot guarantee live updates.
 // Air quality: CAMS model via Open-Meteo, US AQI (not Singapore PSI).
@@ -22,10 +22,11 @@ const PD = {
   day: 86400000,
 };
 const COLORS = {
-  background: '101C25', panel: '121D2B', panelBorder: '233246',
-  text: 'F1F5FA', muted: 'A4B3C5', faint: '7F92AA',
-  sora: '9CDEC8', spx: 'AAC5F7', train: 'EAC793', air: 'AED4BE',
-  warning: 'EAC793', bad: 'F0A6A6',
+  background: '09141F', panel: '172039', panelBorder: '30405A',
+  text: 'F5F6EF', muted: 'B7C2D5', faint: '93A5BF',
+  sora: 'C5F277', spx: 'A4CFFF', train: 'FFB45B', air: '82E8CB',
+  warning: 'FFD28D', bad: 'FF8898', ticketInk: '281D16', ticketMuted: '5E3C22',
+  m1: 'B7AAEF', m3: '6DA9DD',
 };
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const fm = FileManager.local();
@@ -242,7 +243,7 @@ function mapsUrl(station = 'Lakeside') {
   return 'https://maps.apple.com/?daddr=' + encodeURIComponent(station + ' MRT Station, Singapore') + '&dirflg=r';
 }
 function emptyCard(key, title, message, detail, url) {
-  return { key, title, metric: '—', label: message, detail, foot: 'Tap to open', url: url || setupUrl(key), warning: true };
+  return { key, title, metric: '—', label: message, detail, foot: 'Tap to open', url: url || setupUrl(key), warning: true, unavailable: true };
 }
 function sourceFoot(date, offline, threshold = 4) {
   return `${shortDate(date)}${isoAge(date) > threshold ? ' · old' : ''}${offline ? ' · cached' : ''}`;
@@ -253,7 +254,9 @@ async function soraCard() {
     if (isoAge(last.date) > 30 || isoAge(last.date) < -1) throw new Error('Old rates');
     return { key: 'sora', title: 'SORA', metric: last.sora.toFixed(4), unit: '%', label: 'Overnight',
       detail: `1M ${last.m1.toFixed(3)}% · 3M ${last.m3.toFixed(3)}%`, foot: sourceFoot(last.date, result.offline),
-      warning: result.offline || isoAge(last.date) > 4, url: PD.soraSite };
+      warning: result.offline || isoAge(last.date) > 4, url: PD.soraSite, value: last.sora,
+      series: rows.map((r) => ({ date: r.date, value: r.sora, m1: r.m1, m3: r.m3 })),
+      delta: rows.length > 1 ? (last.sora - rows[rows.length - 2].sora) * 100 : null };
   } catch { return emptyCard('sora', 'SORA', 'Rates unavailable', 'Open the rates dashboard', PD.soraSite); }
 }
 async function spxCard() {
@@ -262,7 +265,8 @@ async function spxCard() {
     if (isoAge(last.date) > 30 || isoAge(last.date) < -1) throw new Error('Old valuation');
     const band = last.pe < 16 ? 'Below 16× band' : last.pe > 26 ? 'Above 26× band' : last.pe % 2 === 0 ? `At ${last.pe}× band` : `${Math.floor(last.pe / 2) * 2}–${Math.ceil(last.pe / 2) * 2}× band`;
     return { key: 'spx', title: 'S&P 500', metric: last.pe.toFixed(2), unit: '×', label: 'Forward P/E', detail: band,
-      foot: sourceFoot(last.date, result.offline), warning: result.offline || isoAge(last.date) > 4, url: PD.spxSite };
+      foot: sourceFoot(last.date, result.offline), warning: result.offline || isoAge(last.date) > 4, url: PD.spxSite, value: last.pe,
+      series: rows.map((r) => ({ date: r.date, value: r.pe })) };
   } catch { return emptyCard('spx', 'S&P 500', 'Valuation unavailable', 'Open the valuation dashboard', PD.spxSite); }
 }
 function aqiLabel(aqi) {
@@ -274,7 +278,7 @@ async function airCard(settings, locationResult) {
     const result = await loadAir(settings, locationResult), d = result.value;
     return { key: 'air', title: 'AIR QUALITY', metric: String(Math.round(d.aqi)), label: 'US AQI · model',
       detail: `${aqiLabel(d.aqi)}${result.offline ? ' · cached' : result.locationCached && !result.manual ? ` · loc ${elapsed(result.locationAt)}` : ''}`, foot: `${shortDate(localDate(d.time))} ${clockText(d.time)}${result.offline ? ' · cache' : ''}`,
-      attribution: 'CAMS / Open-Meteo', warning: result.offline || age(d.time) > 3 * PD.hour || (result.locationCached && !result.manual) || d.aqi > 100, url: PD.airSite };
+      attribution: 'CAMS / Open-Meteo', value: d.aqi, quality: aqiLabel(d.aqi), warning: result.offline || age(d.time) > 3 * PD.hour || (result.locationCached && !result.manual) || d.aqi > 100, url: PD.airSite };
   } catch { return emptyCard('air', 'AIR QUALITY', 'Air data unavailable', 'Open app to check location', setupUrl('air')); }
 }
 async function trainCard(settings, locationResult, preloaded, preloadedCoordinates) {
@@ -312,7 +316,12 @@ async function trainCard(settings, locationResult, preloaded, preloadedCoordinat
       detail: `${locationResult.cached && !settings.origin ? 'Saved fix: ' : ''}${origin.name} → ${destination.name}`,
       foot: stale ? `${shortDate(data.date)} · verify` : `${shortDate(data.date)} · table`,
       extra: `${locationLabel} · station-to-station only`, warning: stale || result.offline || locationResult.cached || departed,
-      url: PD.trainSite, maps: mapsUrl(destination.name), route: journey, locationLabel, sourceDate: data.date };
+      url: PD.trainSite, maps: mapsUrl(destination.name), route: journey, locationLabel, sourceDate: data.date,
+      origin: origin.name, destination: destination.name,
+      routeLines: journey.rides.map((ride) => {
+        const pattern = data.patterns.find((p) => p.id === ride.patternId);
+        return { id: pattern?.lineId || '', from: ride.fromCode, to: ride.toCode, stops: ride.stopCodes.length - 1 };
+      }), transferCount: journey.transfers.length };
   } catch { return emptyCard('train', 'LAST TRAIN', 'Train data unavailable', 'Open the train dashboard', PD.trainSite); }
 }
 function chosenCards(family, parameter) {
@@ -345,29 +354,230 @@ function addText(stack, value, size, hex = COLORS.text, weight = 'medium', scale
 function fixedRow(parent, width, height) {
   const row = parent.addStack(); row.layoutHorizontally(); row.size = new Size(width, height); row.centerAlignContent(); return row;
 }
-function drawCard(parent, card, width, height, compact = false) {
-  const stack = parent.addStack(); stack.layoutVertically(); stack.size = new Size(width, height);
-  stack.backgroundColor = color(({ sora: '1D3636', spx: '24323F', train: '39362B', air: '2A3936' })[card.key] || COLORS.panel); stack.cornerRadius = 16;
-  stack.borderColor = color(COLORS.panelBorder); stack.borderWidth = 0.5;
-  const pad = width < 140 ? 9 : 11; stack.setPadding(pad, pad, pad, pad); stack.url = card.url;
-  const inner = width - 2 * pad;
-  const title = fixedRow(stack, inner, 14);
-  const dot = title.addStack(); dot.size = new Size(4, 4); dot.cornerRadius = 2; dot.backgroundColor = color(COLORS[card.key]);
-  title.addSpacer(5); addText(title, card.title, 10, COLORS.muted, 'semibold', 0.85);
-  stack.addSpacer(compact || height < 140 ? 3 : 5);
-  const hero = fixedRow(stack, inner, compact || height < 140 ? 30 : 38); hero.bottomAlignContent();
-  const number = hero.addStack(); number.layoutHorizontally(); number.size = new Size(inner - (card.unit ? 20 : 0), compact || height < 140 ? 30 : 38); number.bottomAlignContent();
-  addText(number, card.metric, card.metric.length > 7 ? 23 : compact || height < 140 ? 25 : 31, COLORS.text, 'bold', 0.7);
-  if (card.unit) { hero.addSpacer(2); addText(hero, card.unit, 17, COLORS[card.key], 'semibold'); }
+function column(parent, width, height) {
+  const stack = parent.addStack(); stack.layoutVertically(); stack.size = new Size(width, height); return stack;
+}
+function textLine(parent, text, width, height, size, hex = COLORS.text, weight = 'medium', centered = false) {
+  const row = fixedRow(parent, width, height);
+  if (centered) row.addSpacer();
+  addText(row, text, size, hex, weight);
+  if (centered) row.addSpacer();
+  return row;
+}
+function canvas(width, height) {
+  const ctx = new DrawContext(); ctx.size = new Size(width, height); ctx.opaque = false; ctx.respectScreenScale = true; return ctx;
+}
+function stroke(ctx, points, hex, width = 1, alpha = 1) {
+  if (points.length < 2) return;
+  const path = new Path(); path.move(new Point(points[0].x, points[0].y));
+  for (const p of points.slice(1)) path.addLine(new Point(p.x, p.y));
+  ctx.addPath(path); ctx.setStrokeColor(new Color(hex, alpha)); ctx.setLineWidth(width); ctx.strokePath();
+}
+function disc(ctx, x, y, radius, hex, alpha = 1) {
+  ctx.setFillColor(new Color(hex, alpha)); ctx.fillEllipse(new Rect(x - radius, y - radius, radius * 2, radius * 2));
+}
+function addGraphic(parent, image, width, height) {
+  const item = parent.addImage(image); item.imageSize = new Size(width, height); return item;
+}
+function backdrop(width, height) {
+  const ctx = canvas(width, height); ctx.setFillColor(color(COLORS.background)); ctx.fillRect(new Rect(0, 0, width, height));
+  // Static lighting and drafting-paper dots, never decorative market data.
+  for (let i = 9; i > 0; i--) disc(ctx, width * 0.36, height * 0.19, width * (0.15 + i * 0.04), '6650AA', 0.018);
+  for (let x = 18; x < width; x += 14) for (let y = 20; y < height * 0.57; y += 14) disc(ctx, x, y, 0.5, 'C5BBEE', 0.10);
+  return ctx.getImage();
+}
+function chartGeometry(series, width, height, fields = ['value']) {
+  const rows = (series || []).filter((r) => validIso(r.date) && fields.every((f) => finite(r[f])));
+  if (rows.length < 2) return null;
+  const values = rows.flatMap((r) => fields.map((f) => r[f]));
+  const low = Math.min(...values), high = Math.max(...values), span = Math.max(high - low, Math.abs(high) * 0.02, 0.01);
+  const first = Date.parse(rows[0].date), last = Date.parse(rows[rows.length - 1].date);
+  const x = (r, index) => 3 + (last > first ? (Date.parse(r.date) - first) / (last - first) : index / (rows.length - 1)) * (width - 6);
+  const y = (value) => 3 + (0.5 + (high + low) / (2 * span) - value / span) * (height - 6);
+  return { low, high, count: rows.length, paths: fields.map((f) => rows.map((r, i) => ({ x: x(r, i), y: y(r[f]) }))) };
+}
+function sparkline(series, width, height, multi = false) {
+  const ctx = canvas(width, height), geometry = chartGeometry(series, width, height, multi ? ['value', 'm1', 'm3'] : ['value']);
+  for (const fraction of [0.15, 0.5, 0.85]) stroke(ctx, [{ x: 1, y: height * fraction }, { x: width - 1, y: height * fraction }], '8D9FB9', 0.5, 0.16);
+  if (!geometry) return ctx.getImage(); // Missing series must never become a made-up waveform.
+  const main = geometry.paths[0], fill = new Path();
+  fill.move(new Point(main[0].x, height - 1));
+  for (const p of main) fill.addLine(new Point(p.x, p.y));
+  fill.addLine(new Point(main[main.length - 1].x, height - 1)); fill.closeSubpath();
+  ctx.addPath(fill); ctx.setFillColor(new Color(multi ? COLORS.sora : COLORS.spx, 0.09)); ctx.fillPath();
+  if (multi) {
+    stroke(ctx, geometry.paths[2], COLORS.m3, 1.1, 0.9);
+    stroke(ctx, geometry.paths[1], COLORS.m1, 1.1, 0.95);
+  }
+  stroke(ctx, main, multi ? COLORS.sora : COLORS.spx, 5, 0.08);
+  stroke(ctx, main, multi ? COLORS.sora : COLORS.spx, 1.8);
+  const end = main[main.length - 1]; disc(ctx, end.x, end.y, 2.5, multi ? COLORS.sora : COLORS.spx);
+  return ctx.getImage();
+}
+function arcPoints(cx, cy, radius, start, end, steps = 30) {
+  return Array.from({ length: steps + 1 }, (_, i) => {
+    const angle = (start + (end - start) * i / steps) * Math.PI / 180;
+    return { x: cx + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius };
+  });
+}
+function peDial(value, width, height) {
+  const ctx = canvas(width, height), cx = width / 2, cy = height - 4, radius = Math.min(width / 2 - 7, height - 7);
+  for (let i = 0; i < 5; i++) stroke(ctx, arcPoints(cx, cy, radius, 182 + i * 36, 214 + i * 36), ['577CBA', '769FDA', 'A4CFFF', 'C0ABEE', 'E2AEBA'][i], 3, 0.85);
+  for (let i = 0; i <= 10; i++) {
+    const angle = 180 + i * 18;
+    const a = arcPoints(cx, cy, radius - 5, angle, angle)[0], b = arcPoints(cx, cy, radius - (i % 2 ? 7 : 9), angle, angle)[0];
+    stroke(ctx, [a, b], COLORS.spx, 0.8, 0.55);
+  }
+  if (finite(value)) {
+    const angle = 180 + Math.min(1, Math.max(0, (value - 16) / 10)) * 180;
+    const marker = arcPoints(cx, cy, radius, angle, angle)[0];
+    disc(ctx, marker.x, marker.y, 4.2, COLORS.background); disc(ctx, marker.x, marker.y, 2.6, COLORS.text);
+  }
+  return ctx.getImage();
+}
+function airColor(value) {
+  return value <= 50 ? COLORS.air : value <= 100 ? 'E4D579' : value <= 150 ? 'FFB45B' : value <= 200 ? 'FF8898' : value <= 300 ? 'C6A4EE' : 'E685C8';
+}
+function airDial(value, size) {
+  const ctx = canvas(size, size), center = size / 2, radius = size / 2 - 3;
+  // 30 calibrated ticks represent 0–300 US AQI. The number remains unclamped.
+  for (let i = 0; i < 30; i++) {
+    const angle = 140 + i * (260 / 29), a = arcPoints(center, center, radius - 4, angle, angle)[0], b = arcPoints(center, center, radius, angle, angle)[0];
+    const lit = finite(value) && (i + 1) * 10 <= Math.min(300, Math.max(0, value));
+    stroke(ctx, [a, b], lit ? airColor((i + 1) * 10) : '5E708F', 2, lit ? 1 : 0.28);
+  }
+  return ctx.getImage();
+}
+const LINE_COLORS = { NS: 'E94D51', EW: '15864D', CG: '15864D', NE: '874DBB', CC: 'C58C15', DT: '2671C9', TE: '9A593D' };
+function routeRail(card, width, height) {
+  const ctx = canvas(width, height), lines = card.routeLines || [];
+  if (!lines.length) return ctx.getImage();
+  const total = lines.reduce((sum, line) => sum + Math.max(1, line.stops || 1), 0);
+  let x = 3;
+  for (const line of lines) {
+    const length = (width - 6) * Math.max(1, line.stops || 1) / total;
+    stroke(ctx, [{ x, y: height / 2 }, { x: x + length, y: height / 2 }], LINE_COLORS[line.id] || COLORS.ticketMuted, 3.5);
+    disc(ctx, x, height / 2, 2.7, COLORS.ticketInk); disc(ctx, x, height / 2, 1.3, COLORS.train); x += length;
+  }
+  disc(ctx, width - 3, height / 2, 2.7, COLORS.ticketInk); disc(ctx, width - 3, height / 2, 1.3, COLORS.train);
+  return ctx.getImage();
+}
+function ticketBackdrop(width, height, split) {
+  const ctx = canvas(width, height); ctx.setFillColor(color(COLORS.train)); ctx.fillRect(new Rect(0, 0, width, height));
+  if (split) {
+    for (let y = 11; y < height - 8; y += 6) stroke(ctx, [{ x: split, y }, { x: split, y: Math.min(y + 3, height - 8) }], COLORS.ticketInk, 0.8, 0.25);
+    disc(ctx, split, 0, 4.5, COLORS.background); disc(ctx, split, height, 4.5, COLORS.background);
+  }
+  return ctx.getImage();
+}
+function sourceLine(parent, card, width, size = 8) {
+  return textLine(parent, card.foot, width, 11, size, card.warning ? COLORS.warning : COLORS.faint);
+}
+function drawSora(parent, card, width, height) {
+  const stack = column(parent, width, height); stack.url = card.url;
+  const title = fixedRow(stack, width, 12);
+  addText(title, 'SORA · O/N', 10, COLORS.sora, 'semibold'); title.addSpacer();
+  if (width >= 140 && card.series) addText(title, `${card.series.length} obs`, 8, COLORS.faint);
   stack.addSpacer(2);
-  addText(stack, card.label, 11, COLORS[card.key], 'medium', 0.8);
-  stack.addSpacer(3);
-  addText(stack, card.detail, 10, COLORS.muted, 'medium', 0.75);
-  stack.addSpacer();
-  if (card.attribution) addText(stack, card.attribution, 8, COLORS.faint, 'medium', 0.8);
-  if (card.key === 'train' && card.locationLabel) addText(stack, card.locationLabel, 9, COLORS.faint);
-  addText(stack, card.foot, 9, card.warning ? COLORS.warning : COLORS.faint, 'medium', 0.8);
+  textLine(stack, `${card.metric}${card.unit || ''}`, width, 38, width < 140 ? 28 : 31, COLORS.text, 'bold');
+  textLine(stack, card.unavailable ? card.label : card.detail, width, 13, 9, card.unavailable ? COLORS.warning : COLORS.muted);
+  const chartHeight = Math.max(12, height - 80);
+  if (card.series?.length > 1) addGraphic(stack, sparkline(card.series, width, chartHeight, true), width, chartHeight);
+  else {
+    const missing = column(stack, width, chartHeight); missing.addSpacer();
+    if (chartHeight >= 12) textLine(missing, card.unavailable ? 'NO RATE SIGNAL' : 'History unavailable', width, 11, 8, COLORS.faint);
+  }
+  stack.addSpacer(4); sourceLine(stack, card, width);
   return stack;
+}
+function drawSpx(parent, card, width, height) {
+  const stack = column(parent, width, height); stack.url = card.url;
+  textLine(stack, 'S&P 500', width, 12, 10, COLORS.spx, 'semibold', true);
+  textLine(stack, 'Forward P/E', width, 12, 9, COLORS.muted, 'medium', true);
+  const showHistory = height >= 126 && card.series?.length > 1;
+  const dialHeight = Math.max(35, Math.min(66, height - 60 - (showHistory ? 14 : 0)));
+  const gauge = column(stack, width, dialHeight); gauge.backgroundImage = peDial(card.value, width, dialHeight);
+  const metricSize = width < 110 ? 19 : width < 130 ? 22 : 25;
+  gauge.addSpacer(); textLine(gauge, `${card.metric}${card.unit || ''}`, width, Math.ceil(metricSize * 1.2), metricSize, COLORS.text, 'bold', true);
+  const range = fixedRow(stack, width, 10); addText(range, '16×', 8, COLORS.faint); range.addSpacer(); addText(range, '26×', 8, COLORS.faint);
+  textLine(stack, card.unavailable ? card.label : card.detail, width, 12, 8, card.unavailable ? COLORS.warning : COLORS.muted, 'medium', true);
+  if (showHistory) addGraphic(stack, sparkline(card.series, width, 14), width, 14);
+  stack.addSpacer();
+  sourceLine(stack, card, width);
+  return stack;
+}
+function drawTicket(parent, card, width, height) {
+  const stack = column(parent, width, height), pad = 9, inner = width - pad * 2;
+  stack.url = card.url; stack.cornerRadius = 15; stack.setPadding(pad, pad, pad, pad);
+  const horizontal = width >= 235, split = horizontal ? Math.round(width * 0.63) : 0;
+  stack.backgroundImage = ticketBackdrop(width, height, split);
+  const header = fixedRow(stack, inner, 11); addText(header, 'LAST TRAIN / HOME', 8, COLORS.ticketInk, 'semibold'); header.addSpacer();
+  if (horizontal) addText(header, 'SGT', 8, COLORS.ticketMuted, 'semibold');
+  if (horizontal) {
+    const content = fixedRow(stack, inner, 45), leftWidth = split - pad - 9, rightWidth = inner - leftWidth - 16;
+    const route = column(content, leftWidth, 45);
+    if (card.origin && card.destination) {
+      textLine(route, `${card.detail?.startsWith('Saved fix:') ? 'Saved fix: ' : ''}${card.origin}`, leftWidth, 12, 10, COLORS.ticketMuted);
+      textLine(route, `→ ${card.destination}`, leftWidth, 22, 18, COLORS.ticketInk, 'bold');
+      addGraphic(route, routeRail(card, leftWidth, 9), leftWidth, 9);
+    } else {
+      textLine(route, card.label, leftWidth, 18, 12, COLORS.ticketInk, 'semibold');
+      textLine(route, card.detail, leftWidth, 14, 9, COLORS.ticketMuted); route.addSpacer();
+    }
+    content.addSpacer(16);
+    const time = column(content, rightWidth, 45);
+    textLine(time, card.metric, rightWidth, 34, card.metric.length > 6 ? 22 : 28, COLORS.ticketInk, 'bold', true);
+    textLine(time, card.origin ? 'BOARD BY' : card.unavailable ? 'TAP TO OPEN' : 'HOME MRT', rightWidth, 11, 8, COLORS.ticketMuted, 'semibold', true);
+    stack.addSpacer();
+    textLine(stack, `${card.origin ? card.label + ' · ' : ''}${card.foot}`, inner, 11, 8, COLORS.ticketInk, 'semibold');
+    textLine(stack, card.locationLabel || (card.origin ? 'Station-to-station estimate' : 'Tap to open details'), inner, 10, 8, COLORS.ticketMuted);
+  } else {
+    // Small is a vertical ticket; medium/local uses the same legible narrow ticket.
+    textLine(stack, card.metric, inner, 35, card.metric.length > 6 ? 22 : 29, COLORS.ticketInk, 'bold');
+    textLine(stack, card.label, inner, 12, 9, COLORS.ticketInk, 'semibold');
+    textLine(stack, card.detail, inner, 12, 9, COLORS.ticketMuted);
+    if (height >= 122 && card.routeLines?.length) addGraphic(stack, routeRail(card, inner, 9), inner, 9);
+    stack.addSpacer();
+    if (card.locationLabel) textLine(stack, card.locationLabel, inner, 10, 8, COLORS.ticketMuted);
+    textLine(stack, card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
+  }
+  return stack;
+}
+function drawAir(parent, card, width, height, rail = false) {
+  const stack = column(parent, width, height); stack.url = card.url;
+  if (rail) {
+    const row = fixedRow(stack, width, height), gaugeSize = Math.min(46, height - 4);
+    const gauge = column(row, gaugeSize, gaugeSize); gauge.backgroundImage = airDial(card.value, gaugeSize);
+    gauge.addSpacer(); textLine(gauge, card.metric, gaugeSize, 25, 21, finite(card.value) ? airColor(card.value) : COLORS.muted, 'bold', true); gauge.addSpacer();
+    row.addSpacer(8); const textWidth = width - gaugeSize - 8, details = column(row, textWidth, height);
+    details.addSpacer();
+    textLine(details, 'US AQI · model', textWidth, 12, 9, COLORS.air, 'semibold');
+    textLine(details, card.unavailable ? card.label : card.detail, textWidth, 12, 9, card.warning ? COLORS.warning : COLORS.text);
+    if (card.attribution) textLine(details, card.attribution, textWidth, 10, 8, COLORS.faint);
+    textLine(details, card.foot, textWidth, 10, 8, COLORS.faint); details.addSpacer();
+  } else {
+    textLine(stack, 'AIR / US AQI', width, 12, 9, COLORS.air, 'semibold', true);
+    const gaugeSize = Math.min(width, Math.max(36, height - 60));
+    const holder = fixedRow(stack, width, gaugeSize); holder.addSpacer();
+    const gauge = column(holder, gaugeSize, gaugeSize); gauge.backgroundImage = airDial(card.value, gaugeSize);
+    gauge.addSpacer(); textLine(gauge, card.metric, gaugeSize, Math.min(36, gaugeSize), Math.min(30, gaugeSize * 0.48), finite(card.value) ? airColor(card.value) : COLORS.muted, 'bold', true); gauge.addSpacer(); holder.addSpacer();
+    textLine(stack, card.unavailable ? card.label : card.detail, width, 12, 9, card.warning ? COLORS.warning : COLORS.text, 'medium', true);
+    textLine(stack, 'US AQI · model', width, 11, 8, COLORS.muted, 'medium', true);
+    if (card.attribution) textLine(stack, card.attribution, width, 10, 8, COLORS.faint, 'medium', true);
+    stack.addSpacer(); sourceLine(stack, card, width);
+  }
+  return stack;
+}
+function drawInstrument(parent, card, width, height) {
+  if (card.key === 'sora') return drawSora(parent, card, width, height);
+  if (card.key === 'spx') return drawSpx(parent, card, width, height);
+  if (card.key === 'train') return drawTicket(parent, card, width, height);
+  return drawAir(parent, card, width, height);
+}
+function largeLayout(dimension) {
+  const usableHeight = dimension.height - 24;
+  const ticket = Math.round(95 + (dimension.height - 311) * 0.18), air = Math.round(52 + (dimension.height - 311) * 0.08);
+  return { width: dimension.width - 24, finance: usableHeight - 16 - 21 - ticket - air, ticket, air };
 }
 function buildWidget(cards, family) {
   const widget = new ListWidget(); widget.backgroundColor = color(COLORS.background);
@@ -378,32 +588,35 @@ function buildWidget(cards, family) {
     const title = card.key === 'air' ? 'US AQI model' : card.key === 'train' && card.label === 'Historical estimate' ? 'Historical train' : card.title;
     if (family === 'accessoryInline') addText(widget, `${title} ${card.metric}${card.unit || ''} · ${card.foot}`, 12);
     else {
-      addText(widget, title, 10);
-      addText(widget, `${card.metric}${card.unit || ''}`, 20, COLORS.text, 'bold');
+      addText(widget, title, 10); addText(widget, `${card.metric}${card.unit || ''}`, 20, COLORS.text, 'bold');
       addText(widget, family === 'accessoryCircular' ? card.foot : `${card.label} · ${card.foot}`, family === 'accessoryCircular' ? 8 : 10);
     }
     return widget;
   }
-  const dimension = widgetDimensions(family), pad = family === 'small' ? 8 : 12;
-  widget.setPadding(pad, pad, pad, pad);
-  const width = dimension.width - 2 * pad;
-  if (family === 'small') drawCard(widget, cards[0], width, dimension.height - 2 * pad, true);
+  const dimension = widgetDimensions(family), pad = family === 'medium' ? 10 : 12;
+  widget.setPadding(pad, pad, pad, pad); widget.backgroundImage = backdrop(dimension.width, dimension.height);
+  const width = dimension.width - pad * 2, height = dimension.height - pad * 2;
+  if (family === 'small') drawInstrument(widget, cards[0], width, height);
   else if (family === 'medium') {
-    const row = fixedRow(widget, width, dimension.height - 2 * pad), cardWidth = (width - 8) / 2;
-    drawCard(row, cards[0], cardWidth, dimension.height - 2 * pad, true); row.addSpacer(8);
-    drawCard(row, cards[1], cardWidth, dimension.height - 2 * pad, true);
+    const row = fixedRow(widget, width, height), ratio = cards[0].key === 'train' ? 0.67 : 0.60, first = Math.floor((width - 8) * ratio);
+    drawInstrument(row, cards[0], first, height); row.addSpacer(8); drawInstrument(row, cards[1], width - 8 - first, height);
   } else {
+    const layout = largeLayout(dimension), byKey = Object.fromEntries(cards.map((c) => [c.key, c]));
     const header = fixedRow(widget, width, 16);
-    addText(header, 'POCKET DESK', 10, COLORS.muted, 'semibold'); header.addSpacer();
-    addText(header, `${clockText(now())} snapshot`, 9, COLORS.faint);
-    widget.addSpacer(8);
-    const cardWidth = (width - 8) / 2, cardHeight = Math.floor((dimension.height - 2 * pad - 16 - 8 - 8) / 2);
-    for (let rowIndex = 0; rowIndex < 2; rowIndex++) {
-      const row = fixedRow(widget, width, cardHeight);
-      drawCard(row, cards[rowIndex * 2], cardWidth, cardHeight); row.addSpacer(8);
-      drawCard(row, cards[rowIndex * 2 + 1], cardWidth, cardHeight);
-      if (!rowIndex) widget.addSpacer(8);
-    }
+    addText(header, '◒  NIGHT SHIFT', 10, COLORS.text, 'semibold'); header.addSpacer();
+    addText(header, `${clockText(now())} snapshot`, 8, COLORS.faint);
+    widget.addSpacer(7);
+    const finance = fixedRow(widget, width, layout.finance), soraWidth = Math.floor((width - 12) * 0.60);
+    drawSora(finance, byKey.sora, soraWidth, layout.finance); finance.addSpacer(12); drawSpx(finance, byKey.spx, width - 12 - soraWidth, layout.finance);
+    widget.addSpacer(7); drawTicket(widget, byKey.train, width, layout.ticket); widget.addSpacer(7);
+    const footer = fixedRow(widget, width, layout.air), statusWidth = width < 290 ? 48 : 56;
+    drawAir(footer, byKey.air, width - statusWidth - 12, layout.air, true); footer.addSpacer(12);
+    const status = column(footer, statusWidth, layout.air); status.url = PD.site; status.addSpacer();
+    textLine(status, 'SOURCES', statusWidth, 11, 8, COLORS.faint, 'semibold');
+    const dots = fixedRow(status, statusWidth, 11);
+    for (const c of cards) { const dot = dots.addStack(); dot.size = new Size(5, 5); dot.cornerRadius = 2.5; dot.backgroundColor = color(c.unavailable ? COLORS.bad : c.warning ? COLORS.warning : COLORS[c.key]); dots.addSpacer(5); }
+    const warnings = cards.filter((c) => c.warning).length;
+    textLine(status, warnings ? `${warnings} to check` : 'ALL SET', statusWidth, 11, 8, warnings ? COLORS.warning : COLORS.air); status.addSpacer();
   }
   return widget;
 }
@@ -463,7 +676,7 @@ async function setupAir(settings) {
   } else if (choice === 2) { settings.airConsent = false; settings.airLocation = null; saveSettings(settings); }
 }
 async function menu(settings) {
-  const a = new Alert(); a.title = 'Pocket Desk'; a.message = 'Four quiet cards. Local setup. Source dates on every snapshot.';
+  const a = new Alert(); a.title = 'Pocket Desk'; a.message = 'NIGHT SHIFT. Your rates, market dial, homebound ticket and air signal. Local setup; source dates on every snapshot.';
   ['Preview large', 'Preview medium', 'Preview small', 'Set up last train', 'Set up air quality', 'Location & data notes', 'Turn off automatic location'].forEach((x) => a.addAction(x));
   a.addCancelAction('Done');
   const choice = await a.presentSheet();

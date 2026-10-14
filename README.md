@@ -1,15 +1,15 @@
 # Pocket Desk
 
-One source-labelled Scriptable widget for your iPhone Home Screen or Today View.
+NIGHT SHIFT: an expressive, source-labelled Scriptable instrument panel for your iPhone Home Screen or Today View.
 
 **Install and preview:** https://kush0511.github.io/pocket-desk/
 
-The large widget combines four cards:
+The large widget combines four distinctly shaped instruments:
 
-- **SORA:** overnight rate, 1M and 3M compounded rates, and observation date, using the public sheet behind [SORA Rates](https://kush0511.github.io/sora-rates/).
-- **S&P 500:** next-12-month forward P/E and a valuation-band reference, using the dated snapshot behind [Valuation Bands](https://kush0511.github.io/spy-valuation-bands/). Bands are earnings scenarios, not price targets.
-- **Last train:** nearest mapped MRT exit → Lakeside by default, calculated using the [Last Train Home](https://kush0511.github.io/sg-last-train-home/) routing engine. Manual origin/destination and transfer buffer are configurable.
-- **Air quality:** US AQI model estimate for your selected location, with source time and CAMS/Open-Meteo attribution. This is not a nearby sensor reading or Singapore PSI.
+- **SORA:** overnight rate, 1M and 3M compounded rates, a real three-series history chart, and observation date, using the public sheet behind [SORA Rates](https://kush0511.github.io/sora-rates/).
+- **S&P 500:** next-12-month forward P/E on a calibrated 16–26× dial, using the dated snapshot behind [Valuation Bands](https://kush0511.github.io/spy-valuation-bands/). The dial is a visual reference, not an investment recommendation; values outside its range remain visible numerically.
+- **Last train:** a full-width orange journey ticket with line-coloured route segments and nearest mapped MRT exit → Lakeside by default, calculated using the [Last Train Home](https://kush0511.github.io/sg-last-train-home/) routing engine. Manual origin/destination and transfer buffer are configurable.
+- **Air quality:** a radial US AQI model instrument for your selected location, with source time and CAMS/Open-Meteo attribution. This is not a nearby sensor reading or Singapore PSI.
 
 ## Install on iPhone
 
