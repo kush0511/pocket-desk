@@ -511,7 +511,10 @@ details[open]>summary>svg { transform: rotate(180deg); }
 .route-stop, .route-interchange { width: calc(5.4 * var(--u)); height: calc(5.4 * var(--u)); border: calc(1.3 * var(--u)) solid #382e21; background: #ffb45b; }
 .route-ne { background: #874dbb; flex: .43; }
 .route-ew { background: #15864d; }
-.ticket-perforation { position: absolute; left: 63%; top: 0; bottom: 0; height: auto; }
+.instrument-train { position: relative; isolation: isolate; }
+.ticket-perforation { position: absolute; left: 63%; top: 0; bottom: auto; height: 100%; width: 0; align-self: auto; pointer-events: none; z-index: 0; }
+.ticket-top, .ticket-main, .ticket-bottom { position: relative; z-index: 1; }
+.medium-local .ticket-perforation, .desk-widget-small .ticket-perforation { display: none; }
 .ticket-perforation::before { top: calc(-4.5 * var(--u)); }
 .ticket-perforation::after { bottom: calc(-4.5 * var(--u)); }
 .ticket-departure { width: 32%; align-items: center; }

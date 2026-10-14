@@ -85,10 +85,10 @@ function RouteTrack() {
 }
 function TrainTicket() {
   return <>
+    <span className="ticket-perforation" aria-hidden="true" />
     <span className="ticket-top"><span>LAST TRAIN / HOME</span><span>SGT</span></span>
     <span className="ticket-main">
       <span className="ticket-route"><span className="ticket-origin">Farrer Park</span><strong>→ Lakeside</strong><RouteTrack /></span>
-      <span className="ticket-perforation" aria-hidden="true" />
       <span className="ticket-departure"><strong>23:41</strong><span>BOARD BY</span></span>
     </span>
     <span className="ticket-bottom"><span>Historical estimate · 29 Jul · verify</span><span>GPS 18:00 · example</span></span>
