@@ -173,25 +173,28 @@ function assertWidget(rt, dimensions) {
   const visit = (node) => {
     const drawing = node.backgroundImage;
     if (drawing?.commands.some((c) => c.type === 'fillRect' && c.color.hex === 'FFB45B')) {
-      const cuts = drawing.commands.filter((c) => c.type === 'fillEllipse');
-      const dashes = drawing.commands.filter((c) => c.type === 'strokePath');
+      const cuts = drawing.commands.filter((c) => c.type === 'fillEllipse' && c.color.hex === '09141F');
+      const dots = drawing.commands.filter((c) => c.type === 'fillEllipse' && c.color.hex === '281D16');
       assert.equal(cuts.length, 2, 'Ticket has two semicircle cutouts');
-      assert.ok(dashes.length >= 8, 'Ticket has a visible dashed perforation');
-      for (const dash of dashes) {
-        assert.equal(dash.path.length, 2); assert.equal(dash.color.hex, '281D16');
-        assert.equal(dash.color.alpha, 0.25);
-        assert.ok(Math.hypot(dash.path[1].x - dash.path[0].x, dash.path[1].y - dash.path[0].y) <= 3.01);
+      assert.ok(dots.length >= 8, 'Ticket has a visible round-dot perforation');
+      assert.equal(drawing.commands.filter((c) => c.type === 'strokePath').length, 0, 'Perforation cannot regress to faint hairline strokes');
+      for (const dot of dots) {
+        assert.equal(dot.rect.width, 2); assert.equal(dot.rect.height, 2);
+        assert.equal(dot.color.alpha, 0.65, 'Dots remain high contrast at actual widget size');
       }
       const horizontal = node.size.width < 235;
       if (horizontal) {
         assert.equal(cuts[0].rect.x + 4.5, 0); assert.equal(cuts[1].rect.x + 4.5, node.size.width);
         assert.equal(cuts[0].rect.y, cuts[1].rect.y);
-        assert.ok(dashes.every((c) => c.path[0].y === c.path[1].y));
+        assert.ok(dots.every((c) => c.rect.y + 1 === cuts[0].rect.y + 4.5), 'Dots align with the side cutouts');
       } else {
         assert.equal(cuts[0].rect.y + 4.5, 0); assert.equal(cuts[1].rect.y + 4.5, node.size.height);
         assert.equal(cuts[0].rect.x, cuts[1].rect.x);
-        assert.ok(dashes.every((c) => c.path[0].x === c.path[1].x));
+        assert.ok(dots.every((c) => c.rect.x + 1 === cuts[0].rect.x + 4.5), 'Dots align with the top and bottom cutouts');
       }
+      const axis = horizontal ? 'x' : 'y';
+      assert.equal(dots[0].rect[axis] + 1, 11, 'First dot stays clear of the cutout');
+      for (let i = 1; i < dots.length; i++) assert.equal(dots[i].rect[axis] - dots[i - 1].rect[axis], 5, 'Dots use a consistent 5pt pitch');
     }
     for (const child of node.children || []) visit(child);
   }; visit(rt.result);
@@ -503,7 +506,7 @@ await test('Home, saved-home, travel, manual-home, missing and no-route retain h
       }
     }
     if(family==='large') {
-      const cut=ticket.backgroundImage.commands.find((c)=>c.type==='fillEllipse'), split=cut.rect.x+4.5;
+      const cut=ticket.backgroundImage.commands.find((c)=>c.type==='fillEllipse'&&c.color.hex==='09141F'), split=cut.rect.x+4.5;
       assert.equal(split,Math.round(ticket.size.width*.74),'Non-journey stub gets a deliberate narrow share');
       const [main,stub]=ticket.children[0].children.filter((c)=>c.kind==='stack');
       assert.ok(main.size.width>stub.size.width*2.6,'Main message remains wider than the tear-off stub');

@@ -153,8 +153,8 @@ h1 { position: relative; font-size: clamp(82px, 8.1vw, 110px); line-height: .83;
 .route-codes { width: 90%; display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: calc(5.5 * var(--u)); line-height: 1.2; }
 .route-codes b { font-weight: 650; }
 .route-codes>span { opacity: .6; }
-.ticket-perforation { display: block; height: calc(108 * var(--u)); width: 0; border-left: calc(1 * var(--u)) dashed #332f2445; position: relative; align-self: center; flex-shrink: 0; }
-.ticket-perforation::before, .ticket-perforation::after { content: ""; width: calc(9 * var(--u)); height: calc(9 * var(--u)); background: #09141f; border-radius: 50%; position: absolute; left: calc(-5 * var(--u)); }
+.ticket-perforation { display: block; height: calc(108 * var(--u)); width: 0; border-left: calc(2 * var(--u)) dotted #281d16a6; position: relative; align-self: center; flex-shrink: 0; }
+.ticket-perforation::before, .ticket-perforation::after { content: ""; width: calc(9 * var(--u)); height: calc(9 * var(--u)); background: #09141f; border-radius: 50%; position: absolute; left: calc(-5.5 * var(--u)); }
 .ticket-perforation::before { top: calc(-3 * var(--u)); }
 .ticket-perforation::after { bottom: calc(-4 * var(--u)); }
 .ticket-departure { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; width: 35%; flex-shrink: 0; white-space: nowrap; }
@@ -186,7 +186,7 @@ h1 { position: relative; font-size: clamp(82px, 8.1vw, 110px); line-height: .83;
 .medium-local .ticket-route>strong { font-size: calc(21 * var(--u)); }
 .medium-local .ticket-route .route-track, .medium-local .route-codes { width: 100%; }
 .medium-local .ticket-origin { font-size: calc(9 * var(--u)); }
-.medium-local .ticket-perforation { height: 0; width: 100%; border-left: 0; border-top: calc(1 * var(--u)) dashed #332f2445; }
+.medium-local .ticket-perforation { height: 0; width: 100%; border-left: 0; border-top: calc(2 * var(--u)) dotted #281d16a6; }
 .medium-local .ticket-perforation::before, .medium-local .ticket-perforation::after { display: none; }
 .medium-local .ticket-departure { flex-direction: row; align-items: baseline; gap: calc(6 * var(--u)); justify-content: space-between; width: 100%; }
 .medium-local .ticket-departure>span:first-child { font-size: calc(6 * var(--u)); }
@@ -220,7 +220,7 @@ h1 { position: relative; font-size: clamp(82px, 8.1vw, 110px); line-height: .83;
 .desk-widget-small .ticket-route { flex: none; }
 .desk-widget-small .ticket-route>strong { font-size: calc(24 * var(--u)); }
 .desk-widget-small .route-track, .desk-widget-small .route-codes { width: 100%; }
-.desk-widget-small .ticket-perforation { height: 0; width: 100%; border-top: calc(1 * var(--u)) dashed #332f2445; border-left: 0; }
+.desk-widget-small .ticket-perforation { height: 0; width: 100%; border-top: calc(2 * var(--u)) dotted #281d16a6; border-left: 0; }
 .desk-widget-small .ticket-perforation::before, .desk-widget-small .ticket-perforation::after { display: none; }
 .desk-widget-small .ticket-departure { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: baseline; }
 .desk-widget-small .ticket-departure>span:first-child { font-size: calc(6 * var(--u)); }
@@ -591,10 +591,10 @@ details[open]>summary>svg { transform: rotate(180deg); }
 .medium-local .ticket-state-main .ticket-top>span:first-child, .desk-widget-small .ticket-state-main .ticket-top>span:first-child { display: inline; }
 .medium-local .ticket-state-stub, .desk-widget-small .ticket-state-stub { flex-direction: row; gap: calc(6 * var(--u)); padding: 0; }
 .medium-local .ticket-stamp, .desk-widget-small .ticket-stamp { height: calc(22 * var(--u)); width: calc(22 * var(--u)); }
-.medium-local .ticket-perforation, .desk-widget-small .ticket-perforation { display: block; left: 0; top: auto; height: 0; width: 100%; border-left: 0; border-top: calc(1 * var(--u)) dashed #332f2445; }
+.medium-local .ticket-perforation, .desk-widget-small .ticket-perforation { display: block; left: 0; top: auto; height: 0; width: 100%; border-left: 0; border-top: calc(2 * var(--u)) dotted #281d16a6; }
 .medium-local .ticket-state-perforation, .desk-widget-small .ticket-state-perforation { bottom: calc(36 * var(--u)); }
 .medium-local .ticket-journey-perforation, .desk-widget-small .ticket-journey-perforation { bottom: calc(33 * var(--u)); }
-.medium-local .ticket-perforation::before, .medium-local .ticket-perforation::after, .desk-widget-small .ticket-perforation::before, .desk-widget-small .ticket-perforation::after { display: block; top: calc(-5 * var(--u)); bottom: auto; }
+.medium-local .ticket-perforation::before, .medium-local .ticket-perforation::after, .desk-widget-small .ticket-perforation::before, .desk-widget-small .ticket-perforation::after { display: block; top: calc(-5.5 * var(--u)); bottom: auto; }
 .medium-local .ticket-perforation::before, .desk-widget-small .ticket-perforation::before { left: calc(-4.5 * var(--u)); }
 .medium-local .ticket-perforation::after, .desk-widget-small .ticket-perforation::after { left: auto; right: calc(-4.5 * var(--u)); }
 .medium-local .ticket-home-direction, .desk-widget-small .ticket-home-direction { display: none; }

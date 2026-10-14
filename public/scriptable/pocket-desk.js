@@ -510,11 +510,12 @@ function routeRail(card, width, height) {
 }
 function ticketBackdrop(width, height, split, horizontal = false) {
   const ctx = canvas(width, height); ctx.setFillColor(color(COLORS.train)); ctx.fillRect(new Rect(0, 0, width, height));
+  // Filled 2pt dots stay legible at Home Screen size; faint sub-point strokes do not.
   if (horizontal) {
-    for (let x = 11; x < width - 8; x += 6) stroke(ctx, [{ x, y: split }, { x: Math.min(x + 3, width - 8), y: split }], COLORS.ticketInk, 0.8, 0.25);
+    for (let x = 11; x < width - 8; x += 5) disc(ctx, x, split, 1, COLORS.ticketInk, 0.65);
     disc(ctx, 0, split, 4.5, COLORS.background); disc(ctx, width, split, 4.5, COLORS.background);
   } else {
-    for (let y = 11; y < height - 8; y += 6) stroke(ctx, [{ x: split, y }, { x: split, y: Math.min(y + 3, height - 8) }], COLORS.ticketInk, 0.8, 0.25);
+    for (let y = 11; y < height - 8; y += 5) disc(ctx, split, y, 1, COLORS.ticketInk, 0.65);
     disc(ctx, split, 0, 4.5, COLORS.background); disc(ctx, split, height, 4.5, COLORS.background);
   }
   return ctx.getImage();
