@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm run test:pocket
+      - run: npm run test:stations
       - run: npm run build
         env:
           PAGES_BASE_PATH: /${{ github.event.repository.name }}

@@ -1,0 +1,5705 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-14T10:57:29.424Z",
+  "source": {
+    "name": "LTA MRT Station Exit (GEOJSON)",
+    "agency": "Land Transport Authority",
+    "url": "https://data.gov.sg/datasets/d_b39d3a0871985372d7e1637193335da5/view",
+    "datasetId": "d_b39d3a0871985372d7e1637193335da5",
+    "updatedAt": "2026-10-10T10:06:44+08:00",
+    "coverageStart": "2025-08-18T00:00:00+08:00",
+    "accessedAt": "2026-10-14",
+    "sha256": "a7eaa90f30991dc0ac4aa970d704123ce3ec9e60c82b42c32a32e74be7dc0327",
+    "license": {
+      "name": "Singapore Open Data Licence 1.0",
+      "url": "https://data.gov.sg/open-data-licence"
+    },
+    "attribution": "Contains information from LTA MRT Station Exit (GEOJSON), accessed on 2026-10-14 from data.gov.sg, made available under the Singapore Open Data Licence 1.0."
+  },
+  "network": {
+    "datasetVersion": "2026.07.29",
+    "networkAsOf": "2026-07-29",
+    "eligibleMrtStations": 146
+  },
+  "selection": {
+    "method": "Operating MRT stations present in the matching routing-network whitelist; one record per physical station.",
+    "distanceMethod": "Minimum local haversine distance to the official exits; station latitude/longitude is an exit centroid fallback.",
+    "limitations": "Straight-line distance is not a walking route. Exit availability is not live. The whitelist must be updated with the routing network before newly opened stations can be selected."
+  },
+  "coverage": {
+    "expectedMrtStations": 146,
+    "matchedMrtStations": 146,
+    "missingStationIds": [],
+    "officialExitCount": 537,
+    "matchedStationCodes": [
+      "CC30",
+      "CC31",
+      "CC32",
+      "CC9",
+      "DT18",
+      "DT4",
+      "NE18"
+    ],
+    "excludedSourceNames": [
+      "BAKAU LRT STATION",
+      "BANGKIT LRT STATION",
+      "BUKIT PANJANG LRT STATION",
+      "CHENG LIM LRT STATION",
+      "CHOA CHU KANG LRT STATION",
+      "COMPASSVALE LRT STATION",
+      "CORAL EDGE LRT STATION",
+      "COVE LRT STATION",
+      "DAMAI LRT STATION",
+      "FAJAR LRT STATION",
+      "FARMWAY LRT STATION",
+      "FERNVALE LRT STATION",
+      "JELAPANG LRT STATION",
+      "KADALOOR LRT STATION",
+      "KANGKAR LRT STATION",
+      "KEAT HONG LRT STATION",
+      "KUPANG LRT STATION",
+      "LAYAR LRT STATION",
+      "MARINA SOUTH MRT STATION",
+      "MERIDIAN LRT STATION",
+      "NIBONG LRT STATION",
+      "OASIS LRT STATION",
+      "PENDING LRT STATION",
+      "PETIR LRT STATION",
+      "PHOENIX LRT STATION",
+      "PUNGGOL LRT STATION",
+      "PUNGGOL POINT LRT STATION",
+      "RANGGUNG LRT STATION",
+      "RENJONG LRT STATION",
+      "RIVIERA LRT STATION",
+      "RUMBIA LRT STATION",
+      "SAM KEE LRT STATION",
+      "SAMUDERA LRT STATION",
+      "SEGAR LRT STATION",
+      "SENJA LRT STATION",
+      "SOO TECK LRT STATION",
+      "SOUTH VIEW LRT STATION",
+      "SUMANG LRT STATION",
+      "TECK LEE LRT STATION",
+      "TECK WHYE LRT STATION",
+      "THANGGAM LRT STATION",
+      "TONGKANG LRT STATION"
+    ]
+  },
+  "stations": [
+    {
+      "id": "admiralty",
+      "name": "Admiralty",
+      "mode": "MRT",
+      "codes": [
+        "NS10"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4404069,
+      "longitude": 103.8008575,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4403457,
+          "longitude": 103.8009895,
+          "sourceObjectId": 21491
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4401524,
+          "longitude": 103.8005335,
+          "sourceObjectId": 21673
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4405963,
+          "longitude": 103.8005425,
+          "sourceObjectId": 21131
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.4405334,
+          "longitude": 103.8013645,
+          "sourceObjectId": 21674
+        }
+      ]
+    },
+    {
+      "id": "aljunied",
+      "name": "Aljunied",
+      "mode": "MRT",
+      "codes": [
+        "EW9"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3163632,
+      "longitude": 103.8824848,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3162385,
+          "longitude": 103.8824967,
+          "sourceObjectId": 21480
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3164879,
+          "longitude": 103.8824729,
+          "sourceObjectId": 21479
+        }
+      ]
+    },
+    {
+      "id": "ang-mo-kio",
+      "name": "Ang Mo Kio",
+      "mode": "MRT",
+      "codes": [
+        "NS16"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3696182,
+      "longitude": 103.8496757,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3694647,
+          "longitude": 103.849939,
+          "sourceObjectId": 21692
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3696853,
+          "longitude": 103.8495961,
+          "sourceObjectId": 21691
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3694405,
+          "longitude": 103.8493433,
+          "sourceObjectId": 21675
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3698824,
+          "longitude": 103.8498246,
+          "sourceObjectId": 21260
+        }
+      ]
+    },
+    {
+      "id": "bartley",
+      "name": "Bartley",
+      "mode": "MRT",
+      "codes": [
+        "CC12"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3428749,
+      "longitude": 103.8795823,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3422487,
+          "longitude": 103.8802559,
+          "sourceObjectId": 21325
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3435011,
+          "longitude": 103.8789087,
+          "sourceObjectId": 21324
+        }
+      ]
+    },
+    {
+      "id": "bayfront",
+      "name": "Bayfront",
+      "mode": "MRT",
+      "codes": [
+        "CC34",
+        "DT16"
+      ],
+      "lineIds": [
+        "CC",
+        "DT"
+      ],
+      "latitude": 1.2820893,
+      "longitude": 103.8592046,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2809674,
+          "longitude": 103.8587319,
+          "sourceObjectId": 21676
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2827052,
+          "longitude": 103.8597592,
+          "sourceObjectId": 21625
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2828349,
+          "longitude": 103.8595969,
+          "sourceObjectId": 21624
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2828344,
+          "longitude": 103.8594938,
+          "sourceObjectId": 21678
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2811046,
+          "longitude": 103.858441,
+          "sourceObjectId": 21677
+        }
+      ]
+    },
+    {
+      "id": "bayshore",
+      "name": "Bayshore",
+      "mode": "MRT",
+      "codes": [
+        "TE29"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3128147,
+      "longitude": 103.9415833,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3118987,
+          "longitude": 103.9412617,
+          "sourceObjectId": 21242
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3121839,
+          "longitude": 103.9406735,
+          "sourceObjectId": 21243
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.313568,
+          "longitude": 103.940721,
+          "sourceObjectId": 21244
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3135264,
+          "longitude": 103.9426759,
+          "sourceObjectId": 21245
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3128967,
+          "longitude": 103.9425844,
+          "sourceObjectId": 21246
+        }
+      ]
+    },
+    {
+      "id": "beauty-world",
+      "name": "Beauty World",
+      "mode": "MRT",
+      "codes": [
+        "DT5"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3410867,
+      "longitude": 103.7757322,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3416961,
+          "longitude": 103.7759843,
+          "sourceObjectId": 21269
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3415822,
+          "longitude": 103.7754507,
+          "sourceObjectId": 21626
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3399819,
+          "longitude": 103.7757615,
+          "sourceObjectId": 21270
+        }
+      ]
+    },
+    {
+      "id": "bedok",
+      "name": "Bedok",
+      "mode": "MRT",
+      "codes": [
+        "EW5"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3239705,
+      "longitude": 103.9294115,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3235686,
+          "longitude": 103.9291571,
+          "sourceObjectId": 21689
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3242683,
+          "longitude": 103.9296731,
+          "sourceObjectId": 21690
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3240746,
+          "longitude": 103.9294043,
+          "sourceObjectId": 21174
+        }
+      ]
+    },
+    {
+      "id": "bedok-north",
+      "name": "Bedok North",
+      "mode": "MRT",
+      "codes": [
+        "DT29"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3345219,
+      "longitude": 103.9185144,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3351263,
+          "longitude": 103.9180498,
+          "sourceObjectId": 21535
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3341661,
+          "longitude": 103.9190628,
+          "sourceObjectId": 21537
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3343725,
+          "longitude": 103.9191343,
+          "sourceObjectId": 21542
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3344226,
+          "longitude": 103.9178105,
+          "sourceObjectId": 21203
+        }
+      ]
+    },
+    {
+      "id": "bedok-reservoir",
+      "name": "Bedok Reservoir",
+      "mode": "MRT",
+      "codes": [
+        "DT30"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3364513,
+      "longitude": 103.933187,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3363478,
+          "longitude": 103.9328868,
+          "sourceObjectId": 21349
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3365549,
+          "longitude": 103.9334872,
+          "sourceObjectId": 21196
+        }
+      ]
+    },
+    {
+      "id": "bencoolen",
+      "name": "Bencoolen",
+      "mode": "MRT",
+      "codes": [
+        "DT21"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.2983646,
+      "longitude": 103.8498919,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2991952,
+          "longitude": 103.8508434,
+          "sourceObjectId": 21198
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2981994,
+          "longitude": 103.8495605,
+          "sourceObjectId": 21370
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2976991,
+          "longitude": 103.8492717,
+          "sourceObjectId": 21197
+        }
+      ]
+    },
+    {
+      "id": "bendemeer",
+      "name": "Bendemeer",
+      "mode": "MRT",
+      "codes": [
+        "DT23"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3136666,
+      "longitude": 103.8631466,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3138525,
+          "longitude": 103.863074,
+          "sourceObjectId": 21202
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3134807,
+          "longitude": 103.8632192,
+          "sourceObjectId": 21538
+        }
+      ]
+    },
+    {
+      "id": "bishan",
+      "name": "Bishan",
+      "mode": "MRT",
+      "codes": [
+        "NS17",
+        "CC15"
+      ],
+      "lineIds": [
+        "NS",
+        "CC"
+      ],
+      "latitude": 1.3508634,
+      "longitude": 103.8486921,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3505796,
+          "longitude": 103.848305,
+          "sourceObjectId": 21628
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3510644,
+          "longitude": 103.8483123,
+          "sourceObjectId": 21693
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3505849,
+          "longitude": 103.8482093,
+          "sourceObjectId": 21695
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3510532,
+          "longitude": 103.8502011,
+          "sourceObjectId": 21627
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3510348,
+          "longitude": 103.8484329,
+          "sourceObjectId": 21694
+        }
+      ]
+    },
+    {
+      "id": "boon-keng",
+      "name": "Boon Keng",
+      "mode": "MRT",
+      "codes": [
+        "NE9"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.3190856,
+      "longitude": 103.861371,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3201069,
+          "longitude": 103.8615024,
+          "sourceObjectId": 21629
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3192352,
+          "longitude": 103.8619037,
+          "sourceObjectId": 21333
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3179148,
+          "longitude": 103.8607068,
+          "sourceObjectId": 21616
+        }
+      ]
+    },
+    {
+      "id": "boon-lay",
+      "name": "Boon Lay",
+      "mode": "MRT",
+      "codes": [
+        "EW27"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3384759,
+      "longitude": 103.705718,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.33828,
+          "longitude": 103.705409,
+          "sourceObjectId": 21579
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3384207,
+          "longitude": 103.7061455,
+          "sourceObjectId": 21577
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3387381,
+          "longitude": 103.7059552,
+          "sourceObjectId": 21578
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3386295,
+          "longitude": 103.70565,
+          "sourceObjectId": 21433
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3385141,
+          "longitude": 103.7053534,
+          "sourceObjectId": 21434
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.3382732,
+          "longitude": 103.705795,
+          "sourceObjectId": 21435
+        }
+      ]
+    },
+    {
+      "id": "botanic-gardens",
+      "name": "Botanic Gardens",
+      "mode": "MRT",
+      "codes": [
+        "CC19",
+        "DT9"
+      ],
+      "lineIds": [
+        "CC",
+        "DT"
+      ],
+      "latitude": 1.3226096,
+      "longitude": 103.8154455,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3225346,
+          "longitude": 103.8149769,
+          "sourceObjectId": 21619
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3226846,
+          "longitude": 103.8159141,
+          "sourceObjectId": 21274
+        }
+      ]
+    },
+    {
+      "id": "braddell",
+      "name": "Braddell",
+      "mode": "MRT",
+      "codes": [
+        "NS18"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3408285,
+      "longitude": 103.8467589,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.341069,
+          "longitude": 103.8464295,
+          "sourceObjectId": 21698
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3407443,
+          "longitude": 103.8464065,
+          "sourceObjectId": 21697
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3406722,
+          "longitude": 103.8474408,
+          "sourceObjectId": 21696
+        }
+      ]
+    },
+    {
+      "id": "bras-basah",
+      "name": "Bras Basah",
+      "mode": "MRT",
+      "codes": [
+        "CC2"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2970013,
+      "longitude": 103.8505264,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2968589,
+          "longitude": 103.8513273,
+          "sourceObjectId": 21339
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2960462,
+          "longitude": 103.8504743,
+          "sourceObjectId": 21338
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2970144,
+          "longitude": 103.8502499,
+          "sourceObjectId": 21340
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2975515,
+          "longitude": 103.8501575,
+          "sourceObjectId": 21341
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2975355,
+          "longitude": 103.8504232,
+          "sourceObjectId": 21342
+        }
+      ]
+    },
+    {
+      "id": "bright-hill",
+      "name": "Bright Hill",
+      "mode": "MRT",
+      "codes": [
+        "TE7"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3631669,
+      "longitude": 103.8328689,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3640372,
+          "longitude": 103.8336354,
+          "sourceObjectId": 21297
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3632828,
+          "longitude": 103.8335106,
+          "sourceObjectId": 21298
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3621838,
+          "longitude": 103.8323757,
+          "sourceObjectId": 21300
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.363164,
+          "longitude": 103.8319538,
+          "sourceObjectId": 21299
+        }
+      ]
+    },
+    {
+      "id": "buangkok",
+      "name": "Buangkok",
+      "mode": "MRT",
+      "codes": [
+        "NE15"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.3830297,
+      "longitude": 103.8931735,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "A",
+          "latitude": 1.3834098,
+          "longitude": 103.8928838,
+          "sourceObjectId": 21638
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3826497,
+          "longitude": 103.8934632,
+          "sourceObjectId": 21639
+        }
+      ]
+    },
+    {
+      "id": "bugis",
+      "name": "Bugis",
+      "mode": "MRT",
+      "codes": [
+        "EW12",
+        "DT14"
+      ],
+      "lineIds": [
+        "EW",
+        "DT"
+      ],
+      "latitude": 1.2999143,
+      "longitude": 103.8565619,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "E",
+          "latitude": 1.2993046,
+          "longitude": 103.857408,
+          "sourceObjectId": 21283
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.3012041,
+          "longitude": 103.8559241,
+          "sourceObjectId": 21517
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3007822,
+          "longitude": 103.8563366,
+          "sourceObjectId": 21516
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3000069,
+          "longitude": 103.8556857,
+          "sourceObjectId": 21513
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2990788,
+          "longitude": 103.8568907,
+          "sourceObjectId": 21175
+        },
+        {
+          "code": "F",
+          "latitude": 1.2996382,
+          "longitude": 103.8571475,
+          "sourceObjectId": 21284
+        },
+        {
+          "code": "G",
+          "latitude": 1.2989565,
+          "longitude": 103.8570674,
+          "sourceObjectId": 21282
+        },
+        {
+          "code": "H",
+          "latitude": 1.3003435,
+          "longitude": 103.8560352,
+          "sourceObjectId": 21285
+        }
+      ]
+    },
+    {
+      "id": "bukit-batok",
+      "name": "Bukit Batok",
+      "mode": "MRT",
+      "codes": [
+        "NS2"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3492191,
+      "longitude": 103.749699,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3495611,
+          "longitude": 103.749974,
+          "sourceObjectId": 21347
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3493896,
+          "longitude": 103.749937,
+          "sourceObjectId": 21436
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3495201,
+          "longitude": 103.7497666,
+          "sourceObjectId": 21344
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3484054,
+          "longitude": 103.7491184,
+          "sourceObjectId": 21346
+        }
+      ]
+    },
+    {
+      "id": "bukit-gombak",
+      "name": "Bukit Gombak",
+      "mode": "MRT",
+      "codes": [
+        "NS3"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.359032,
+      "longitude": 103.7519618,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3590698,
+          "longitude": 103.7520764,
+          "sourceObjectId": 21575
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3586953,
+          "longitude": 103.752093,
+          "sourceObjectId": 21181
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.359065,
+          "longitude": 103.7517266,
+          "sourceObjectId": 21574
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3592979,
+          "longitude": 103.751951,
+          "sourceObjectId": 21576
+        }
+      ]
+    },
+    {
+      "id": "bukit-panjang",
+      "name": "Bukit Panjang",
+      "mode": "MRT",
+      "codes": [
+        "DT1"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3792846,
+      "longitude": 103.7612314,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3787662,
+          "longitude": 103.7620344,
+          "sourceObjectId": 21449
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.379008,
+          "longitude": 103.7619229,
+          "sourceObjectId": 21640
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.3807451,
+          "longitude": 103.7595978,
+          "sourceObjectId": 21185
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3786189,
+          "longitude": 103.7613705,
+          "sourceObjectId": 21267
+        }
+      ]
+    },
+    {
+      "id": "buona-vista",
+      "name": "Buona Vista",
+      "mode": "MRT",
+      "codes": [
+        "EW21",
+        "CC22"
+      ],
+      "lineIds": [
+        "EW",
+        "CC"
+      ],
+      "latitude": 1.3069294,
+      "longitude": 103.7906588,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3073095,
+          "longitude": 103.7904492,
+          "sourceObjectId": 21607
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3071973,
+          "longitude": 103.7906566,
+          "sourceObjectId": 21608
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3069129,
+          "longitude": 103.7905994,
+          "sourceObjectId": 21609
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3062981,
+          "longitude": 103.7909301,
+          "sourceObjectId": 21647
+        }
+      ]
+    },
+    {
+      "id": "caldecott",
+      "name": "Caldecott",
+      "mode": "MRT",
+      "codes": [
+        "CC17",
+        "TE9"
+      ],
+      "lineIds": [
+        "CC",
+        "TE"
+      ],
+      "latitude": 1.337487,
+      "longitude": 103.8400353,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3371053,
+          "longitude": 103.8394067,
+          "sourceObjectId": 21670
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3382597,
+          "longitude": 103.8403875,
+          "sourceObjectId": 21306
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.337832,
+          "longitude": 103.8404647,
+          "sourceObjectId": 21307
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3367509,
+          "longitude": 103.8398824,
+          "sourceObjectId": 21308
+        }
+      ]
+    },
+    {
+      "id": "canberra",
+      "name": "Canberra",
+      "mode": "MRT",
+      "codes": [
+        "NS12"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4432274,
+      "longitude": 103.8297122,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4436301,
+          "longitude": 103.829528,
+          "sourceObjectId": 21310
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4429351,
+          "longitude": 103.8299617,
+          "sourceObjectId": 21312
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4428045,
+          "longitude": 103.8297003,
+          "sourceObjectId": 21311
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.4435113,
+          "longitude": 103.8292546,
+          "sourceObjectId": 21309
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.4432559,
+          "longitude": 103.8301162,
+          "sourceObjectId": 21313
+        }
+      ]
+    },
+    {
+      "id": "cantonment",
+      "name": "Cantonment",
+      "mode": "MRT",
+      "codes": [
+        "CC31"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2730477,
+      "longitude": 103.8369766,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "1",
+          "latitude": 1.2721321,
+          "longitude": 103.8357026,
+          "sourceObjectId": 21293
+        },
+        {
+          "code": "2",
+          "latitude": 1.2737365,
+          "longitude": 103.8359983,
+          "sourceObjectId": 21294
+        },
+        {
+          "code": "3",
+          "latitude": 1.2736398,
+          "longitude": 103.838492,
+          "sourceObjectId": 21295
+        },
+        {
+          "code": "4",
+          "latitude": 1.2726822,
+          "longitude": 103.8377136,
+          "sourceObjectId": 21296
+        }
+      ]
+    },
+    {
+      "id": "cashew",
+      "name": "Cashew",
+      "mode": "MRT",
+      "codes": [
+        "DT2"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3698333,
+      "longitude": 103.7642345,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3698333,
+          "longitude": 103.7642345,
+          "sourceObjectId": 21730
+        }
+      ]
+    },
+    {
+      "id": "changi-airport",
+      "name": "Changi Airport",
+      "mode": "MRT",
+      "codes": [
+        "CG2"
+      ],
+      "lineIds": [
+        "CG"
+      ],
+      "latitude": 1.3567809,
+      "longitude": 103.9882906,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3563414,
+          "longitude": 103.9892766,
+          "sourceObjectId": 21360
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3572203,
+          "longitude": 103.9873046,
+          "sourceObjectId": 21361
+        }
+      ]
+    },
+    {
+      "id": "chinatown",
+      "name": "Chinatown",
+      "mode": "MRT",
+      "codes": [
+        "NE4",
+        "DT19"
+      ],
+      "lineIds": [
+        "NE",
+        "DT"
+      ],
+      "latitude": 1.2846415,
+      "longitude": 103.8440727,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2837128,
+          "longitude": 103.8437979,
+          "sourceObjectId": 21659
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2846749,
+          "longitude": 103.8428129,
+          "sourceObjectId": 21458
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2854065,
+          "longitude": 103.8434762,
+          "sourceObjectId": 21345
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2850441,
+          "longitude": 103.8444281,
+          "sourceObjectId": 21460
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2842748,
+          "longitude": 103.8454625,
+          "sourceObjectId": 21266
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.2847361,
+          "longitude": 103.8444585,
+          "sourceObjectId": 21265
+        }
+      ]
+    },
+    {
+      "id": "chinese-garden",
+      "name": "Chinese Garden",
+      "mode": "MRT",
+      "codes": [
+        "EW25"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3419955,
+      "longitude": 103.732785,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3424387,
+          "longitude": 103.7322202,
+          "sourceObjectId": 21490
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3419821,
+          "longitude": 103.7327418,
+          "sourceObjectId": 21489
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3415658,
+          "longitude": 103.7333931,
+          "sourceObjectId": 21488
+        }
+      ]
+    },
+    {
+      "id": "choa-chu-kang",
+      "name": "Choa Chu Kang",
+      "mode": "MRT",
+      "codes": [
+        "NS4"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3854247,
+      "longitude": 103.7444155,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3854,
+          "longitude": 103.74456,
+          "sourceObjectId": 21373
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.3854313,
+          "longitude": 103.7445571,
+          "sourceObjectId": 21505
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3846,
+          "longitude": 103.74447,
+          "sourceObjectId": 21374
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.38573,
+          "longitude": 103.74447,
+          "sourceObjectId": 21375
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3857362,
+          "longitude": 103.7445178,
+          "sourceObjectId": 21504
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.38537,
+          "longitude": 103.74411,
+          "sourceObjectId": 21376
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3857054,
+          "longitude": 103.7442236,
+          "sourceObjectId": 21439
+        }
+      ]
+    },
+    {
+      "id": "city-hall",
+      "name": "City Hall",
+      "mode": "MRT",
+      "codes": [
+        "NS25",
+        "EW13"
+      ],
+      "lineIds": [
+        "NS",
+        "EW"
+      ],
+      "latitude": 1.2932059,
+      "longitude": 103.8524408,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2932271,
+          "longitude": 103.8530204,
+          "sourceObjectId": 21514
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2930999,
+          "longitude": 103.8519602,
+          "sourceObjectId": 21515
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2930418,
+          "longitude": 103.8529803,
+          "sourceObjectId": 21252
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2934548,
+          "longitude": 103.8518023,
+          "sourceObjectId": 21217
+        }
+      ]
+    },
+    {
+      "id": "clarke-quay",
+      "name": "Clarke Quay",
+      "mode": "MRT",
+      "codes": [
+        "NE5"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.2886156,
+      "longitude": 103.846565,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2868988,
+          "longitude": 103.8460645,
+          "sourceObjectId": 21456
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2878058,
+          "longitude": 103.8459034,
+          "sourceObjectId": 21660
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2893839,
+          "longitude": 103.8466658,
+          "sourceObjectId": 21454
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2890002,
+          "longitude": 103.8470326,
+          "sourceObjectId": 21457
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2894056,
+          "longitude": 103.8471297,
+          "sourceObjectId": 21455
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.2891993,
+          "longitude": 103.8465939,
+          "sourceObjectId": 21661
+        }
+      ]
+    },
+    {
+      "id": "clementi",
+      "name": "Clementi",
+      "mode": "MRT",
+      "codes": [
+        "EW23"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3147708,
+      "longitude": 103.7653719,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3153736,
+          "longitude": 103.7649821,
+          "sourceObjectId": 21605
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3154691,
+          "longitude": 103.7651856,
+          "sourceObjectId": 21606
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3141623,
+          "longitude": 103.7657498,
+          "sourceObjectId": 21258
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3140784,
+          "longitude": 103.7655701,
+          "sourceObjectId": 21257
+        }
+      ]
+    },
+    {
+      "id": "commonwealth",
+      "name": "Commonwealth",
+      "mode": "MRT",
+      "codes": [
+        "EW20"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3023727,
+      "longitude": 103.7983788,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3026482,
+          "longitude": 103.7979583,
+          "sourceObjectId": 21465
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3027528,
+          "longitude": 103.7980579,
+          "sourceObjectId": 21464
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.302077,
+          "longitude": 103.7987786,
+          "sourceObjectId": 21255
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3020127,
+          "longitude": 103.7987203,
+          "sourceObjectId": 21256
+        }
+      ]
+    },
+    {
+      "id": "dakota",
+      "name": "Dakota",
+      "mode": "MRT",
+      "codes": [
+        "CC8"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3084555,
+      "longitude": 103.8886433,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3088142,
+          "longitude": 103.8893072,
+          "sourceObjectId": 21167
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3080968,
+          "longitude": 103.8879793,
+          "sourceObjectId": 21168
+        }
+      ]
+    },
+    {
+      "id": "dhoby-ghaut",
+      "name": "Dhoby Ghaut",
+      "mode": "MRT",
+      "codes": [
+        "NS24",
+        "NE6",
+        "CC1"
+      ],
+      "lineIds": [
+        "NS",
+        "NE",
+        "CC"
+      ],
+      "latitude": 1.2994107,
+      "longitude": 103.8455017,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2984451,
+          "longitude": 103.846788,
+          "sourceObjectId": 21509
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2990559,
+          "longitude": 103.8452296,
+          "sourceObjectId": 21510
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2996492,
+          "longitude": 103.8447479,
+          "sourceObjectId": 21669
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2999307,
+          "longitude": 103.8450301,
+          "sourceObjectId": 21530
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2997485,
+          "longitude": 103.8453723,
+          "sourceObjectId": 21511
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2996349,
+          "longitude": 103.8458423,
+          "sourceObjectId": 21512
+        }
+      ]
+    },
+    {
+      "id": "dover",
+      "name": "Dover",
+      "mode": "MRT",
+      "codes": [
+        "EW22"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3115543,
+      "longitude": 103.7783848,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3114154,
+          "longitude": 103.7783047,
+          "sourceObjectId": 21431
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3116932,
+          "longitude": 103.7784648,
+          "sourceObjectId": 21432
+        }
+      ]
+    },
+    {
+      "id": "downtown",
+      "name": "Downtown",
+      "mode": "MRT",
+      "codes": [
+        "DT17"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.2795532,
+      "longitude": 103.8527711,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2797735,
+          "longitude": 103.8526466,
+          "sourceObjectId": 21278
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2796013,
+          "longitude": 103.8529081,
+          "sourceObjectId": 21280
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2794444,
+          "longitude": 103.8531521,
+          "sourceObjectId": 21441
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.279176,
+          "longitude": 103.8530138,
+          "sourceObjectId": 21442
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2795279,
+          "longitude": 103.852478,
+          "sourceObjectId": 21279
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2797962,
+          "longitude": 103.8524277,
+          "sourceObjectId": 21642
+        }
+      ]
+    },
+    {
+      "id": "esplanade",
+      "name": "Esplanade",
+      "mode": "MRT",
+      "codes": [
+        "CC3"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2931943,
+      "longitude": 103.8556804,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2933705,
+          "longitude": 103.8563056,
+          "sourceObjectId": 21343
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2929272,
+          "longitude": 103.8561757,
+          "sourceObjectId": 21364
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2929043,
+          "longitude": 103.8558552,
+          "sourceObjectId": 21363
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2926237,
+          "longitude": 103.8558338,
+          "sourceObjectId": 21160
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2931288,
+          "longitude": 103.8555678,
+          "sourceObjectId": 21158
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2938195,
+          "longitude": 103.8551046,
+          "sourceObjectId": 21159
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.2935864,
+          "longitude": 103.8549202,
+          "sourceObjectId": 21362
+        }
+      ]
+    },
+    {
+      "id": "eunos",
+      "name": "Eunos",
+      "mode": "MRT",
+      "codes": [
+        "EW7"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3195366,
+      "longitude": 103.9028971,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3195173,
+          "longitude": 103.9028941,
+          "sourceObjectId": 21685
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3195625,
+          "longitude": 103.9025821,
+          "sourceObjectId": 21686
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3195299,
+          "longitude": 103.9032152,
+          "sourceObjectId": 21357
+        }
+      ]
+    },
+    {
+      "id": "expo",
+      "name": "Expo",
+      "mode": "MRT",
+      "codes": [
+        "CG1",
+        "DT35"
+      ],
+      "lineIds": [
+        "CG",
+        "DT"
+      ],
+      "latitude": 1.3351797,
+      "longitude": 103.9623944,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3353217,
+          "longitude": 103.961943,
+          "sourceObjectId": 21671
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.3354828,
+          "longitude": 103.9618368,
+          "sourceObjectId": 21392
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3352529,
+          "longitude": 103.9620753,
+          "sourceObjectId": 21672
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.335951,
+          "longitude": 103.962161,
+          "sourceObjectId": 21386
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3348349,
+          "longitude": 103.9631007,
+          "sourceObjectId": 21387
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3348633,
+          "longitude": 103.9621234,
+          "sourceObjectId": 21389
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.3347119,
+          "longitude": 103.9628657,
+          "sourceObjectId": 21393
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.3350193,
+          "longitude": 103.963049,
+          "sourceObjectId": 21391
+        }
+      ]
+    },
+    {
+      "id": "farrer-park",
+      "name": "Farrer Park",
+      "mode": "MRT",
+      "codes": [
+        "NE8"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.312161,
+      "longitude": 103.8543372,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3123269,
+          "longitude": 103.8547727,
+          "sourceObjectId": 21612
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.313544,
+          "longitude": 103.8547638,
+          "sourceObjectId": 21482
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3119107,
+          "longitude": 103.8532668,
+          "sourceObjectId": 21666
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3124536,
+          "longitude": 103.8529746,
+          "sourceObjectId": 21665
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3118835,
+          "longitude": 103.852651,
+          "sourceObjectId": 21483
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.311422,
+          "longitude": 103.8531994,
+          "sourceObjectId": 21484
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.312259,
+          "longitude": 103.855501,
+          "sourceObjectId": 21613
+        },
+        {
+          "code": "Exit H",
+          "latitude": 1.3118835,
+          "longitude": 103.8560989,
+          "sourceObjectId": 21615
+        },
+        {
+          "code": "Exit I",
+          "latitude": 1.3117659,
+          "longitude": 103.8558067,
+          "sourceObjectId": 21614
+        }
+      ]
+    },
+    {
+      "id": "farrer-road",
+      "name": "Farrer Road",
+      "mode": "MRT",
+      "codes": [
+        "CC20"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3175229,
+      "longitude": 103.8076772,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3174937,
+          "longitude": 103.8079652,
+          "sourceObjectId": 21620
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.317552,
+          "longitude": 103.8073892,
+          "sourceObjectId": 21621
+        }
+      ]
+    },
+    {
+      "id": "fort-canning",
+      "name": "Fort Canning",
+      "mode": "MRT",
+      "codes": [
+        "DT20"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.2926182,
+      "longitude": 103.8442975,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2924061,
+          "longitude": 103.84417,
+          "sourceObjectId": 21544
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2928303,
+          "longitude": 103.844425,
+          "sourceObjectId": 21541
+        }
+      ]
+    },
+    {
+      "id": "gardens-by-the-bay",
+      "name": "Gardens by the Bay",
+      "mode": "MRT",
+      "codes": [
+        "TE22"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2791668,
+      "longitude": 103.8679032,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2803708,
+          "longitude": 103.8685867,
+          "sourceObjectId": 21567
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2788262,
+          "longitude": 103.8679688,
+          "sourceObjectId": 21566
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.2783034,
+          "longitude": 103.8671541,
+          "sourceObjectId": 21565
+        }
+      ]
+    },
+    {
+      "id": "geylang-bahru",
+      "name": "Geylang Bahru",
+      "mode": "MRT",
+      "codes": [
+        "DT24"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3213354,
+      "longitude": 103.8716749,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3215617,
+          "longitude": 103.8715556,
+          "sourceObjectId": 21193
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3211091,
+          "longitude": 103.8717943,
+          "sourceObjectId": 21205
+        }
+      ]
+    },
+    {
+      "id": "great-world",
+      "name": "Great World",
+      "mode": "MRT",
+      "codes": [
+        "TE15"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2942962,
+      "longitude": 103.8330916,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.293321,
+          "longitude": 103.8339046,
+          "sourceObjectId": 21139
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2928695,
+          "longitude": 103.8326271,
+          "sourceObjectId": 21140
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.29382,
+          "longitude": 103.8327341,
+          "sourceObjectId": 21142
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.2960298,
+          "longitude": 103.8330371,
+          "sourceObjectId": 21143
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.2965526,
+          "longitude": 103.8334055,
+          "sourceObjectId": 21138
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.2931843,
+          "longitude": 103.832841,
+          "sourceObjectId": 21141
+        }
+      ]
+    },
+    {
+      "id": "gul-circle",
+      "name": "Gul Circle",
+      "mode": "MRT",
+      "codes": [
+        "EW30"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3189347,
+      "longitude": 103.6599395,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3190323,
+          "longitude": 103.6604441,
+          "sourceObjectId": 21378
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3188372,
+          "longitude": 103.6594349,
+          "sourceObjectId": 21379
+        }
+      ]
+    },
+    {
+      "id": "harbourfront",
+      "name": "HarbourFront",
+      "mode": "MRT",
+      "codes": [
+        "NE1",
+        "CC29"
+      ],
+      "lineIds": [
+        "NE",
+        "CC"
+      ],
+      "latitude": 1.2654107,
+      "longitude": 103.8214997,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.265085,
+          "longitude": 103.8225098,
+          "sourceObjectId": 21599
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.2660132,
+          "longitude": 103.8204684,
+          "sourceObjectId": 21658
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2651547,
+          "longitude": 103.8205088,
+          "sourceObjectId": 21469
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2652599,
+          "longitude": 103.8225317,
+          "sourceObjectId": 21468
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2659793,
+          "longitude": 103.8213989,
+          "sourceObjectId": 21657
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.264972,
+          "longitude": 103.8215803,
+          "sourceObjectId": 21656
+        }
+      ]
+    },
+    {
+      "id": "havelock",
+      "name": "Havelock",
+      "mode": "MRT",
+      "codes": [
+        "TE16"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2884385,
+      "longitude": 103.833734,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2866767,
+          "longitude": 103.8338398,
+          "sourceObjectId": 21213
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2869441,
+          "longitude": 103.8334951,
+          "sourceObjectId": 21214
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.2888436,
+          "longitude": 103.8333695,
+          "sourceObjectId": 21144
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.2901669,
+          "longitude": 103.8340035,
+          "sourceObjectId": 21216
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.289561,
+          "longitude": 103.8339619,
+          "sourceObjectId": 21215
+        }
+      ]
+    },
+    {
+      "id": "haw-par-villa",
+      "name": "Haw Par Villa",
+      "mode": "MRT",
+      "codes": [
+        "CC25"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2830553,
+      "longitude": 103.7820064,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2830553,
+          "longitude": 103.7820064,
+          "sourceObjectId": 21725
+        }
+      ]
+    },
+    {
+      "id": "hillview",
+      "name": "Hillview",
+      "mode": "MRT",
+      "codes": [
+        "DT3"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3622793,
+      "longitude": 103.7673984,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3624742,
+          "longitude": 103.7676883,
+          "sourceObjectId": 21268
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3620843,
+          "longitude": 103.7671085,
+          "sourceObjectId": 21733
+        }
+      ]
+    },
+    {
+      "id": "holland-village",
+      "name": "Holland Village",
+      "mode": "MRT",
+      "codes": [
+        "CC21"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3110003,
+      "longitude": 103.7958873,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3112203,
+          "longitude": 103.7961391,
+          "sourceObjectId": 21623
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3110695,
+          "longitude": 103.7957691,
+          "sourceObjectId": 21428
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3107112,
+          "longitude": 103.7957538,
+          "sourceObjectId": 21622
+        }
+      ]
+    },
+    {
+      "id": "hougang",
+      "name": "Hougang",
+      "mode": "MRT",
+      "codes": [
+        "NE14"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.3714322,
+      "longitude": 103.8924644,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3702086,
+          "longitude": 103.8924457,
+          "sourceObjectId": 21681
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3719461,
+          "longitude": 103.8929724,
+          "sourceObjectId": 21359
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3721418,
+          "longitude": 103.891975,
+          "sourceObjectId": 21680
+        }
+      ]
+    },
+    {
+      "id": "hume",
+      "name": "Hume",
+      "mode": "MRT",
+      "codes": [
+        "DT4"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.354946,
+      "longitude": 103.7686736,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "1",
+          "latitude": 1.3550633,
+          "longitude": 103.7686955,
+          "sourceObjectId": 21251
+        },
+        {
+          "code": "2",
+          "latitude": 1.3548287,
+          "longitude": 103.7686517,
+          "sourceObjectId": 21249
+        }
+      ]
+    },
+    {
+      "id": "jalan-besar",
+      "name": "Jalan Besar",
+      "mode": "MRT",
+      "codes": [
+        "DT22"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3051786,
+      "longitude": 103.8552704,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3048899,
+          "longitude": 103.8552961,
+          "sourceObjectId": 21201
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3054673,
+          "longitude": 103.8552446,
+          "sourceObjectId": 21534
+        }
+      ]
+    },
+    {
+      "id": "joo-koon",
+      "name": "Joo Koon",
+      "mode": "MRT",
+      "codes": [
+        "EW29"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3277291,
+      "longitude": 103.6785824,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3275021,
+          "longitude": 103.6785207,
+          "sourceObjectId": 21437
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3279561,
+          "longitude": 103.6786441,
+          "sourceObjectId": 21438
+        }
+      ]
+    },
+    {
+      "id": "jurong-east",
+      "name": "Jurong East",
+      "mode": "MRT",
+      "codes": [
+        "NS1",
+        "EW24"
+      ],
+      "lineIds": [
+        "NS",
+        "EW"
+      ],
+      "latitude": 1.3332114,
+      "longitude": 103.7423651,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3339896,
+          "longitude": 103.7417599,
+          "sourceObjectId": 21451
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3325262,
+          "longitude": 103.7426402,
+          "sourceObjectId": 21176
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3327487,
+          "longitude": 103.7427621,
+          "sourceObjectId": 21450
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3335813,
+          "longitude": 103.7422982,
+          "sourceObjectId": 21259
+        }
+      ]
+    },
+    {
+      "id": "kaki-bukit",
+      "name": "Kaki Bukit",
+      "mode": "MRT",
+      "codes": [
+        "DT28"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3351165,
+      "longitude": 103.9092757,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3353112,
+          "longitude": 103.9094051,
+          "sourceObjectId": 21199
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3349219,
+          "longitude": 103.9091463,
+          "sourceObjectId": 21195
+        }
+      ]
+    },
+    {
+      "id": "kallang",
+      "name": "Kallang",
+      "mode": "MRT",
+      "codes": [
+        "EW10"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3116611,
+      "longitude": 103.8716589,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3115405,
+          "longitude": 103.8717306,
+          "sourceObjectId": 21478
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3117818,
+          "longitude": 103.8715871,
+          "sourceObjectId": 21477
+        }
+      ]
+    },
+    {
+      "id": "katong-park",
+      "name": "Katong Park",
+      "mode": "MRT",
+      "codes": [
+        "TE24"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2979591,
+      "longitude": 103.8860806,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2975385,
+          "longitude": 103.8870921,
+          "sourceObjectId": 21221
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2983797,
+          "longitude": 103.8850692,
+          "sourceObjectId": 21220
+        }
+      ]
+    },
+    {
+      "id": "kembangan",
+      "name": "Kembangan",
+      "mode": "MRT",
+      "codes": [
+        "EW6"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.321038,
+      "longitude": 103.9129202,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3209238,
+          "longitude": 103.9129411,
+          "sourceObjectId": 21688
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3211521,
+          "longitude": 103.9128993,
+          "sourceObjectId": 21687
+        }
+      ]
+    },
+    {
+      "id": "kent-ridge",
+      "name": "Kent Ridge",
+      "mode": "MRT",
+      "codes": [
+        "CC24"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2934869,
+      "longitude": 103.7845752,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2943159,
+          "longitude": 103.7844659,
+          "sourceObjectId": 21724
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2924281,
+          "longitude": 103.7848096,
+          "sourceObjectId": 21723
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2939848,
+          "longitude": 103.7844905,
+          "sourceObjectId": 21446
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2932188,
+          "longitude": 103.7845347,
+          "sourceObjectId": 21447
+        }
+      ]
+    },
+    {
+      "id": "keppel",
+      "name": "Keppel",
+      "mode": "MRT",
+      "codes": [
+        "CC30"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2703867,
+      "longitude": 103.83011,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "1",
+          "latitude": 1.2696653,
+          "longitude": 103.8295953,
+          "sourceObjectId": 21288
+        },
+        {
+          "code": "2",
+          "latitude": 1.2705455,
+          "longitude": 103.8296248,
+          "sourceObjectId": 21289
+        },
+        {
+          "code": "3",
+          "latitude": 1.2709494,
+          "longitude": 103.8311098,
+          "sourceObjectId": 21290
+        }
+      ]
+    },
+    {
+      "id": "khatib",
+      "name": "Khatib",
+      "mode": "MRT",
+      "codes": [
+        "NS14"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4174038,
+      "longitude": 103.8329368,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4170582,
+          "longitude": 103.8329224,
+          "sourceObjectId": 21497
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4171434,
+          "longitude": 103.8327067,
+          "sourceObjectId": 21498
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4175447,
+          "longitude": 103.8328869,
+          "sourceObjectId": 21496
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.417869,
+          "longitude": 103.833231,
+          "sourceObjectId": 21172
+        }
+      ]
+    },
+    {
+      "id": "king-albert-park",
+      "name": "King Albert Park",
+      "mode": "MRT",
+      "codes": [
+        "DT6"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3357566,
+      "longitude": 103.7837959,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3355371,
+          "longitude": 103.7830303,
+          "sourceObjectId": 21732
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.335976,
+          "longitude": 103.7845616,
+          "sourceObjectId": 21271
+        }
+      ]
+    },
+    {
+      "id": "kovan",
+      "name": "Kovan",
+      "mode": "MRT",
+      "codes": [
+        "NE13"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.3599804,
+      "longitude": 103.8848266,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3597076,
+          "longitude": 103.8843074,
+          "sourceObjectId": 21684
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3602056,
+          "longitude": 103.8847217,
+          "sourceObjectId": 21682
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.360028,
+          "longitude": 103.8854506,
+          "sourceObjectId": 21683
+        }
+      ]
+    },
+    {
+      "id": "kranji",
+      "name": "Kranji",
+      "mode": "MRT",
+      "codes": [
+        "NS7"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4249607,
+      "longitude": 103.7620527,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4247392,
+          "longitude": 103.7620185,
+          "sourceObjectId": 21123
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4248526,
+          "longitude": 103.7619406,
+          "sourceObjectId": 21122
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4251259,
+          "longitude": 103.7617547,
+          "sourceObjectId": 21582
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.425125,
+          "longitude": 103.7624968,
+          "sourceObjectId": 21440
+        }
+      ]
+    },
+    {
+      "id": "labrador-park",
+      "name": "Labrador Park",
+      "mode": "MRT",
+      "codes": [
+        "CC27"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.272107,
+      "longitude": 103.8023556,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.272107,
+          "longitude": 103.8023556,
+          "sourceObjectId": 21727
+        }
+      ]
+    },
+    {
+      "id": "lakeside",
+      "name": "Lakeside",
+      "mode": "MRT",
+      "codes": [
+        "EW26"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.344123,
+      "longitude": 103.7210789,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3439833,
+          "longitude": 103.7204485,
+          "sourceObjectId": 21487
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3440815,
+          "longitude": 103.7210754,
+          "sourceObjectId": 21581
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3443042,
+          "longitude": 103.7217128,
+          "sourceObjectId": 21580
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "name": "Lavender",
+      "mode": "MRT",
+      "codes": [
+        "EW11"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.307394,
+      "longitude": 103.8628467,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3071695,
+          "longitude": 103.8630431,
+          "sourceObjectId": 21475
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3076185,
+          "longitude": 103.8626503,
+          "sourceObjectId": 21476
+        }
+      ]
+    },
+    {
+      "id": "lentor",
+      "name": "Lentor",
+      "mode": "MRT",
+      "codes": [
+        "TE5"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3847386,
+      "longitude": 103.836552,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3854098,
+          "longitude": 103.83536,
+          "sourceObjectId": 21406
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.385891,
+          "longitude": 103.8358235,
+          "sourceObjectId": 21405
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.384602,
+          "longitude": 103.8373981,
+          "sourceObjectId": 21407
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3836278,
+          "longitude": 103.8373387,
+          "sourceObjectId": 21408
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3841624,
+          "longitude": 103.8368395,
+          "sourceObjectId": 21409
+        }
+      ]
+    },
+    {
+      "id": "little-india",
+      "name": "Little India",
+      "mode": "MRT",
+      "codes": [
+        "NE7",
+        "DT12"
+      ],
+      "lineIds": [
+        "NE",
+        "DT"
+      ],
+      "latitude": 1.3067475,
+      "longitude": 103.8492794,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3056053,
+          "longitude": 103.84936,
+          "sourceObjectId": 21662
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3065636,
+          "longitude": 103.8489851,
+          "sourceObjectId": 21481
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3063516,
+          "longitude": 103.8497048,
+          "sourceObjectId": 21663
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3068547,
+          "longitude": 103.849,
+          "sourceObjectId": 21448
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3074264,
+          "longitude": 103.8503222,
+          "sourceObjectId": 21664
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.3076835,
+          "longitude": 103.8483044,
+          "sourceObjectId": 21276
+        }
+      ]
+    },
+    {
+      "id": "lorong-chuan",
+      "name": "Lorong Chuan",
+      "mode": "MRT",
+      "codes": [
+        "CC14"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3515888,
+      "longitude": 103.863926,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3514391,
+          "longitude": 103.8649337,
+          "sourceObjectId": 21332
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3517385,
+          "longitude": 103.8629183,
+          "sourceObjectId": 21331
+        }
+      ]
+    },
+    {
+      "id": "macpherson",
+      "name": "MacPherson",
+      "mode": "MRT",
+      "codes": [
+        "CC10",
+        "DT26"
+      ],
+      "lineIds": [
+        "CC",
+        "DT"
+      ],
+      "latitude": 1.3258707,
+      "longitude": 103.8895583,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3266788,
+          "longitude": 103.8897933,
+          "sourceObjectId": 21707
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.325855,
+          "longitude": 103.8906657,
+          "sourceObjectId": 21708
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3254815,
+          "longitude": 103.8902626,
+          "sourceObjectId": 21709
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3251455,
+          "longitude": 103.8884548,
+          "sourceObjectId": 21390
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3261928,
+          "longitude": 103.8886152,
+          "sourceObjectId": 21388
+        }
+      ]
+    },
+    {
+      "id": "marina-bay",
+      "name": "Marina Bay",
+      "mode": "MRT",
+      "codes": [
+        "NS27",
+        "CC33",
+        "TE20"
+      ],
+      "lineIds": [
+        "NS",
+        "CC",
+        "TE"
+      ],
+      "latitude": 1.2754512,
+      "longitude": 103.8551307,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.277353,
+          "longitude": 103.85447,
+          "sourceObjectId": 21560
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2761589,
+          "longitude": 103.8550033,
+          "sourceObjectId": 21564
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.2754164,
+          "longitude": 103.8553717,
+          "sourceObjectId": 21563
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.2736342,
+          "longitude": 103.8564888,
+          "sourceObjectId": 21562
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.2746933,
+          "longitude": 103.8543195,
+          "sourceObjectId": 21561
+        }
+      ]
+    },
+    {
+      "id": "marina-south-pier",
+      "name": "Marina South Pier",
+      "mode": "MRT",
+      "codes": [
+        "NS28"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.2709839,
+      "longitude": 103.8629549,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.27053,
+          "longitude": 103.8623301,
+          "sourceObjectId": 21263
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2714378,
+          "longitude": 103.8635797,
+          "sourceObjectId": 21264
+        }
+      ]
+    },
+    {
+      "id": "marine-parade",
+      "name": "Marine Parade",
+      "mode": "MRT",
+      "codes": [
+        "TE26"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3037773,
+      "longitude": 103.9068439,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3020933,
+          "longitude": 103.9059104,
+          "sourceObjectId": 21222
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3025317,
+          "longitude": 103.9045912,
+          "sourceObjectId": 21223
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.303594,
+          "longitude": 103.9060529,
+          "sourceObjectId": 21224
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3045659,
+          "longitude": 103.9076275,
+          "sourceObjectId": 21225
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3055802,
+          "longitude": 103.9090937,
+          "sourceObjectId": 21227
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.3042985,
+          "longitude": 103.9077879,
+          "sourceObjectId": 21226
+        }
+      ]
+    },
+    {
+      "id": "marine-terrace",
+      "name": "Marine Terrace",
+      "mode": "MRT",
+      "codes": [
+        "TE27"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3066939,
+      "longitude": 103.9150744,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3063987,
+          "longitude": 103.9150522,
+          "sourceObjectId": 21229
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3057892,
+          "longitude": 103.913253,
+          "sourceObjectId": 21232
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3065793,
+          "longitude": 103.9130866,
+          "sourceObjectId": 21233
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3068953,
+          "longitude": 103.9150201,
+          "sourceObjectId": 21228
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3074383,
+          "longitude": 103.9170891,
+          "sourceObjectId": 21230
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.3070628,
+          "longitude": 103.9169453,
+          "sourceObjectId": 21231
+        }
+      ]
+    },
+    {
+      "id": "marsiling",
+      "name": "Marsiling",
+      "mode": "MRT",
+      "codes": [
+        "NS8"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4326935,
+      "longitude": 103.7741096,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4328017,
+          "longitude": 103.7742105,
+          "sourceObjectId": 21125
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4327514,
+          "longitude": 103.7744105,
+          "sourceObjectId": 21654
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4324695,
+          "longitude": 103.7738205,
+          "sourceObjectId": 21124
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.4327514,
+          "longitude": 103.7739971,
+          "sourceObjectId": 21655
+        }
+      ]
+    },
+    {
+      "id": "marymount",
+      "name": "Marymount",
+      "mode": "MRT",
+      "codes": [
+        "CC16"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3484233,
+      "longitude": 103.8395735,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3489804,
+          "longitude": 103.839088,
+          "sourceObjectId": 21668
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3478661,
+          "longitude": 103.8400589,
+          "sourceObjectId": 21667
+        }
+      ]
+    },
+    {
+      "id": "mattar",
+      "name": "Mattar",
+      "mode": "MRT",
+      "codes": [
+        "DT25"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3268574,
+      "longitude": 103.8832403,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3272514,
+          "longitude": 103.8827321,
+          "sourceObjectId": 21372
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3264635,
+          "longitude": 103.8837484,
+          "sourceObjectId": 21543
+        }
+      ]
+    },
+    {
+      "id": "maxwell",
+      "name": "Maxwell",
+      "mode": "MRT",
+      "codes": [
+        "TE18"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2807151,
+      "longitude": 103.8439921,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2810343,
+          "longitude": 103.8441644,
+          "sourceObjectId": 21552
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2809194,
+          "longitude": 103.8448955,
+          "sourceObjectId": 21553
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.2801915,
+          "longitude": 103.8429163,
+          "sourceObjectId": 21551
+        }
+      ]
+    },
+    {
+      "id": "mayflower",
+      "name": "Mayflower",
+      "mode": "MRT",
+      "codes": [
+        "TE6"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3720404,
+      "longitude": 103.8367656,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.372704,
+          "longitude": 103.8367168,
+          "sourceObjectId": 21412
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3737198,
+          "longitude": 103.8370317,
+          "sourceObjectId": 21411
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3735321,
+          "longitude": 103.837461,
+          "sourceObjectId": 21410
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3712763,
+          "longitude": 103.836796,
+          "sourceObjectId": 21133
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3707773,
+          "longitude": 103.8367603,
+          "sourceObjectId": 21134
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.3708961,
+          "longitude": 103.8363087,
+          "sourceObjectId": 21135
+        },
+        {
+          "code": "Exit 7",
+          "latitude": 1.3713773,
+          "longitude": 103.836285,
+          "sourceObjectId": 21413
+        }
+      ]
+    },
+    {
+      "id": "mountbatten",
+      "name": "Mountbatten",
+      "mode": "MRT",
+      "codes": [
+        "CC7"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3063993,
+      "longitude": 103.8829229,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3067527,
+          "longitude": 103.8825975,
+          "sourceObjectId": 21166
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3060459,
+          "longitude": 103.8832483,
+          "sourceObjectId": 21165
+        }
+      ]
+    },
+    {
+      "id": "napier",
+      "name": "Napier",
+      "mode": "MRT",
+      "codes": [
+        "TE12"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3066405,
+      "longitude": 103.8194952,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.306936,
+          "longitude": 103.8194838,
+          "sourceObjectId": 21145
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.306345,
+          "longitude": 103.8195066,
+          "sourceObjectId": 21146
+        }
+      ]
+    },
+    {
+      "id": "newton",
+      "name": "Newton",
+      "mode": "MRT",
+      "codes": [
+        "NS21",
+        "DT11"
+      ],
+      "lineIds": [
+        "NS",
+        "DT"
+      ],
+      "latitude": 1.3127635,
+      "longitude": 103.8381143,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3125978,
+          "longitude": 103.8378813,
+          "sourceObjectId": 21472
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3120755,
+          "longitude": 103.8382191,
+          "sourceObjectId": 21473
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3136173,
+          "longitude": 103.8382424,
+          "sourceObjectId": 21275
+        }
+      ]
+    },
+    {
+      "id": "nicoll-highway",
+      "name": "Nicoll Highway",
+      "mode": "MRT",
+      "codes": [
+        "CC5"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2999153,
+      "longitude": 103.8638289,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3001697,
+          "longitude": 103.863506,
+          "sourceObjectId": 21162
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2996608,
+          "longitude": 103.8641517,
+          "sourceObjectId": 21618
+        }
+      ]
+    },
+    {
+      "id": "novena",
+      "name": "Novena",
+      "mode": "MRT",
+      "codes": [
+        "NS20"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3204954,
+      "longitude": 103.8438645,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3210949,
+          "longitude": 103.8443893,
+          "sourceObjectId": 21702
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3198959,
+          "longitude": 103.8433397,
+          "sourceObjectId": 21701
+        }
+      ]
+    },
+    {
+      "id": "one-north",
+      "name": "one-north",
+      "mode": "MRT",
+      "codes": [
+        "CC23"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2997941,
+      "longitude": 103.7875464,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2990275,
+          "longitude": 103.7869075,
+          "sourceObjectId": 21722
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3003595,
+          "longitude": 103.7879278,
+          "sourceObjectId": 21429
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2997147,
+          "longitude": 103.7875655,
+          "sourceObjectId": 21337
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3000747,
+          "longitude": 103.7877848,
+          "sourceObjectId": 21445
+        }
+      ]
+    },
+    {
+      "id": "orchard",
+      "name": "Orchard",
+      "mode": "MRT",
+      "codes": [
+        "NS22",
+        "TE14"
+      ],
+      "lineIds": [
+        "NS",
+        "TE"
+      ],
+      "latitude": 1.3037892,
+      "longitude": 103.8318596,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3048922,
+          "longitude": 103.8325243,
+          "sourceObjectId": 21471
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3043544,
+          "longitude": 103.8326196,
+          "sourceObjectId": 21474
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3041611,
+          "longitude": 103.8327708,
+          "sourceObjectId": 21506
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3045605,
+          "longitude": 103.8320398,
+          "sourceObjectId": 21470
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3039447,
+          "longitude": 103.8320238,
+          "sourceObjectId": 21153
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.3036477,
+          "longitude": 103.8323209,
+          "sourceObjectId": 21207
+        },
+        {
+          "code": "Exit 7",
+          "latitude": 1.3031675,
+          "longitude": 103.8321716,
+          "sourceObjectId": 21507
+        },
+        {
+          "code": "Exit 8",
+          "latitude": 1.3034457,
+          "longitude": 103.8317861,
+          "sourceObjectId": 21151
+        },
+        {
+          "code": "Exit 9",
+          "latitude": 1.3036655,
+          "longitude": 103.8315069,
+          "sourceObjectId": 21150
+        },
+        {
+          "code": "Exit 10",
+          "latitude": 1.3040457,
+          "longitude": 103.8311266,
+          "sourceObjectId": 21149
+        },
+        {
+          "code": "Exit 11",
+          "latitude": 1.304218,
+          "longitude": 103.8304967,
+          "sourceObjectId": 21148
+        },
+        {
+          "code": "Exit 12",
+          "latitude": 1.3028576,
+          "longitude": 103.8306631,
+          "sourceObjectId": 21147
+        },
+        {
+          "code": "Exit 13",
+          "latitude": 1.3022992,
+          "longitude": 103.8321248,
+          "sourceObjectId": 21152
+        }
+      ]
+    },
+    {
+      "id": "orchard-boulevard",
+      "name": "Orchard Boulevard",
+      "mode": "MRT",
+      "codes": [
+        "TE13"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3030436,
+      "longitude": 103.8237668,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.303624,
+          "longitude": 103.8236379,
+          "sourceObjectId": 21136
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3024633,
+          "longitude": 103.8238956,
+          "sourceObjectId": 21137
+        }
+      ]
+    },
+    {
+      "id": "outram-park",
+      "name": "Outram Park",
+      "mode": "MRT",
+      "codes": [
+        "EW16",
+        "NE3",
+        "TE17"
+      ],
+      "lineIds": [
+        "EW",
+        "NE",
+        "TE"
+      ],
+      "latitude": 1.2807283,
+      "longitude": 103.8390765,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2816024,
+          "longitude": 103.8386577,
+          "sourceObjectId": 21518
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2816753,
+          "longitude": 103.8389348,
+          "sourceObjectId": 21519
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.2809933,
+          "longitude": 103.8397892,
+          "sourceObjectId": 21430
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.2802134,
+          "longitude": 103.8403868,
+          "sourceObjectId": 21132
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.278947,
+          "longitude": 103.8395492,
+          "sourceObjectId": 21452
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.2790512,
+          "longitude": 103.8385373,
+          "sourceObjectId": 21453
+        },
+        {
+          "code": "Exit 7",
+          "latitude": 1.281022,
+          "longitude": 103.8386402,
+          "sourceObjectId": 21550
+        },
+        {
+          "code": "Exit 8",
+          "latitude": 1.2823216,
+          "longitude": 103.8381171,
+          "sourceObjectId": 21549
+        }
+      ]
+    },
+    {
+      "id": "pasir-panjang",
+      "name": "Pasir Panjang",
+      "mode": "MRT",
+      "codes": [
+        "CC26"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2760032,
+      "longitude": 103.7920302,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2760032,
+          "longitude": 103.7920302,
+          "sourceObjectId": 21726
+        }
+      ]
+    },
+    {
+      "id": "pasir-ris",
+      "name": "Pasir Ris",
+      "mode": "MRT",
+      "codes": [
+        "EW1"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3728641,
+      "longitude": 103.9492351,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.372842,
+          "longitude": 103.9493334,
+          "sourceObjectId": 21501
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3728862,
+          "longitude": 103.9491369,
+          "sourceObjectId": 21500
+        }
+      ]
+    },
+    {
+      "id": "paya-lebar",
+      "name": "Paya Lebar",
+      "mode": "MRT",
+      "codes": [
+        "EW8",
+        "CC9"
+      ],
+      "lineIds": [
+        "EW",
+        "CC"
+      ],
+      "latitude": 1.3177209,
+      "longitude": 103.8924413,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "E",
+          "latitude": 1.3182875,
+          "longitude": 103.8932344,
+          "sourceObjectId": 21218
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.318216,
+          "longitude": 103.8927883,
+          "sourceObjectId": 21126
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3183475,
+          "longitude": 103.8922172,
+          "sourceObjectId": 21127
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3181493,
+          "longitude": 103.8917211,
+          "sourceObjectId": 21169
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3165877,
+          "longitude": 103.8920777,
+          "sourceObjectId": 21170
+        },
+        {
+          "code": "F",
+          "latitude": 1.3167375,
+          "longitude": 103.8926094,
+          "sourceObjectId": 21219
+        }
+      ]
+    },
+    {
+      "id": "pioneer",
+      "name": "Pioneer",
+      "mode": "MRT",
+      "codes": [
+        "EW28"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3375881,
+      "longitude": 103.6971425,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3373446,
+          "longitude": 103.6971554,
+          "sourceObjectId": 21644
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3378316,
+          "longitude": 103.6971295,
+          "sourceObjectId": 21645
+        }
+      ]
+    },
+    {
+      "id": "potong-pasir",
+      "name": "Potong Pasir",
+      "mode": "MRT",
+      "codes": [
+        "NE10"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.3316721,
+      "longitude": 103.8690012,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3328014,
+          "longitude": 103.8689664,
+          "sourceObjectId": 21617
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3311481,
+          "longitude": 103.8693332,
+          "sourceObjectId": 21335
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3310667,
+          "longitude": 103.8687039,
+          "sourceObjectId": 21334
+        }
+      ]
+    },
+    {
+      "id": "prince-edward-road",
+      "name": "Prince Edward Road",
+      "mode": "MRT",
+      "codes": [
+        "CC32"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2732346,
+      "longitude": 103.8462182,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "1",
+          "latitude": 1.2730338,
+          "longitude": 103.8455753,
+          "sourceObjectId": 21291
+        },
+        {
+          "code": "2",
+          "latitude": 1.2734354,
+          "longitude": 103.8468612,
+          "sourceObjectId": 21292
+        }
+      ]
+    },
+    {
+      "id": "promenade",
+      "name": "Promenade",
+      "mode": "MRT",
+      "codes": [
+        "CC4",
+        "DT15"
+      ],
+      "lineIds": [
+        "CC",
+        "DT"
+      ],
+      "latitude": 1.2932255,
+      "longitude": 103.860349,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2917117,
+          "longitude": 103.8606736,
+          "sourceObjectId": 21485
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2938621,
+          "longitude": 103.8601369,
+          "sourceObjectId": 21161
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2941028,
+          "longitude": 103.8602365,
+          "sourceObjectId": 21171
+        }
+      ]
+    },
+    {
+      "id": "punggol",
+      "name": "Punggol",
+      "mode": "MRT",
+      "codes": [
+        "NE17"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.4052629,
+      "longitude": 103.9024521,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4053396,
+          "longitude": 103.902306,
+          "sourceObjectId": 21634
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4051862,
+          "longitude": 103.9025982,
+          "sourceObjectId": 21636
+        }
+      ]
+    },
+    {
+      "id": "punggol-coast",
+      "name": "Punggol Coast",
+      "mode": "MRT",
+      "codes": [
+        "NE18"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.4149625,
+      "longitude": 103.9101071,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "1",
+          "latitude": 1.4148361,
+          "longitude": 103.9095329,
+          "sourceObjectId": 21286
+        },
+        {
+          "code": "2",
+          "latitude": 1.4150889,
+          "longitude": 103.9106813,
+          "sourceObjectId": 21287
+        }
+      ]
+    },
+    {
+      "id": "queenstown",
+      "name": "Queenstown",
+      "mode": "MRT",
+      "codes": [
+        "EW19"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.2948516,
+      "longitude": 103.8058928,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2942473,
+          "longitude": 103.8061828,
+          "sourceObjectId": 21461
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2943299,
+          "longitude": 103.8063115,
+          "sourceObjectId": 21610
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2954463,
+          "longitude": 103.8055847,
+          "sourceObjectId": 21253
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2953829,
+          "longitude": 103.8054922,
+          "sourceObjectId": 21254
+        }
+      ]
+    },
+    {
+      "id": "raffles-place",
+      "name": "Raffles Place",
+      "mode": "MRT",
+      "codes": [
+        "NS26",
+        "EW14"
+      ],
+      "lineIds": [
+        "NS",
+        "EW"
+      ],
+      "latitude": 1.2837038,
+      "longitude": 103.8514147,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2841251,
+          "longitude": 103.8514384,
+          "sourceObjectId": 21528
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2846069,
+          "longitude": 103.85148,
+          "sourceObjectId": 21526
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2836305,
+          "longitude": 103.8515625,
+          "sourceObjectId": 21365
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2836414,
+          "longitude": 103.8513532,
+          "sourceObjectId": 21529
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2832116,
+          "longitude": 103.8515226,
+          "sourceObjectId": 21525
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2825386,
+          "longitude": 103.8509609,
+          "sourceObjectId": 21367
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.2850169,
+          "longitude": 103.8514781,
+          "sourceObjectId": 21527
+        },
+        {
+          "code": "Exit H",
+          "latitude": 1.2852583,
+          "longitude": 103.8516217,
+          "sourceObjectId": 21524
+        },
+        {
+          "code": "Exit I",
+          "latitude": 1.2823823,
+          "longitude": 103.8514333,
+          "sourceObjectId": 21368
+        },
+        {
+          "code": "Exit J",
+          "latitude": 1.2826262,
+          "longitude": 103.851296,
+          "sourceObjectId": 21366
+        }
+      ]
+    },
+    {
+      "id": "redhill",
+      "name": "Redhill",
+      "mode": "MRT",
+      "codes": [
+        "EW18"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.2894283,
+      "longitude": 103.817122,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2893707,
+          "longitude": 103.8169945,
+          "sourceObjectId": 21462
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2894859,
+          "longitude": 103.8172494,
+          "sourceObjectId": 21463
+        }
+      ]
+    },
+    {
+      "id": "rochor",
+      "name": "Rochor",
+      "mode": "MRT",
+      "codes": [
+        "DT13"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3038095,
+      "longitude": 103.8527396,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3034041,
+          "longitude": 103.852375,
+          "sourceObjectId": 21641
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3042148,
+          "longitude": 103.8531043,
+          "sourceObjectId": 21277
+        }
+      ]
+    },
+    {
+      "id": "sembawang",
+      "name": "Sembawang",
+      "mode": "MRT",
+      "codes": [
+        "NS11"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4489224,
+      "longitude": 103.8200151,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4488373,
+          "longitude": 103.8201097,
+          "sourceObjectId": 21492
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4487683,
+          "longitude": 103.8197902,
+          "sourceObjectId": 21493
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4491568,
+          "longitude": 103.819759,
+          "sourceObjectId": 21358
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.4489273,
+          "longitude": 103.8204016,
+          "sourceObjectId": 21499
+        }
+      ]
+    },
+    {
+      "id": "sengkang",
+      "name": "Sengkang",
+      "mode": "MRT",
+      "codes": [
+        "NE16"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.3917193,
+      "longitude": 103.8954894,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3918291,
+          "longitude": 103.8954057,
+          "sourceObjectId": 21632
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3917956,
+          "longitude": 103.8956369,
+          "sourceObjectId": 21631
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3908816,
+          "longitude": 103.8952094,
+          "sourceObjectId": 21633
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3923708,
+          "longitude": 103.8957055,
+          "sourceObjectId": 21630
+        }
+      ]
+    },
+    {
+      "id": "serangoon",
+      "name": "Serangoon",
+      "mode": "MRT",
+      "codes": [
+        "NE12",
+        "CC13"
+      ],
+      "lineIds": [
+        "NE",
+        "CC"
+      ],
+      "latitude": 1.3502623,
+      "longitude": 103.8732974,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3494817,
+          "longitude": 103.8739574,
+          "sourceObjectId": 21327
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3498337,
+          "longitude": 103.8736413,
+          "sourceObjectId": 21354
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3505951,
+          "longitude": 103.873694,
+          "sourceObjectId": 21329
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3499016,
+          "longitude": 103.8743219,
+          "sourceObjectId": 21328
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3508202,
+          "longitude": 103.8729021,
+          "sourceObjectId": 21355
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.3509483,
+          "longitude": 103.8714493,
+          "sourceObjectId": 21330
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.3507902,
+          "longitude": 103.8728667,
+          "sourceObjectId": 21353
+        },
+        {
+          "code": "Exit H",
+          "latitude": 1.3497277,
+          "longitude": 103.8735465,
+          "sourceObjectId": 21326
+        }
+      ]
+    },
+    {
+      "id": "shenton-way",
+      "name": "Shenton Way",
+      "mode": "MRT",
+      "codes": [
+        "TE19"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2774706,
+      "longitude": 103.8509358,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2774621,
+          "longitude": 103.8518357,
+          "sourceObjectId": 21554
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2770031,
+          "longitude": 103.8509151,
+          "sourceObjectId": 21557
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.2776296,
+          "longitude": 103.8501288,
+          "sourceObjectId": 21558
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.2776559,
+          "longitude": 103.8510341,
+          "sourceObjectId": 21556
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.2771436,
+          "longitude": 103.851808,
+          "sourceObjectId": 21555
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.2779292,
+          "longitude": 103.8498932,
+          "sourceObjectId": 21559
+        }
+      ]
+    },
+    {
+      "id": "siglap",
+      "name": "Siglap",
+      "mode": "MRT",
+      "codes": [
+        "TE28"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3098545,
+      "longitude": 103.929979,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3088503,
+          "longitude": 103.9287926,
+          "sourceObjectId": 21238
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3097766,
+          "longitude": 103.9285863,
+          "sourceObjectId": 21239
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3105892,
+          "longitude": 103.9312459,
+          "sourceObjectId": 21240
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3102017,
+          "longitude": 103.9312911,
+          "sourceObjectId": 21241
+        }
+      ]
+    },
+    {
+      "id": "simei",
+      "name": "Simei",
+      "mode": "MRT",
+      "codes": [
+        "EW3"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3426618,
+      "longitude": 103.9538187,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3426618,
+          "longitude": 103.9538187,
+          "sourceObjectId": 21173
+        }
+      ]
+    },
+    {
+      "id": "sixth-avenue",
+      "name": "Sixth Avenue",
+      "mode": "MRT",
+      "codes": [
+        "DT7"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3311509,
+      "longitude": 103.7967072,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3307805,
+          "longitude": 103.7965661,
+          "sourceObjectId": 21731
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3315213,
+          "longitude": 103.7968482,
+          "sourceObjectId": 21272
+        }
+      ]
+    },
+    {
+      "id": "somerset",
+      "name": "Somerset",
+      "mode": "MRT",
+      "codes": [
+        "NS23"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3003681,
+      "longitude": 103.8388395,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3000285,
+          "longitude": 103.8383993,
+          "sourceObjectId": 21336
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3007665,
+          "longitude": 103.838459,
+          "sourceObjectId": 21508
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3004362,
+          "longitude": 103.8387656,
+          "sourceObjectId": 21261
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3002411,
+          "longitude": 103.8397341,
+          "sourceObjectId": 21262
+        }
+      ]
+    },
+    {
+      "id": "springleaf",
+      "name": "Springleaf",
+      "mode": "MRT",
+      "codes": [
+        "TE4"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3980974,
+      "longitude": 103.8181585,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3987872,
+          "longitude": 103.8180034,
+          "sourceObjectId": 21404
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3978208,
+          "longitude": 103.8183906,
+          "sourceObjectId": 21394
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3976842,
+          "longitude": 103.8180816,
+          "sourceObjectId": 21395
+        }
+      ]
+    },
+    {
+      "id": "stadium",
+      "name": "Stadium",
+      "mode": "MRT",
+      "codes": [
+        "CC6"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3029407,
+      "longitude": 103.8753131,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3025111,
+          "longitude": 103.8744,
+          "sourceObjectId": 21164
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3033702,
+          "longitude": 103.8762262,
+          "sourceObjectId": 21163
+        }
+      ]
+    },
+    {
+      "id": "stevens",
+      "name": "Stevens",
+      "mode": "MRT",
+      "codes": [
+        "DT10",
+        "TE11"
+      ],
+      "lineIds": [
+        "DT",
+        "TE"
+      ],
+      "latitude": 1.3201417,
+      "longitude": 103.8257878,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3199516,
+          "longitude": 103.8257284,
+          "sourceObjectId": 21210
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3188289,
+          "longitude": 103.8260136,
+          "sourceObjectId": 21211
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3194705,
+          "longitude": 103.8249916,
+          "sourceObjectId": 21212
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.3215199,
+          "longitude": 103.8258829,
+          "sourceObjectId": 21209
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3209377,
+          "longitude": 103.8263226,
+          "sourceObjectId": 21208
+        }
+      ]
+    },
+    {
+      "id": "tai-seng",
+      "name": "Tai Seng",
+      "mode": "MRT",
+      "codes": [
+        "CC11"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.3354358,
+      "longitude": 103.8880342,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "C",
+          "latitude": 1.3357724,
+          "longitude": 103.8882612,
+          "sourceObjectId": 21281
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.3359141,
+          "longitude": 103.8876274,
+          "sourceObjectId": 21356
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3346209,
+          "longitude": 103.8882141,
+          "sourceObjectId": 21323
+        }
+      ]
+    },
+    {
+      "id": "tampines",
+      "name": "Tampines",
+      "mode": "MRT",
+      "codes": [
+        "EW2",
+        "DT32"
+      ],
+      "lineIds": [
+        "EW",
+        "DT"
+      ],
+      "latitude": 1.3543165,
+      "longitude": 103.943782,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.353764,
+          "longitude": 103.9447663,
+          "sourceObjectId": 21502
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3535391,
+          "longitude": 103.9450896,
+          "sourceObjectId": 21679
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3533983,
+          "longitude": 103.944904,
+          "sourceObjectId": 21503
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3548706,
+          "longitude": 103.9436782,
+          "sourceObjectId": 21206
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.3558534,
+          "longitude": 103.9426588,
+          "sourceObjectId": 21531
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.3541939,
+          "longitude": 103.9426537,
+          "sourceObjectId": 21192
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.3545963,
+          "longitude": 103.9427235,
+          "sourceObjectId": 21348
+        }
+      ]
+    },
+    {
+      "id": "tampines-east",
+      "name": "Tampines East",
+      "mode": "MRT",
+      "codes": [
+        "DT33"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3561431,
+      "longitude": 103.9552831,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3564608,
+          "longitude": 103.9545404,
+          "sourceObjectId": 21194
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3555882,
+          "longitude": 103.95517,
+          "sourceObjectId": 21533
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3555532,
+          "longitude": 103.9557047,
+          "sourceObjectId": 21371
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3569702,
+          "longitude": 103.9557174,
+          "sourceObjectId": 21154
+        }
+      ]
+    },
+    {
+      "id": "tampines-west",
+      "name": "Tampines West",
+      "mode": "MRT",
+      "codes": [
+        "DT31"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3453149,
+      "longitude": 103.9385726,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3456306,
+          "longitude": 103.9381967,
+          "sourceObjectId": 21539
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3449992,
+          "longitude": 103.9389485,
+          "sourceObjectId": 21200
+        }
+      ]
+    },
+    {
+      "id": "tan-kah-kee",
+      "name": "Tan Kah Kee",
+      "mode": "MRT",
+      "codes": [
+        "DT8"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3257397,
+      "longitude": 103.8078,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3253331,
+          "longitude": 103.8077991,
+          "sourceObjectId": 21729
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3261462,
+          "longitude": 103.8078009,
+          "sourceObjectId": 21273
+        }
+      ]
+    },
+    {
+      "id": "tanah-merah",
+      "name": "Tanah Merah",
+      "mode": "MRT",
+      "codes": [
+        "EW4"
+      ],
+      "lineIds": [
+        "EW",
+        "CG"
+      ],
+      "latitude": 1.3269595,
+      "longitude": 103.9457589,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3268577,
+          "longitude": 103.9457947,
+          "sourceObjectId": 21604
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3270613,
+          "longitude": 103.945723,
+          "sourceObjectId": 21603
+        }
+      ]
+    },
+    {
+      "id": "tanjong-katong",
+      "name": "Tanjong Katong",
+      "mode": "MRT",
+      "codes": [
+        "TE25"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.299428,
+      "longitude": 103.8974846,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2990387,
+          "longitude": 103.8970455,
+          "sourceObjectId": 21236
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2990161,
+          "longitude": 103.8976931,
+          "sourceObjectId": 21237
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3002292,
+          "longitude": 103.8977153,
+          "sourceObjectId": 21247
+        }
+      ]
+    },
+    {
+      "id": "tanjong-pagar",
+      "name": "Tanjong Pagar",
+      "mode": "MRT",
+      "codes": [
+        "EW15"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.2765062,
+      "longitude": 103.8464332,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2764085,
+          "longitude": 103.844834,
+          "sourceObjectId": 21521
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2766717,
+          "longitude": 103.8465446,
+          "sourceObjectId": 21520
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2760892,
+          "longitude": 103.8465336,
+          "sourceObjectId": 21522
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.2760648,
+          "longitude": 103.8469088,
+          "sourceObjectId": 21523
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.2762591,
+          "longitude": 103.8470958,
+          "sourceObjectId": 21369
+        },
+        {
+          "code": "Exit F",
+          "latitude": 1.2773795,
+          "longitude": 103.8469276,
+          "sourceObjectId": 21155
+        },
+        {
+          "code": "Exit G",
+          "latitude": 1.2777845,
+          "longitude": 103.8469531,
+          "sourceObjectId": 21156
+        },
+        {
+          "code": "Exit H",
+          "latitude": 1.2754509,
+          "longitude": 103.8464451,
+          "sourceObjectId": 21157
+        },
+        {
+          "code": "Exit I",
+          "latitude": 1.276448,
+          "longitude": 103.845656,
+          "sourceObjectId": 21646
+        }
+      ]
+    },
+    {
+      "id": "tanjong-rhu",
+      "name": "Tanjong Rhu",
+      "mode": "MRT",
+      "codes": [
+        "TE23"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.2973298,
+      "longitude": 103.8735403,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.2964595,
+          "longitude": 103.8734779,
+          "sourceObjectId": 21234
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.2982,
+          "longitude": 103.8736027,
+          "sourceObjectId": 21235
+        }
+      ]
+    },
+    {
+      "id": "telok-ayer",
+      "name": "Telok Ayer",
+      "mode": "MRT",
+      "codes": [
+        "DT18"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.2823871,
+      "longitude": 103.8483443,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "D",
+          "latitude": 1.2826,
+          "longitude": 103.8481,
+          "sourceObjectId": 21250
+        },
+        {
+          "code": "E",
+          "latitude": 1.2827,
+          "longitude": 103.8475,
+          "sourceObjectId": 21248
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.2818874,
+          "longitude": 103.8485065,
+          "sourceObjectId": 21643
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2824973,
+          "longitude": 103.8487733,
+          "sourceObjectId": 21444
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.2822507,
+          "longitude": 103.8488417,
+          "sourceObjectId": 21443
+        }
+      ]
+    },
+    {
+      "id": "telok-blangah",
+      "name": "Telok Blangah",
+      "mode": "MRT",
+      "codes": [
+        "CC28"
+      ],
+      "lineIds": [
+        "CC"
+      ],
+      "latitude": 1.2707212,
+      "longitude": 103.8098837,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2707212,
+          "longitude": 103.8098837,
+          "sourceObjectId": 21728
+        }
+      ]
+    },
+    {
+      "id": "tiong-bahru",
+      "name": "Tiong Bahru",
+      "mode": "MRT",
+      "codes": [
+        "EW17"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.2860607,
+      "longitude": 103.8272435,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.2857595,
+          "longitude": 103.8269906,
+          "sourceObjectId": 21466
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.2863619,
+          "longitude": 103.8274964,
+          "sourceObjectId": 21467
+        }
+      ]
+    },
+    {
+      "id": "toa-payoh",
+      "name": "Toa Payoh",
+      "mode": "MRT",
+      "codes": [
+        "NS19"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3327412,
+      "longitude": 103.8472846,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3323764,
+          "longitude": 103.8477238,
+          "sourceObjectId": 21486
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3323155,
+          "longitude": 103.8475776,
+          "sourceObjectId": 21699
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3329941,
+          "longitude": 103.8473198,
+          "sourceObjectId": 21700
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3332787,
+          "longitude": 103.8465174,
+          "sourceObjectId": 21703
+        }
+      ]
+    },
+    {
+      "id": "tuas-crescent",
+      "name": "Tuas Crescent",
+      "mode": "MRT",
+      "codes": [
+        "EW31"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3210037,
+      "longitude": 103.6491228,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3207638,
+          "longitude": 103.6489587,
+          "sourceObjectId": 21380
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3212436,
+          "longitude": 103.6492868,
+          "sourceObjectId": 21381
+        }
+      ]
+    },
+    {
+      "id": "tuas-link",
+      "name": "Tuas Link",
+      "mode": "MRT",
+      "codes": [
+        "EW33"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3406835,
+      "longitude": 103.6370432,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3404269,
+          "longitude": 103.6372457,
+          "sourceObjectId": 21384
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3409401,
+          "longitude": 103.6368407,
+          "sourceObjectId": 21385
+        }
+      ]
+    },
+    {
+      "id": "tuas-west-road",
+      "name": "Tuas West Road",
+      "mode": "MRT",
+      "codes": [
+        "EW32"
+      ],
+      "lineIds": [
+        "EW"
+      ],
+      "latitude": 1.3300273,
+      "longitude": 103.6395375,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3298724,
+          "longitude": 103.6392843,
+          "sourceObjectId": 21382
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3301823,
+          "longitude": 103.6397907,
+          "sourceObjectId": 21383
+        }
+      ]
+    },
+    {
+      "id": "ubi",
+      "name": "Ubi",
+      "mode": "MRT",
+      "codes": [
+        "DT27"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3298908,
+      "longitude": 103.8992311,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3299508,
+          "longitude": 103.8998767,
+          "sourceObjectId": 21545
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3298308,
+          "longitude": 103.8985856,
+          "sourceObjectId": 21540
+        }
+      ]
+    },
+    {
+      "id": "upper-changi",
+      "name": "Upper Changi",
+      "mode": "MRT",
+      "codes": [
+        "DT34"
+      ],
+      "lineIds": [
+        "DT"
+      ],
+      "latitude": 1.3415477,
+      "longitude": 103.9612852,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3418612,
+          "longitude": 103.9613285,
+          "sourceObjectId": 21532
+        },
+        {
+          "code": "Exit A",
+          "latitude": 1.3420065,
+          "longitude": 103.9609606,
+          "sourceObjectId": 21536
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3410377,
+          "longitude": 103.9614763,
+          "sourceObjectId": 21547
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3419927,
+          "longitude": 103.9616173,
+          "sourceObjectId": 21546
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3408405,
+          "longitude": 103.9610431,
+          "sourceObjectId": 21204
+        }
+      ]
+    },
+    {
+      "id": "upper-thomson",
+      "name": "Upper Thomson",
+      "mode": "MRT",
+      "codes": [
+        "TE8"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.3545271,
+      "longitude": 103.8328206,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.3548336,
+          "longitude": 103.8319162,
+          "sourceObjectId": 21302
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.3557366,
+          "longitude": 103.831833,
+          "sourceObjectId": 21301
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.3541446,
+          "longitude": 103.8339246,
+          "sourceObjectId": 21304
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.353503,
+          "longitude": 103.8337939,
+          "sourceObjectId": 21305
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.3544178,
+          "longitude": 103.8326352,
+          "sourceObjectId": 21303
+        }
+      ]
+    },
+    {
+      "id": "woodlands",
+      "name": "Woodlands",
+      "mode": "MRT",
+      "codes": [
+        "NS9",
+        "TE2"
+      ],
+      "lineIds": [
+        "NS",
+        "TE"
+      ],
+      "latitude": 1.4361869,
+      "longitude": 103.7876268,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.4366969,
+          "longitude": 103.7857356,
+          "sourceObjectId": 21317
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.4366731,
+          "longitude": 103.7865081,
+          "sourceObjectId": 21314
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.4372434,
+          "longitude": 103.7871082,
+          "sourceObjectId": 21315
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.4375404,
+          "longitude": 103.7880055,
+          "sourceObjectId": 21316
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.4358439,
+          "longitude": 103.7889643,
+          "sourceObjectId": 21398
+        },
+        {
+          "code": "Exit 6",
+          "latitude": 1.4348152,
+          "longitude": 103.7890891,
+          "sourceObjectId": 21318
+        },
+        {
+          "code": "Exit 7",
+          "latitude": 1.4344955,
+          "longitude": 103.7879768,
+          "sourceObjectId": 21399
+        }
+      ]
+    },
+    {
+      "id": "woodlands-north",
+      "name": "Woodlands North",
+      "mode": "MRT",
+      "codes": [
+        "TE1"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.4484919,
+      "longitude": 103.7852657,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.4479365,
+          "longitude": 103.7854291,
+          "sourceObjectId": 21396
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.4490473,
+          "longitude": 103.7851023,
+          "sourceObjectId": 21397
+        }
+      ]
+    },
+    {
+      "id": "woodlands-south",
+      "name": "Woodlands South",
+      "mode": "MRT",
+      "codes": [
+        "TE3"
+      ],
+      "lineIds": [
+        "TE"
+      ],
+      "latitude": 1.4269723,
+      "longitude": 103.7939581,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit 1",
+          "latitude": 1.427302,
+          "longitude": 103.7930275,
+          "sourceObjectId": 21400
+        },
+        {
+          "code": "Exit 2",
+          "latitude": 1.427605,
+          "longitude": 103.7934137,
+          "sourceObjectId": 21401
+        },
+        {
+          "code": "Exit 3",
+          "latitude": 1.4274268,
+          "longitude": 103.7945605,
+          "sourceObjectId": 21402
+        },
+        {
+          "code": "Exit 4",
+          "latitude": 1.4266842,
+          "longitude": 103.7944238,
+          "sourceObjectId": 21403
+        },
+        {
+          "code": "Exit 5",
+          "latitude": 1.4258434,
+          "longitude": 103.7943652,
+          "sourceObjectId": 21548
+        }
+      ]
+    },
+    {
+      "id": "woodleigh",
+      "name": "Woodleigh",
+      "mode": "MRT",
+      "codes": [
+        "NE11"
+      ],
+      "lineIds": [
+        "NE"
+      ],
+      "latitude": 1.338987,
+      "longitude": 103.8708343,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3385107,
+          "longitude": 103.8709406,
+          "sourceObjectId": 21705
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3385831,
+          "longitude": 103.8705085,
+          "sourceObjectId": 21706
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3398672,
+          "longitude": 103.8710538,
+          "sourceObjectId": 21704
+        }
+      ]
+    },
+    {
+      "id": "yew-tee",
+      "name": "Yew Tee",
+      "mode": "MRT",
+      "codes": [
+        "NS5"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3974991,
+      "longitude": 103.7472671,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3976555,
+          "longitude": 103.7471952,
+          "sourceObjectId": 21178
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3980678,
+          "longitude": 103.7473299,
+          "sourceObjectId": 21177
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3970008,
+          "longitude": 103.7474319,
+          "sourceObjectId": 21179
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.3972725,
+          "longitude": 103.7471114,
+          "sourceObjectId": 21180
+        }
+      ]
+    },
+    {
+      "id": "yio-chu-kang",
+      "name": "Yio Chu Kang",
+      "mode": "MRT",
+      "codes": [
+        "NS15"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.3817152,
+      "longitude": 103.8448089,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.3816444,
+          "longitude": 103.8448342,
+          "sourceObjectId": 21129
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.3815475,
+          "longitude": 103.8449468,
+          "sourceObjectId": 21130
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.3819536,
+          "longitude": 103.8446458,
+          "sourceObjectId": 21128
+        }
+      ]
+    },
+    {
+      "id": "yishun",
+      "name": "Yishun",
+      "mode": "MRT",
+      "codes": [
+        "NS13"
+      ],
+      "lineIds": [
+        "NS"
+      ],
+      "latitude": 1.4293845,
+      "longitude": 103.8350494,
+      "coordinateMethod": "mean-of-official-exits",
+      "exits": [
+        {
+          "code": "Exit A",
+          "latitude": 1.4293972,
+          "longitude": 103.8347836,
+          "sourceObjectId": 21494
+        },
+        {
+          "code": "Exit B",
+          "latitude": 1.4296363,
+          "longitude": 103.8348655,
+          "sourceObjectId": 21351
+        },
+        {
+          "code": "Exit C",
+          "latitude": 1.4291168,
+          "longitude": 103.8350908,
+          "sourceObjectId": 21322
+        },
+        {
+          "code": "Exit D",
+          "latitude": 1.4291065,
+          "longitude": 103.8348635,
+          "sourceObjectId": 21495
+        },
+        {
+          "code": "Exit E",
+          "latitude": 1.4296656,
+          "longitude": 103.8356437,
+          "sourceObjectId": 21352
+        }
+      ]
+    }
+  ]
+}
