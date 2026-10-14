@@ -536,14 +536,20 @@ details[open]>summary>svg { transform: rotate(180deg); }
 .ticket-time-block>span { font-size: calc(8 * var(--u)); line-height: calc(11 * var(--u)); color: #5e3c22; }
 .ticket-bottom { margin-top: auto; flex-direction: column; align-items: flex-start; width: 100%; gap: 0; font-family: var(--font-geist-sans), sans-serif; font-size: calc(8 * var(--u)); line-height: calc(11 * var(--u)); white-space: nowrap; }
 .ticket-bottom>span:last-child { font-size: calc(8 * var(--u)); line-height: calc(10 * var(--u)); }
-.ticket-postcard { display: flex; align-items: center; gap: calc(8 * var(--u)); height: calc(40 * var(--u)); flex-shrink: 0; margin-top: calc(4 * var(--u)); }
-.ticket-postcard-words { display: flex; flex-direction: column; flex: 1; min-width: 0; align-self: stretch; }
-.ticket-postcard-words>strong { font-family: ui-rounded, var(--font-geist-sans), sans-serif; font-size: calc(22 * var(--u)); line-height: calc(27 * var(--u)); font-weight: 700; letter-spacing: calc(-.6 * var(--u)); }
-.ticket-postcard-detail { font-size: calc(9 * var(--u)); line-height: calc(13 * var(--u)); color: #5e3c22; }
-.ticket-postcard-travel .ticket-postcard-words>strong { font-size: calc(23 * var(--u)); }
-.ticket-postcard-stamp { display: block; height: calc(37 * var(--u)); width: calc(37 * var(--u)); }
-.ticket-postcard-foot { display: flex; flex-direction: column; margin-top: auto; font-size: calc(8 * var(--u)); line-height: calc(10 * var(--u)); color: #5e3c22; white-space: nowrap; }
-.ticket-postcard-foot>span:first-child { color: #281d16; font-weight: 600; }
+/* The wide native ticket keeps a 74/26 tear-off split in home and travel states. */
+.ticket-state-perforation { left: 74%; }
+.ticket-state { display: grid; grid-template-columns: 74% 26%; position: absolute; inset: 0; }
+.ticket-state-main { display: flex; flex-direction: column; min-width: 0; padding: calc(9 * var(--u)); }
+.ticket-state-main .ticket-top>span:first-child { opacity: 1; }
+.ticket-state-words { display: flex; flex-direction: column; min-width: 0; height: calc(38 * var(--u)); flex-shrink: 0; margin-top: calc(3 * var(--u)); }
+.ticket-state-words>strong { font-family: ui-rounded, var(--font-geist-sans), sans-serif; font-size: calc(22 * var(--u)); line-height: calc(26 * var(--u)); font-weight: 700; letter-spacing: calc(-.6 * var(--u)); white-space: nowrap; }
+.ticket-state-detail { font-size: calc(9 * var(--u)); line-height: calc(12 * var(--u)); color: #5e3c22; }
+.ticket-state-travel .ticket-state-words>strong { font-size: calc(23 * var(--u)); }
+.ticket-state-stub { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(3 * var(--u)); min-width: 0; padding: calc(9 * var(--u)); }
+.ticket-stamp { display: block; height: calc(37 * var(--u)); width: calc(37 * var(--u)); }
+.ticket-stub-code { font-size: calc(9 * var(--u)); line-height: calc(12 * var(--u)); font-weight: 600; color: #281d16; }
+.ticket-state-foot { display: flex; flex-direction: column; margin-top: auto; font-size: calc(8 * var(--u)); line-height: calc(10 * var(--u)); color: #5e3c22; white-space: nowrap; }
+.ticket-state-foot>span:first-child { color: #281d16; font-weight: 600; }
 .ticket-vertical { display: none; }
 .instrument-air { gap: calc(8 * var(--u)); }
 .air-dial { width: calc(46 * var(--u)); height: calc(46 * var(--u)); }
@@ -571,11 +577,27 @@ details[open]>summary>svg { transform: rotate(180deg); }
 .ticket-location, .ticket-verify { font-size: calc(8 * var(--u)); line-height: calc(10 * var(--u)); color: #5b452c; }
 .ticket-verify { font-weight: 600; color: #29211c; }
 .ticket-vertical-spacer { flex: 1; }
+.ticket-vertical-foot { display: flex; flex-direction: column; height: calc(20 * var(--u)); flex-shrink: 0; margin-top: calc(8 * var(--u)); }
 .medium-local .ticket-top>span:last-child { display: none; }
-.medium-local .ticket-postcard, .desk-widget-small .ticket-postcard { height: calc(51 * var(--u)); margin-top: calc(5 * var(--u)); }
-.medium-local .ticket-postcard-words>strong, .desk-widget-small .ticket-postcard-words>strong { font-size: calc(16 * var(--u)); line-height: calc(26 * var(--u)); }
-.medium-local .ticket-postcard-travel .ticket-postcard-words>strong, .desk-widget-small .ticket-postcard-travel .ticket-postcard-words>strong { font-size: calc(20 * var(--u)); }
-.medium-local .ticket-postcard-stamp, .desk-widget-small .ticket-postcard-stamp, .medium-local .ticket-home-direction, .desk-widget-small .ticket-home-direction { display: none; }
+.medium-local .ticket-vertical .ticket-top>span:first-child, .desk-widget-small .ticket-vertical .ticket-top>span:first-child { display: inline; opacity: 1; }
+/* Native compact cards use a horizontal tear-off: 22pt stub, 10pt gap, 9pt inset. */
+.medium-local .ticket-state, .desk-widget-small .ticket-state { inset: calc(9 * var(--u)); grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) calc(22 * var(--u)); gap: calc(10 * var(--u)); }
+.medium-local .ticket-state-main, .desk-widget-small .ticket-state-main { padding: 0; }
+.medium-local .ticket-state-main .ticket-top, .desk-widget-small .ticket-state-main .ticket-top { height: calc(10 * var(--u)); }
+.medium-local .ticket-state-words, .desk-widget-small .ticket-state-words { height: calc(34 * var(--u)); margin-top: calc(2 * var(--u)); }
+.medium-local .ticket-state-words>strong, .desk-widget-small .ticket-state-words>strong { font-size: calc(16 * var(--u)); line-height: calc(22 * var(--u)); }
+.medium-local .ticket-state-detail, .desk-widget-small .ticket-state-detail { line-height: calc(12 * var(--u)); }
+.medium-local .ticket-state-travel .ticket-state-words>strong, .desk-widget-small .ticket-state-travel .ticket-state-words>strong { font-size: calc(18 * var(--u)); }
+.medium-local .ticket-state-main .ticket-top>span:first-child, .desk-widget-small .ticket-state-main .ticket-top>span:first-child { display: inline; }
+.medium-local .ticket-state-stub, .desk-widget-small .ticket-state-stub { flex-direction: row; gap: calc(6 * var(--u)); padding: 0; }
+.medium-local .ticket-stamp, .desk-widget-small .ticket-stamp { height: calc(22 * var(--u)); width: calc(22 * var(--u)); }
+.medium-local .ticket-perforation, .desk-widget-small .ticket-perforation { display: block; left: 0; top: auto; height: 0; width: 100%; border-left: 0; border-top: calc(1 * var(--u)) dashed #332f2445; }
+.medium-local .ticket-state-perforation, .desk-widget-small .ticket-state-perforation { bottom: calc(36 * var(--u)); }
+.medium-local .ticket-journey-perforation, .desk-widget-small .ticket-journey-perforation { bottom: calc(33 * var(--u)); }
+.medium-local .ticket-perforation::before, .medium-local .ticket-perforation::after, .desk-widget-small .ticket-perforation::before, .desk-widget-small .ticket-perforation::after { display: block; top: calc(-5 * var(--u)); bottom: auto; }
+.medium-local .ticket-perforation::before, .desk-widget-small .ticket-perforation::before { left: calc(-4.5 * var(--u)); }
+.medium-local .ticket-perforation::after, .desk-widget-small .ticket-perforation::after { left: auto; right: calc(-4.5 * var(--u)); }
+.medium-local .ticket-home-direction, .desk-widget-small .ticket-home-direction { display: none; }
 .medium-local .instrument-air, .desk-widget-small .instrument-air { gap: 0; }
 .medium-local .air-standalone-title, .desk-widget-small .air-standalone-title { display: block; font-size: calc(9 * var(--u)); font-weight: 600; line-height: calc(12 * var(--u)); }
 .medium-local .air-dial { height: calc(90 * var(--u)); width: calc(90 * var(--u)); }

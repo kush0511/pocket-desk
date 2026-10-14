@@ -169,7 +169,34 @@ function assertWidget(rt, dimensions) {
   assert.ok(layout.width <= dimensions.width + 0.01, `Root width ${layout.width} > ${dimensions.width}`);
   assert.ok(layout.height <= dimensions.height + 2, `Root height ${layout.height} > ${dimensions.height}`);
   assert.ok(rt.result.refreshAfterDate.getTime() > NOW);
+  // Every train state has an actual tear-off silhouette, including compact cards.
+  const visit = (node) => {
+    const drawing = node.backgroundImage;
+    if (drawing?.commands.some((c) => c.type === 'fillRect' && c.color.hex === 'FFB45B')) {
+      const cuts = drawing.commands.filter((c) => c.type === 'fillEllipse');
+      const dashes = drawing.commands.filter((c) => c.type === 'strokePath');
+      assert.equal(cuts.length, 2, 'Ticket has two semicircle cutouts');
+      assert.ok(dashes.length >= 8, 'Ticket has a visible dashed perforation');
+      for (const dash of dashes) {
+        assert.equal(dash.path.length, 2); assert.equal(dash.color.hex, '281D16');
+        assert.equal(dash.color.alpha, 0.25);
+        assert.ok(Math.hypot(dash.path[1].x - dash.path[0].x, dash.path[1].y - dash.path[0].y) <= 3.01);
+      }
+      const horizontal = node.size.width < 235;
+      if (horizontal) {
+        assert.equal(cuts[0].rect.x + 4.5, 0); assert.equal(cuts[1].rect.x + 4.5, node.size.width);
+        assert.equal(cuts[0].rect.y, cuts[1].rect.y);
+        assert.ok(dashes.every((c) => c.path[0].y === c.path[1].y));
+      } else {
+        assert.equal(cuts[0].rect.y + 4.5, 0); assert.equal(cuts[1].rect.y + 4.5, node.size.height);
+        assert.equal(cuts[0].rect.x, cuts[1].rect.x);
+        assert.ok(dashes.every((c) => c.path[0].x === c.path[1].x));
+      }
+    }
+    for (const child of node.children || []) visit(child);
+  }; visit(rt.result);
 }
+
 let count = 0;
 async function test(name, fn) { await fn(); count++; console.log(`ok ${count} - ${name}`); }
 const captures = [];
@@ -259,6 +286,9 @@ await test('Home turf requires a nearby automatic home station; manual same-stat
   const settings = {autoLocation:true,destination:'lakeside'};
   const home = await api.trainCard(settings,fresh(lakeside));
   assert.equal(home.state,'home'); assert.equal(home.metric,'Home turf :)'); assert.equal(home.label,'Lakeside is nearby');
+  assert.equal(home.destinationCode,'EW26');
+  const otherHome = await api.trainCard({...settings,origin:'farrer-park',destination:'farrer-park'},fresh(farrer));
+  assert.equal(otherHome.destinationCode,'NE8','Stub codes come from the chosen station, never a hard-coded home');
   assert.doesNotMatch(JSON.stringify(home),/back home already|at home|arrived home/i);
   const farFromExit = {latitude:1.337,longitude:103.716};
   assert.equal(api.nearestStation(farFromExit,coordinates.stations,trainData.stations).station.id,'lakeside');
@@ -443,7 +473,7 @@ await test('AQI 0–1000 prints completely inside one Retina drawing without com
     if(width===320||aqi===245||aqi===500) captures.push({name:`${family}-aqi-${aqi}-${width}`,dimension:api.widgetDimensions(family),tree:rt.result});
   }
 });
-await test('Home, saved-home, travel, manual-home, missing and no-route tickets have no fake boarding divider', async () => {
+await test('Home, saved-home, travel, manual-home, missing and no-route retain honest perforated tickets', async () => {
   const states=[
     {name:'home',location:lakeside,settings:{autoLocation:true}},
     {name:'saved-home',locationError:true,settings:{autoLocation:true,location:{...lakeside,checkedAt:NOW-2*HOUR}}},
@@ -458,11 +488,28 @@ await test('Home, saved-home, travel, manual-home, missing and no-route tickets 
     const rt=runtime({family,parameter:family==='medium'?'local':'train',width,height,location:state.location,locationError:state.locationError,
       files:settingsFiles({...state.settings,airConsent:true}),fixtureOverrides:{'air-quality?':{current:{us_aqi:245,time:NOW/1000}}}});
     const api=await rt.api(); await rt.run(); assertWidget(rt,api.widgetDimensions(family));
-    const drawings=[]; const visit=(node)=>{if(node.backgroundImage)drawings.push(node.backgroundImage);for(const child of node.children||[])visit(child);}; visit(rt.result);
-    const ticket=drawings.find((drawing)=>drawing.commands.some((c)=>c.type==='fillRect'&&c.color.hex==='FFB45B'));
-    assert.ok(ticket); assert.equal(ticket.commands.filter((c)=>c.type==='fillEllipse').length,0,'No punched divider on a non-journey state');
-    assert.doesNotMatch(widgetText(rt),/BOARD BY/);
-    if(family==='large'||family==='small') captures.push({name:`${family}-${state.name}-${width}`,dimension:api.widgetDimensions(family),tree:rt.result});
+    const tickets=[]; const visit=(node)=>{if(node.backgroundImage?.commands.some((c)=>c.type==='fillRect'&&c.color.hex==='FFB45B'))tickets.push(node);for(const child of node.children||[])visit(child);}; visit(rt.result);
+    const ticket=tickets[0]; assert.ok(ticket);
+    assert.doesNotMatch(widgetText(rt),/BOARD BY|SGT/,'Home/travel ticket stubs never invent departure data');
+    if(state.name.includes('travel')) assert.match(widgetText(rt),/AWAY/);
+    if(['home','saved-home','manual-home','home-station-farther'].includes(state.name)) assert.match(widgetText(rt),/EW26/);
+    if(state.name.startsWith('saved-')) {
+      assert.match(widgetText(rt),/Location 2h ago · saved/);
+      const main=family==='large'?ticket.children[0].children[0]:ticket.children[0];
+      const savedRows=main.children.filter((row)=>row.children?.some((item)=>item.text?.includes('last seen')||item.text?.includes(' · saved')));
+      assert.ok(savedRows.length>=1);
+      for(const row of savedRows) for(const item of row.children.filter((c)=>c.kind==='text')) {
+        assert.ok(item.text.length*item.font.size*.56*item.minimumScaleFactor<=row.size.width+.01,'Saved-fix warning has a readable width budget');
+      }
+    }
+    if(family==='large') {
+      const cut=ticket.backgroundImage.commands.find((c)=>c.type==='fillEllipse'), split=cut.rect.x+4.5;
+      assert.equal(split,Math.round(ticket.size.width*.74),'Non-journey stub gets a deliberate narrow share');
+      const [main,stub]=ticket.children[0].children.filter((c)=>c.kind==='stack');
+      assert.ok(main.size.width>stub.size.width*2.6,'Main message remains wider than the tear-off stub');
+      assert.ok(main.size.width+9<split,'Main text never crosses the perforation');
+    }
+    captures.push({name:`${family}-${state.name}-${width}`,dimension:api.widgetDimensions(family),tree:rt.result});
   }
 });
 await test('Leading text rows use explicit trailing spacers and source metadata stays clear of ticket divider', async () => {

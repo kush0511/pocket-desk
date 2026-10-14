@@ -96,8 +96,8 @@ function SpxInstrument() {
 function RouteTrack() {
   return <span className="route-track"><i className="route-stop" /><i className="route-ne" /><i className="route-interchange" /><i className="route-ew" /><i className="route-stop route-end" /></span>;
 }
-function PostcardStamp({ state }: { state: Exclude<TrainState, "journey"> }) {
-  return <svg className="ticket-postcard-stamp" viewBox="0 0 37 37" aria-hidden="true">
+function TicketStamp({ state }: { state: Exclude<TrainState, "journey"> }) {
+  return <svg className="ticket-stamp" viewBox="0 0 37 37" aria-hidden="true">
     <circle cx="18.5" cy="18.5" r="14.43" fill="none" stroke="#5e3c22" strokeWidth="1" opacity=".35" />
     {state === "home" ? <g fill="none" stroke="#281d16" opacity=".7"><path d="M10.56 18.5 18.5 11.86 26.44 18.5" strokeWidth="1.5" /><path d="M13.02 17.35V24.56H23.98V17.35" strokeWidth="1.3" /><path d="M17.06 24.56V19.94H19.94V24.56" strokeWidth="1.1" /></g> : <g fill="none" stroke="#281d16" opacity=".7"><circle cx="18.5" cy="18.5" r="8.66" strokeWidth="1.1" /><path d="M9.84 18.5H27.16M18.5 9.84 15.18 14.89V22.11L18.5 27.16 21.82 22.11V14.89Z" strokeWidth=".8" /></g>}
   </svg>;
@@ -106,16 +106,19 @@ function TrainTicket({ state }: { state: TrainState }) {
   if (state !== "journey") {
     const home = state === "home";
     return <>
-      <span className="ticket-top"><span>{home ? "HOME TURF" : "WANDER MODE  ✈"}</span><span>{home ? "HOME" : "SG ↗"}</span></span>
-      <span className={`ticket-postcard ticket-postcard-${state}`}>
-        <span className="ticket-postcard-words"><strong>{home ? "Home turf :)" : "~1,234 km"}</strong><span className="ticket-postcard-detail">{home ? "Lakeside is nearby" : "from Singapore"}</span></span>
-        <PostcardStamp state={state} />
+      <span className="ticket-perforation ticket-state-perforation" aria-hidden="true" />
+      <span className={`ticket-state ticket-state-${state}`}>
+        <span className="ticket-state-main">
+          <span className="ticket-top"><span>{home ? "LAST TRAIN / HOME" : "WANDER MODE"}</span></span>
+          <span className="ticket-state-words"><strong>{home ? "Home turf :)" : "~1,234 km"}</strong><span className="ticket-state-detail">{home ? "Lakeside is nearby" : "from Singapore"}</span></span>
+          <span className="ticket-state-foot"><span>Location now</span><span className={home ? "ticket-home-direction" : undefined}>{home ? "Nearest MRT · tap for directions" : "Straight-line · SG centre"}</span></span>
+        </span>
+        <span className="ticket-state-stub"><TicketStamp state={state} /><span className="ticket-stub-code">{home ? "EW26" : "AWAY"}</span></span>
       </span>
-      <span className="ticket-postcard-foot"><span>Location now</span><span className={home ? "ticket-home-direction" : undefined}>{home ? "Nearest MRT · tap for directions" : "Straight-line · SG centre"}</span></span>
     </>;
   }
   return <>
-    <span className="ticket-perforation" aria-hidden="true" />
+    <span className="ticket-perforation ticket-journey-perforation" aria-hidden="true" />
     <span className="ticket-journey">
       <span className="ticket-route-column">
         <span className="ticket-top"><span>LAST TRAIN / HOME</span></span>
@@ -124,7 +127,7 @@ function TrainTicket({ state }: { state: TrainState }) {
       </span>
       <span className="ticket-departure"><span className="ticket-zone">SGT</span><span className="ticket-time-block"><strong>23:41</strong><span>BOARD BY</span></span></span>
     </span>
-    <span className="ticket-vertical"><span className="ticket-top"><span>LAST TRAIN / HOME</span></span><strong>23:41</strong><span className="ticket-history-label">Historical estimate</span><span className="ticket-vertical-route">Farrer Park → Lakeside</span><RouteTrack /><span className="ticket-vertical-spacer" /><span className="ticket-location">Location now</span><span className="ticket-verify">29 Jul · verify</span></span>
+    <span className="ticket-vertical"><span className="ticket-top"><span>LAST TRAIN / HOME</span></span><strong>23:41</strong><span className="ticket-history-label">Historical estimate</span><span className="ticket-vertical-route">Farrer Park → Lakeside</span><RouteTrack /><span className="ticket-vertical-spacer" /><span className="ticket-vertical-foot"><span className="ticket-location">Location now</span><span className="ticket-verify">29 Jul · verify</span></span></span>
   </>;
 }
 
@@ -153,7 +156,7 @@ export function DeskPreview() {
   const detail = active === "train" && trainState !== "journey"
     ? trainState === "home"
       ? "A little welcome back when your home MRT is nearby. This sample uses Lakeside. On your phone, a fresh location within 800 m of your nearest home station shows this card; saved locations are labelled. It does not confirm that you are at home."
-      : "A tiny travel postcard when you are more than 75 km from the Singapore reference point. The installed widget calculates an approximate straight-line distance on your phone. This 1,234 km example is illustrative."
+      : "A little travel ticket when you are more than 75 km from the Singapore reference point. The installed widget calculates an approximate straight-line distance on your phone. This 1,234 km example is illustrative."
     : selected.detail;
 
   function instrument(key: Signal) {

@@ -325,14 +325,14 @@ async function trainCard(settings, locationResult, preloaded, preloadedCoordinat
     if (!origin) return emptyCard('train', 'LAST TRAIN', 'Origin unavailable', 'Choose an origin in the app', setupUrl('train'));
     if (origin.id === destination.id) {
       if (settings.origin) return { key: 'train', state: 'station', title: 'SAVED ROUTE', metric: destination.name,
-        label: 'Same origin & home station', detail: 'Tap for transit directions', foot: locationLabel, url: mapsUrl(destination.name) };
+        destinationCode: destination.codes?.[0], label: 'Same origin & home station', detail: 'Tap for transit directions', foot: locationLabel, url: mapsUrl(destination.name) };
       const nearby = nearest.distance <= PD.homeMrtRadiusKm;
       return { key: 'train', state: nearby ? 'home' : 'near-home', title: nearby ? 'HOME TURF' : 'HOME STATION',
         metric: nearby ? locationResult.cached ? 'Home turf, last seen' : 'Home turf :)' : 'Home MRT is nearest',
         label: nearby ? `${destination.name} is nearby` : `${destination.name} · ${nearest.distance.toFixed(1)} km away`,
         detail: locationResult.cached ? 'From your saved location' : 'Take the last stretch easy.',
         foot: locationLabel, locationLabel, extra: nearby ? 'Nearest MRT · tap for directions' : 'Straight-line · tap for directions',
-        destination: destination.name, warning: locationResult.cached, url: mapsUrl(destination.name) };
+        destination: destination.name, destinationCode: destination.codes?.[0], warning: locationResult.cached, url: mapsUrl(destination.name) };
     }
     const serviceDate = singaporeServiceDate();
     const years = Object.keys(data.holidays).map((d) => d.slice(0, 4));
@@ -508,9 +508,12 @@ function routeRail(card, width, height) {
   disc(ctx, width - 3, height / 2, 2.7, COLORS.ticketInk); disc(ctx, width - 3, height / 2, 1.3, COLORS.train);
   return ctx.getImage();
 }
-function ticketBackdrop(width, height, split) {
+function ticketBackdrop(width, height, split, horizontal = false) {
   const ctx = canvas(width, height); ctx.setFillColor(color(COLORS.train)); ctx.fillRect(new Rect(0, 0, width, height));
-  if (split) {
+  if (horizontal) {
+    for (let x = 11; x < width - 8; x += 6) stroke(ctx, [{ x, y: split }, { x: Math.min(x + 3, width - 8), y: split }], COLORS.ticketInk, 0.8, 0.25);
+    disc(ctx, 0, split, 4.5, COLORS.background); disc(ctx, width, split, 4.5, COLORS.background);
+  } else {
     for (let y = 11; y < height - 8; y += 6) stroke(ctx, [{ x: split, y }, { x: split, y: Math.min(y + 3, height - 8) }], COLORS.ticketInk, 0.8, 0.25);
     disc(ctx, split, 0, 4.5, COLORS.background); disc(ctx, split, height, 4.5, COLORS.background);
   }
@@ -552,7 +555,7 @@ function drawSpx(parent, card, width, height) {
   sourceLine(stack, card, width);
   return stack;
 }
-function postcardStamp(state, size) {
+function ticketStamp(state, size) {
   const ctx = canvas(size, size), c = size / 2, r = size * 0.39;
   stroke(ctx, arcPoints(c, c, r, 0, 360, 60), COLORS.ticketMuted, 1, 0.35);
   if (state === 'travel') {
@@ -562,10 +565,15 @@ function postcardStamp(state, size) {
     for (const direction of [-1, 1]) stroke(ctx, [
       {x:c,y:c-r*.60},{x:c+direction*r*.23,y:c-r*.25},{x:c+direction*r*.23,y:c+r*.25},{x:c,y:c+r*.60},
     ], COLORS.ticketInk, 0.8, 0.6);
-  } else {
+  } else if (['home', 'near-home', 'station'].includes(state)) {
     stroke(ctx, [{x:c-r*.55,y:c},{x:c,y:c-r*.46},{x:c+r*.55,y:c}], COLORS.ticketInk, 1.5, 0.7);
     stroke(ctx, [{x:c-r*.38,y:c-r*.08},{x:c-r*.38,y:c+r*.42},{x:c+r*.38,y:c+r*.42},{x:c+r*.38,y:c-r*.08}], COLORS.ticketInk, 1.3, 0.7);
     stroke(ctx, [{x:c-r*.10,y:c+r*.42},{x:c-r*.10,y:c+r*.10},{x:c+r*.10,y:c+r*.10},{x:c+r*.10,y:c+r*.42}], COLORS.ticketInk, 1.1, 0.7);
+  } else {
+    // A transit emblem is decoration, never a made-up route or departure.
+    stroke(ctx, [{x:c-r*.35,y:c+r*.3},{x:c-r*.35,y:c-r*.4},{x:c+r*.35,y:c-r*.4},{x:c+r*.35,y:c+r*.3},{x:c-r*.35,y:c+r*.3}], COLORS.ticketInk, 1.2, 0.7);
+    stroke(ctx, [{x:c-r*.35,y:c-r*.03},{x:c+r*.35,y:c-r*.03}], COLORS.ticketInk, 1, 0.7);
+    for (const direction of [-1, 1]) stroke(ctx, [{x:c+direction*r*.2,y:c+r*.3},{x:c+direction*r*.4,y:c+r*.55}], COLORS.ticketInk, 1, 0.7);
   }
   return ctx.getImage();
 }
@@ -573,31 +581,43 @@ function drawTicket(parent, card, width, height) {
   const stack = column(parent, width, height), pad = 9, inner = width - pad * 2;
   stack.url = card.url; stack.cornerRadius = 15; stack.setPadding(pad, pad, pad, pad);
   const horizontal = width >= 235, journey = Boolean(card.route && card.origin && card.destination);
-  const split = horizontal && journey ? Math.round(width * 0.63) : 0;
-  stack.backgroundImage = ticketBackdrop(width, height, split);
+  const stubHeight = journey ? 20 : 22, gutter = journey ? 8 : 10;
+  const split = horizontal ? Math.round(width * (journey ? 0.63 : 0.74)) : height - pad - stubHeight - gutter / 2;
+  stack.backgroundImage = ticketBackdrop(width, height, split, !horizontal);
   if (!journey) {
-    // Home, travel and unavailable states are postcards, not fake boarding passes.
-    // A wide leading column leaves breathing room instead of a giant destination.
-    const travel = card.state === 'travel', home = card.state === 'home';
-    const header = fixedRow(stack, inner, 11);
-    addText(header, travel ? 'WANDER MODE  ✈' : home ? 'HOME TURF' : card.state === 'station' ? 'SAVED ROUTE' : 'LAST TRAIN / HOME', 8, COLORS.ticketInk, 'semibold'); header.addSpacer();
-    if (horizontal && (home || travel)) addText(header, home ? 'HOME' : 'SG ↗', 8, COLORS.ticketMuted, 'semibold');
-    stack.addSpacer(horizontal ? 4 : 5);
-    const bodyHeight = horizontal ? 40 : 51, body = fixedRow(stack, inner, bodyHeight);
-    const stampSize = horizontal && (home || travel) ? 37 : 0, textWidth = inner - (stampSize ? stampSize + 8 : 0);
-    const words = column(body, textWidth, bodyHeight);
+    // Every state keeps its ticket silhouette. Only actual journeys show a time;
+    // home/travel stubs carry an emblem and verified station code or mode label.
+    const travel = card.state === 'travel', home = ['home', 'near-home', 'station'].includes(card.state);
+    const label = travel ? 'AWAY' : home ? card.destinationCode || 'HOME' : 'MRT';
     const headline = card.unavailable ? card.label : card.metric;
-    const metricSize = horizontal ? travel ? 23 : headline.length > 18 ? 17 : 22 : travel ? 20 : headline.length > 15 ? 12 : 16;
-    textLine(words, headline, textWidth, horizontal ? 27 : 26, metricSize, COLORS.ticketInk, 'bold');
-    textLine(words, travel ? card.label : card.unavailable ? card.detail : card.label, textWidth, 13, 9, COLORS.ticketMuted);
-    if (stampSize) { body.addSpacer(8); addGraphic(body, postcardStamp(card.state, stampSize), stampSize, stampSize); }
-    stack.addSpacer();
+    const title = travel ? 'WANDER MODE' : card.state === 'station' ? 'SAVED ROUTE' : 'LAST TRAIN / HOME';
     if (horizontal) {
-      textLine(stack, card.locationLabel || card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
-      textLine(stack, travel ? 'Straight-line · SG centre' : card.extra || card.detail, inner, 10, 8, COLORS.ticketMuted);
+      const leftWidth = split - pad - 9, rightWidth = inner - leftWidth - 18, contentHeight = height - pad * 2;
+      const content = fixedRow(stack, inner, contentHeight), main = column(content, leftWidth, contentHeight);
+      textLine(main, title, leftWidth, 11, 8, COLORS.ticketInk, 'semibold');
+      main.addSpacer(3);
+      textLine(main, headline, leftWidth, 26, travel ? 23 : headline.length > 18 ? 16 : 22, COLORS.ticketInk, 'bold');
+      textLine(main, card.unavailable ? card.detail : card.label, leftWidth, 12, 9, COLORS.ticketMuted);
+      main.addSpacer();
+      textLine(main, card.locationLabel || card.foot, leftWidth, 10, 8, COLORS.ticketInk, 'semibold');
+      textLine(main, travel ? 'Straight-line · SG centre' : card.extra || card.detail, leftWidth, 10, 8, COLORS.ticketMuted);
+      content.addSpacer(18);
+      const stub = column(content, rightWidth, contentHeight); stub.addSpacer();
+      const stamp = fixedRow(stub, rightWidth, 37); stamp.addSpacer(); addGraphic(stamp, ticketStamp(card.state, 37), 37, 37); stamp.addSpacer();
+      stub.addSpacer(3); textLine(stub, label, rightWidth, 12, 9, COLORS.ticketInk, 'semibold', true); stub.addSpacer();
     } else {
-      textLine(stack, card.locationLabel || card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
-      if (travel) textLine(stack, 'Straight-line · SG centre', inner, 10, 8, COLORS.ticketMuted);
+      const main = column(stack, inner, height - pad * 2 - stubHeight - gutter);
+      textLine(main, title, inner, 10, 8, COLORS.ticketInk, 'semibold'); main.addSpacer(2);
+      const headlineSize = travel ? 18 : headline.length > 15 ? Math.max(8, Math.min(12, inner / (headline.length * 0.56 * 0.8))) : 16;
+      textLine(main, headline, inner, 22, headlineSize, COLORS.ticketInk, 'bold');
+      textLine(main, card.unavailable ? card.detail : card.label, inner, 12, 9, COLORS.ticketMuted);
+      main.addSpacer();
+      textLine(main, card.locationLabel || card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
+      if (travel) textLine(main, 'Straight-line · SG centre', inner, 10, 8, COLORS.ticketMuted);
+      stack.addSpacer(gutter);
+      const stub = fixedRow(stack, inner, stubHeight); stub.addSpacer();
+      addGraphic(stub, ticketStamp(card.state, stubHeight), stubHeight, stubHeight); stub.addSpacer(6);
+      addText(stub, label, 9, COLORS.ticketInk, 'semibold'); stub.addSpacer();
     }
     return stack;
   }
@@ -620,14 +640,16 @@ function drawTicket(parent, card, width, height) {
     textLine(time, 'BOARD BY', rightWidth, 11, 8, COLORS.ticketMuted, 'semibold', true);
     time.addSpacer();
   } else {
-    textLine(stack, 'LAST TRAIN / HOME', inner, 11, 8, COLORS.ticketInk, 'semibold');
-    textLine(stack, card.metric, inner, 35, card.metric.length > 6 ? 22 : 29, COLORS.ticketInk, 'bold');
-    textLine(stack, card.label, inner, 12, 9, COLORS.ticketInk, 'semibold');
-    textLine(stack, card.detail, inner, 12, 9, COLORS.ticketMuted);
-    if (height >= 122 && card.routeLines?.length) addGraphic(stack, routeRail(card, inner, 9), inner, 9);
-    stack.addSpacer();
-    if (card.locationLabel) textLine(stack, card.locationLabel, inner, 10, 8, COLORS.ticketMuted);
-    textLine(stack, card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
+    const mainHeight = height - pad * 2 - stubHeight - gutter, main = column(stack, inner, mainHeight);
+    textLine(main, 'LAST TRAIN / HOME', inner, 11, 8, COLORS.ticketInk, 'semibold');
+    textLine(main, card.metric, inner, 35, card.metric.length > 6 ? 22 : 29, COLORS.ticketInk, 'bold');
+    textLine(main, card.label, inner, 12, 9, COLORS.ticketInk, 'semibold');
+    textLine(main, card.detail, inner, 12, 9, COLORS.ticketMuted);
+    if (mainHeight >= 79 && card.routeLines?.length) addGraphic(main, routeRail(card, inner, 9), inner, 9);
+    main.addSpacer(); stack.addSpacer(gutter);
+    const stub = column(stack, inner, stubHeight);
+    if (card.locationLabel) textLine(stub, card.locationLabel, inner, 10, 8, COLORS.ticketMuted);
+    textLine(stub, card.foot, inner, 10, 8, COLORS.ticketInk, 'semibold');
   }
   return stack;
 }
